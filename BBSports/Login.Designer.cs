@@ -55,7 +55,7 @@
             this.bLogin.TabIndex = 3;
             this.bLogin.Text = "Login";
             this.bLogin.UseVisualStyleBackColor = true;
-            this.bLogin.Click += new System.EventHandler(this.bLogin_Click);
+            this.bLogin.Click += new System.EventHandler(this.Login_Click);
             // 
             // tbUsername
             // 
@@ -86,20 +86,20 @@
             // lUsername
             // 
             this.lUsername.AutoSize = true;
-            this.lUsername.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lUsername.Font = new System.Drawing.Font("Book Antiqua", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lUsername.Location = new System.Drawing.Point(106, 94);
             this.lUsername.Name = "lUsername";
-            this.lUsername.Size = new System.Drawing.Size(111, 24);
+            this.lUsername.Size = new System.Drawing.Size(118, 27);
             this.lUsername.TabIndex = 10;
             this.lUsername.Text = "Username:";
             // 
             // lPassword
             // 
             this.lPassword.AutoSize = true;
-            this.lPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lPassword.Font = new System.Drawing.Font("Book Antiqua", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lPassword.Location = new System.Drawing.Point(107, 187);
             this.lPassword.Name = "lPassword";
-            this.lPassword.Size = new System.Drawing.Size(106, 24);
+            this.lPassword.Size = new System.Drawing.Size(112, 27);
             this.lPassword.TabIndex = 11;
             this.lPassword.Text = "Password:";
             // 
@@ -129,7 +129,6 @@
             this.Controls.Add(this.bNewUser);
             this.Name = "Login";
             this.Text = "Welcome";
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -28,14 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.lAthlete = new System.Windows.Forms.Label();
-            this.cbAthlete = new System.Windows.Forms.ComboBox();
+            this.gbGender = new System.Windows.Forms.GroupBox();
+            this.rbMale = new System.Windows.Forms.RadioButton();
+            this.rbFemale = new System.Windows.Forms.RadioButton();
+            this.gbSplitDistance = new System.Windows.Forms.GroupBox();
             this.rbLong = new System.Windows.Forms.RadioButton();
             this.rbShort = new System.Windows.Forms.RadioButton();
-            this.rbFemale = new System.Windows.Forms.RadioButton();
-            this.rbMale = new System.Windows.Forms.RadioButton();
+            this.lAthlete = new System.Windows.Forms.Label();
+            this.cbAthlete = new System.Windows.Forms.ComboBox();
             this.cbEvent = new System.Windows.Forms.ComboBox();
             this.lEvent = new System.Windows.Forms.Label();
             this.cbMeet = new System.Windows.Forms.ComboBox();
@@ -48,38 +49,33 @@
             this.bSubmit = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolMenuProgram = new System.Windows.Forms.ToolStripMenuItem();
+            this.changeSportTMI = new System.Windows.Forms.ToolStripMenuItem();
+            this.baseballTMI = new System.Windows.Forms.ToolStripMenuItem();
+            this.basketballTMI = new System.Windows.Forms.ToolStripMenuItem();
+            this.crossCountryTMI = new System.Windows.Forms.ToolStripMenuItem();
+            this.footballTMI = new System.Windows.Forms.ToolStripMenuItem();
+            this.hockeyTMI = new System.Windows.Forms.ToolStripMenuItem();
+            this.indoorTrackTMI = new System.Windows.Forms.ToolStripMenuItem();
+            this.outdoorTrackTMI = new System.Windows.Forms.ToolStripMenuItem();
+            this.soccerTMI = new System.Windows.Forms.ToolStripMenuItem();
+            this.softballTMI = new System.Windows.Forms.ToolStripMenuItem();
+            this.volleyballTMI = new System.Windows.Forms.ToolStripMenuItem();
             this.createMeetTMI = new System.Windows.Forms.ToolStripMenuItem();
             this.exitTMI = new System.Windows.Forms.ToolStripMenuItem();
+            this.activateNewSportTMI = new System.Windows.Forms.ToolStripMenuItem();
             this.toolMenuView = new System.Windows.Forms.ToolStripMenuItem();
             this.meetPDFTMI = new System.Windows.Forms.ToolStripMenuItem();
             this.athletesTMI = new System.Windows.Forms.ToolStripMenuItem();
             this.schoolRecordsTMI = new System.Windows.Forms.ToolStripMenuItem();
-            this.changeSportTMI = new System.Windows.Forms.ToolStripMenuItem();
-            this.crossCountryTMI = new System.Windows.Forms.ToolStripMenuItem();
-            this.footballTMI = new System.Windows.Forms.ToolStripMenuItem();
-            this.soccerTMI = new System.Windows.Forms.ToolStripMenuItem();
-            this.baseballTMI = new System.Windows.Forms.ToolStripMenuItem();
-            this.softballTMI = new System.Windows.Forms.ToolStripMenuItem();
-            this.basketballTMI = new System.Windows.Forms.ToolStripMenuItem();
-            this.indoorTrackTMI = new System.Windows.Forms.ToolStripMenuItem();
-            this.outdoorTrackTMI = new System.Windows.Forms.ToolStripMenuItem();
-            this.hockeyTMI = new System.Windows.Forms.ToolStripMenuItem();
-            this.volleyballTMI = new System.Windows.Forms.ToolStripMenuItem();
-            this.gbSplitDistance = new System.Windows.Forms.GroupBox();
-            this.gbGender = new System.Windows.Forms.GroupBox();
-            this.bBSportsDataSet = new BBSports.BBSportsDataSet();
-            this.bBSportsDataSetBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            this.gbGender.SuspendLayout();
+            this.gbSplitDistance.SuspendLayout();
             this.pCrossCountry.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericPlace)).BeginInit();
             this.menuStrip1.SuspendLayout();
-            this.gbSplitDistance.SuspendLayout();
-            this.gbGender.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.bBSportsDataSet)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bBSportsDataSetBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -104,34 +100,68 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.pCrossCountry);
-            this.splitContainer1.Panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.splitContainer1_Panel2_Paint);
             this.splitContainer1.Size = new System.Drawing.Size(1235, 626);
             this.splitContainer1.SplitterDistance = 410;
             this.splitContainer1.TabIndex = 3;
             // 
-            // lAthlete
+            // gbGender
             // 
-            this.lAthlete.AutoSize = true;
-            this.lAthlete.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lAthlete.Location = new System.Drawing.Point(42, 375);
-            this.lAthlete.Name = "lAthlete";
-            this.lAthlete.Size = new System.Drawing.Size(87, 29);
-            this.lAthlete.TabIndex = 11;
-            this.lAthlete.Text = "Athlete";
+            this.gbGender.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbGender.Controls.Add(this.rbMale);
+            this.gbGender.Controls.Add(this.rbFemale);
+            this.gbGender.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gbGender.Location = new System.Drawing.Point(43, 117);
+            this.gbGender.Name = "gbGender";
+            this.gbGender.Size = new System.Drawing.Size(362, 118);
+            this.gbGender.TabIndex = 13;
+            this.gbGender.TabStop = false;
+            this.gbGender.Text = "Gender";
             // 
-            // cbAthlete
+            // rbMale
             // 
-            this.cbAthlete.FormattingEnabled = true;
-            this.cbAthlete.Location = new System.Drawing.Point(37, 419);
-            this.cbAthlete.Name = "cbAthlete";
-            this.cbAthlete.Size = new System.Drawing.Size(334, 24);
-            this.cbAthlete.TabIndex = 10;
+            this.rbMale.AutoSize = true;
+            this.rbMale.Checked = true;
+            this.rbMale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rbMale.Location = new System.Drawing.Point(9, 55);
+            this.rbMale.Name = "rbMale";
+            this.rbMale.Size = new System.Drawing.Size(72, 28);
+            this.rbMale.TabIndex = 5;
+            this.rbMale.TabStop = true;
+            this.rbMale.Text = "Male";
+            this.rbMale.UseVisualStyleBackColor = true;
+            // 
+            // rbFemale
+            // 
+            this.rbFemale.AutoSize = true;
+            this.rbFemale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rbFemale.Location = new System.Drawing.Point(240, 55);
+            this.rbFemale.Name = "rbFemale";
+            this.rbFemale.Size = new System.Drawing.Size(95, 28);
+            this.rbFemale.TabIndex = 6;
+            this.rbFemale.TabStop = true;
+            this.rbFemale.Text = "Female";
+            this.rbFemale.UseVisualStyleBackColor = true;
+            // 
+            // gbSplitDistance
+            // 
+            this.gbSplitDistance.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbSplitDistance.Controls.Add(this.rbLong);
+            this.gbSplitDistance.Controls.Add(this.rbShort);
+            this.gbSplitDistance.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gbSplitDistance.Location = new System.Drawing.Point(43, 331);
+            this.gbSplitDistance.Name = "gbSplitDistance";
+            this.gbSplitDistance.Size = new System.Drawing.Size(362, 124);
+            this.gbSplitDistance.TabIndex = 12;
+            this.gbSplitDistance.TabStop = false;
+            this.gbSplitDistance.Text = "Split Distance";
             // 
             // rbLong
             // 
             this.rbLong.AutoSize = true;
             this.rbLong.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rbLong.Location = new System.Drawing.Point(240, 47);
+            this.rbLong.Location = new System.Drawing.Point(240, 59);
             this.rbLong.Name = "rbLong";
             this.rbLong.Size = new System.Drawing.Size(81, 28);
             this.rbLong.TabIndex = 8;
@@ -144,7 +174,7 @@
             this.rbShort.AutoSize = true;
             this.rbShort.Checked = true;
             this.rbShort.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rbShort.Location = new System.Drawing.Point(9, 47);
+            this.rbShort.Location = new System.Drawing.Point(9, 59);
             this.rbShort.Name = "rbShort";
             this.rbShort.Size = new System.Drawing.Size(87, 28);
             this.rbShort.TabIndex = 7;
@@ -152,35 +182,32 @@
             this.rbShort.Text = "1000m";
             this.rbShort.UseVisualStyleBackColor = true;
             // 
-            // rbFemale
+            // lAthlete
             // 
-            this.rbFemale.AutoSize = true;
-            this.rbFemale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rbFemale.Location = new System.Drawing.Point(240, 47);
-            this.rbFemale.Name = "rbFemale";
-            this.rbFemale.Size = new System.Drawing.Size(95, 28);
-            this.rbFemale.TabIndex = 6;
-            this.rbFemale.TabStop = true;
-            this.rbFemale.Text = "Female";
-            this.rbFemale.UseVisualStyleBackColor = true;
+            this.lAthlete.AutoSize = true;
+            this.lAthlete.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lAthlete.Location = new System.Drawing.Point(48, 458);
+            this.lAthlete.Name = "lAthlete";
+            this.lAthlete.Size = new System.Drawing.Size(87, 29);
+            this.lAthlete.TabIndex = 11;
+            this.lAthlete.Text = "Athlete";
             // 
-            // rbMale
+            // cbAthlete
             // 
-            this.rbMale.AutoSize = true;
-            this.rbMale.Checked = true;
-            this.rbMale.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rbMale.Location = new System.Drawing.Point(9, 47);
-            this.rbMale.Name = "rbMale";
-            this.rbMale.Size = new System.Drawing.Size(72, 28);
-            this.rbMale.TabIndex = 5;
-            this.rbMale.TabStop = true;
-            this.rbMale.Text = "Male";
-            this.rbMale.UseVisualStyleBackColor = true;
+            this.cbAthlete.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbAthlete.FormattingEnabled = true;
+            this.cbAthlete.Location = new System.Drawing.Point(43, 506);
+            this.cbAthlete.Name = "cbAthlete";
+            this.cbAthlete.Size = new System.Drawing.Size(334, 24);
+            this.cbAthlete.TabIndex = 10;
             // 
             // cbEvent
             // 
+            this.cbEvent.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.cbEvent.FormattingEnabled = true;
-            this.cbEvent.Location = new System.Drawing.Point(37, 231);
+            this.cbEvent.Location = new System.Drawing.Point(44, 279);
             this.cbEvent.Name = "cbEvent";
             this.cbEvent.Size = new System.Drawing.Size(334, 24);
             this.cbEvent.TabIndex = 3;
@@ -189,7 +216,7 @@
             // 
             this.lEvent.AutoSize = true;
             this.lEvent.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lEvent.Location = new System.Drawing.Point(42, 189);
+            this.lEvent.Location = new System.Drawing.Point(48, 238);
             this.lEvent.Name = "lEvent";
             this.lEvent.Size = new System.Drawing.Size(73, 29);
             this.lEvent.TabIndex = 2;
@@ -197,9 +224,11 @@
             // 
             // cbMeet
             // 
-            this.cbMeet.DataSource = this.bBSportsDataSetBindingSource;
+            this.cbMeet.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.cbMeet.FormattingEnabled = true;
-            this.cbMeet.Location = new System.Drawing.Point(37, 61);
+            this.cbMeet.Location = new System.Drawing.Point(43, 77);
+            this.cbMeet.MaxDropDownItems = 16;
             this.cbMeet.Name = "cbMeet";
             this.cbMeet.Size = new System.Drawing.Size(334, 24);
             this.cbMeet.TabIndex = 1;
@@ -208,7 +237,7 @@
             // 
             this.lMeet.AutoSize = true;
             this.lMeet.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lMeet.Location = new System.Drawing.Point(42, 25);
+            this.lMeet.Location = new System.Drawing.Point(48, 41);
             this.lMeet.Name = "lMeet";
             this.lMeet.Size = new System.Drawing.Size(67, 29);
             this.lMeet.TabIndex = 0;
@@ -216,6 +245,7 @@
             // 
             // pCrossCountry
             // 
+            this.pCrossCountry.AutoSize = true;
             this.pCrossCountry.Controls.Add(this.numericPlace);
             this.pCrossCountry.Controls.Add(this.lPlace);
             this.pCrossCountry.Controls.Add(this.lSplits);
@@ -229,40 +259,44 @@
             // 
             // numericPlace
             // 
-            this.numericPlace.Location = new System.Drawing.Point(194, 377);
+            this.numericPlace.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.numericPlace.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericPlace.Location = new System.Drawing.Point(328, 441);
             this.numericPlace.Maximum = new decimal(new int[] {
             1000,
             0,
             0,
             0});
             this.numericPlace.Name = "numericPlace";
-            this.numericPlace.Size = new System.Drawing.Size(120, 22);
+            this.numericPlace.Size = new System.Drawing.Size(120, 28);
             this.numericPlace.TabIndex = 5;
             // 
             // lPlace
             // 
+            this.lPlace.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.lPlace.AutoSize = true;
-            this.lPlace.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lPlace.Location = new System.Drawing.Point(38, 375);
+            this.lPlace.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lPlace.Location = new System.Drawing.Point(114, 438);
             this.lPlace.Name = "lPlace";
-            this.lPlace.Size = new System.Drawing.Size(150, 25);
+            this.lPlace.Size = new System.Drawing.Size(184, 29);
             this.lPlace.TabIndex = 3;
             this.lPlace.Text = "Finishing Place:";
             // 
             // lSplits
             // 
             this.lSplits.AutoSize = true;
-            this.lSplits.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lSplits.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lSplits.Location = new System.Drawing.Point(38, 23);
             this.lSplits.Name = "lSplits";
-            this.lSplits.Size = new System.Drawing.Size(66, 25);
+            this.lSplits.Size = new System.Drawing.Size(79, 29);
             this.lSplits.TabIndex = 2;
             this.lSplits.Text = "Splits:";
             // 
             // bReset
             // 
+            this.bReset.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.bReset.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bReset.Location = new System.Drawing.Point(168, 437);
+            this.bReset.Location = new System.Drawing.Point(163, 521);
             this.bReset.Name = "bReset";
             this.bReset.Size = new System.Drawing.Size(91, 37);
             this.bReset.TabIndex = 1;
@@ -271,9 +305,10 @@
             // 
             // bSubmit
             // 
+            this.bSubmit.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.bSubmit.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.bSubmit.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bSubmit.Location = new System.Drawing.Point(387, 437);
+            this.bSubmit.Location = new System.Drawing.Point(383, 521);
             this.bSubmit.Name = "bSubmit";
             this.bSubmit.Size = new System.Drawing.Size(99, 37);
             this.bSubmit.TabIndex = 0;
@@ -295,6 +330,7 @@
             // toolMenuProgram
             // 
             this.toolMenuProgram.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.activateNewSportTMI,
             this.changeSportTMI,
             this.createMeetTMI,
             this.exitTMI});
@@ -302,17 +338,106 @@
             this.toolMenuProgram.Size = new System.Drawing.Size(78, 24);
             this.toolMenuProgram.Text = "Program";
             // 
+            // changeSportTMI
+            // 
+            this.changeSportTMI.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.baseballTMI,
+            this.basketballTMI,
+            this.crossCountryTMI,
+            this.footballTMI,
+            this.hockeyTMI,
+            this.indoorTrackTMI,
+            this.outdoorTrackTMI,
+            this.soccerTMI,
+            this.softballTMI,
+            this.volleyballTMI});
+            this.changeSportTMI.Name = "changeSportTMI";
+            this.changeSportTMI.Size = new System.Drawing.Size(212, 26);
+            this.changeSportTMI.Text = "Change Sport";
+            // 
+            // baseballTMI
+            // 
+            this.baseballTMI.CheckOnClick = true;
+            this.baseballTMI.Name = "baseballTMI";
+            this.baseballTMI.Size = new System.Drawing.Size(178, 26);
+            this.baseballTMI.Text = "Baseball";
+            // 
+            // basketballTMI
+            // 
+            this.basketballTMI.Name = "basketballTMI";
+            this.basketballTMI.Size = new System.Drawing.Size(178, 26);
+            this.basketballTMI.Text = "Basketball";
+            // 
+            // crossCountryTMI
+            // 
+            this.crossCountryTMI.Checked = true;
+            this.crossCountryTMI.CheckOnClick = true;
+            this.crossCountryTMI.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.crossCountryTMI.Name = "crossCountryTMI";
+            this.crossCountryTMI.Size = new System.Drawing.Size(178, 26);
+            this.crossCountryTMI.Text = "Cross Country";
+            // 
+            // footballTMI
+            // 
+            this.footballTMI.Name = "footballTMI";
+            this.footballTMI.Size = new System.Drawing.Size(178, 26);
+            this.footballTMI.Text = "Football";
+            // 
+            // hockeyTMI
+            // 
+            this.hockeyTMI.Name = "hockeyTMI";
+            this.hockeyTMI.Size = new System.Drawing.Size(178, 26);
+            this.hockeyTMI.Text = "Hockey";
+            // 
+            // indoorTrackTMI
+            // 
+            this.indoorTrackTMI.Name = "indoorTrackTMI";
+            this.indoorTrackTMI.Size = new System.Drawing.Size(178, 26);
+            this.indoorTrackTMI.Text = "Indoor Track";
+            // 
+            // outdoorTrackTMI
+            // 
+            this.outdoorTrackTMI.Name = "outdoorTrackTMI";
+            this.outdoorTrackTMI.Size = new System.Drawing.Size(178, 26);
+            this.outdoorTrackTMI.Text = "Outdoor Track";
+            // 
+            // soccerTMI
+            // 
+            this.soccerTMI.Name = "soccerTMI";
+            this.soccerTMI.Size = new System.Drawing.Size(178, 26);
+            this.soccerTMI.Text = "Soccer";
+            // 
+            // softballTMI
+            // 
+            this.softballTMI.Name = "softballTMI";
+            this.softballTMI.Size = new System.Drawing.Size(178, 26);
+            this.softballTMI.Text = "Softball";
+            // 
+            // volleyballTMI
+            // 
+            this.volleyballTMI.Name = "volleyballTMI";
+            this.volleyballTMI.Size = new System.Drawing.Size(178, 26);
+            this.volleyballTMI.Text = "Volleyball";
+            // 
             // createMeetTMI
             // 
             this.createMeetTMI.Name = "createMeetTMI";
-            this.createMeetTMI.Size = new System.Drawing.Size(181, 26);
+            this.createMeetTMI.Size = new System.Drawing.Size(212, 26);
             this.createMeetTMI.Text = "Create Meet";
+            this.createMeetTMI.Click += new System.EventHandler(this.CreateMeetTMI_Click);
             // 
             // exitTMI
             // 
             this.exitTMI.Name = "exitTMI";
-            this.exitTMI.Size = new System.Drawing.Size(181, 26);
+            this.exitTMI.Size = new System.Drawing.Size(212, 26);
             this.exitTMI.Text = "Exit";
+            // 
+            // activateNewSportTMI
+            // 
+            this.activateNewSportTMI.Name = "activateNewSportTMI";
+            this.activateNewSportTMI.Size = new System.Drawing.Size(212, 26);
+            this.activateNewSportTMI.Text = "Activate New Sport";
+            this.activateNewSportTMI.Click += new System.EventHandler(this.ActivateNewSportTMI_Click);
             // 
             // toolMenuView
             // 
@@ -342,121 +467,6 @@
             this.schoolRecordsTMI.Size = new System.Drawing.Size(186, 26);
             this.schoolRecordsTMI.Text = "School Records";
             // 
-            // changeSportTMI
-            // 
-            this.changeSportTMI.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.baseballTMI,
-            this.basketballTMI,
-            this.crossCountryTMI,
-            this.footballTMI,
-            this.hockeyTMI,
-            this.indoorTrackTMI,
-            this.outdoorTrackTMI,
-            this.soccerTMI,
-            this.softballTMI,
-            this.volleyballTMI});
-            this.changeSportTMI.Name = "changeSportTMI";
-            this.changeSportTMI.Size = new System.Drawing.Size(181, 26);
-            this.changeSportTMI.Text = "Change Sport";
-            // 
-            // crossCountryTMI
-            // 
-            this.crossCountryTMI.Checked = true;
-            this.crossCountryTMI.CheckOnClick = true;
-            this.crossCountryTMI.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.crossCountryTMI.Name = "crossCountryTMI";
-            this.crossCountryTMI.Size = new System.Drawing.Size(181, 26);
-            this.crossCountryTMI.Text = "Cross Country";
-            // 
-            // footballTMI
-            // 
-            this.footballTMI.Name = "footballTMI";
-            this.footballTMI.Size = new System.Drawing.Size(181, 26);
-            this.footballTMI.Text = "Football";
-            // 
-            // soccerTMI
-            // 
-            this.soccerTMI.Name = "soccerTMI";
-            this.soccerTMI.Size = new System.Drawing.Size(181, 26);
-            this.soccerTMI.Text = "Soccer";
-            // 
-            // baseballTMI
-            // 
-            this.baseballTMI.CheckOnClick = true;
-            this.baseballTMI.Name = "baseballTMI";
-            this.baseballTMI.Size = new System.Drawing.Size(181, 26);
-            this.baseballTMI.Text = "Baseball";
-            // 
-            // softballTMI
-            // 
-            this.softballTMI.Name = "softballTMI";
-            this.softballTMI.Size = new System.Drawing.Size(181, 26);
-            this.softballTMI.Text = "Softball";
-            // 
-            // basketballTMI
-            // 
-            this.basketballTMI.Name = "basketballTMI";
-            this.basketballTMI.Size = new System.Drawing.Size(181, 26);
-            this.basketballTMI.Text = "Basketball";
-            // 
-            // indoorTrackTMI
-            // 
-            this.indoorTrackTMI.Name = "indoorTrackTMI";
-            this.indoorTrackTMI.Size = new System.Drawing.Size(181, 26);
-            this.indoorTrackTMI.Text = "Indoor Track";
-            // 
-            // outdoorTrackTMI
-            // 
-            this.outdoorTrackTMI.Name = "outdoorTrackTMI";
-            this.outdoorTrackTMI.Size = new System.Drawing.Size(181, 26);
-            this.outdoorTrackTMI.Text = "Outdoor Track";
-            // 
-            // hockeyTMI
-            // 
-            this.hockeyTMI.Name = "hockeyTMI";
-            this.hockeyTMI.Size = new System.Drawing.Size(181, 26);
-            this.hockeyTMI.Text = "Hockey";
-            // 
-            // volleyballTMI
-            // 
-            this.volleyballTMI.Name = "volleyballTMI";
-            this.volleyballTMI.Size = new System.Drawing.Size(181, 26);
-            this.volleyballTMI.Text = "Volleyball";
-            // 
-            // gbSplitDistance
-            // 
-            this.gbSplitDistance.Controls.Add(this.rbLong);
-            this.gbSplitDistance.Controls.Add(this.rbShort);
-            this.gbSplitDistance.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbSplitDistance.Location = new System.Drawing.Point(37, 275);
-            this.gbSplitDistance.Name = "gbSplitDistance";
-            this.gbSplitDistance.Size = new System.Drawing.Size(405, 97);
-            this.gbSplitDistance.TabIndex = 12;
-            this.gbSplitDistance.TabStop = false;
-            this.gbSplitDistance.Text = "Split Distance";
-            // 
-            // gbGender
-            // 
-            this.gbGender.Controls.Add(this.rbMale);
-            this.gbGender.Controls.Add(this.rbFemale);
-            this.gbGender.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbGender.Location = new System.Drawing.Point(37, 91);
-            this.gbGender.Name = "gbGender";
-            this.gbGender.Size = new System.Drawing.Size(371, 100);
-            this.gbGender.TabIndex = 13;
-            this.gbGender.TabStop = false;
-            this.gbGender.Text = "Gender";
-            // 
-            // bBSportsDataSet
-            // 
-            this.bBSportsDataSet.DataSetName = "BBSportsDataSet";
-            this.bBSportsDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
-            // bBSportsDataSetBindingSource
-            // 
-            this.bBSportsDataSetBindingSource.DataSource = this.bBSportsDataSet;
-            this.bBSportsDataSetBindingSource.Position = 0;
-            // 
             // HomePage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -468,23 +478,21 @@
             this.Name = "HomePage";
             this.Text = "Home Page";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.Load += new System.EventHandler(this.HomePage_Load);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel1.PerformLayout();
             this.splitContainer1.Panel2.ResumeLayout(false);
+            this.splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            this.gbGender.ResumeLayout(false);
+            this.gbGender.PerformLayout();
+            this.gbSplitDistance.ResumeLayout(false);
+            this.gbSplitDistance.PerformLayout();
             this.pCrossCountry.ResumeLayout(false);
             this.pCrossCountry.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericPlace)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            this.gbSplitDistance.ResumeLayout(false);
-            this.gbSplitDistance.PerformLayout();
-            this.gbGender.ResumeLayout(false);
-            this.gbGender.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.bBSportsDataSet)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bBSportsDataSetBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -529,7 +537,6 @@
         private System.Windows.Forms.ToolStripMenuItem volleyballTMI;
         private System.Windows.Forms.GroupBox gbSplitDistance;
         private System.Windows.Forms.GroupBox gbGender;
-        private System.Windows.Forms.BindingSource bBSportsDataSetBindingSource;
-        private BBSportsDataSet bBSportsDataSet;
+        private System.Windows.Forms.ToolStripMenuItem activateNewSportTMI;
     }
 }

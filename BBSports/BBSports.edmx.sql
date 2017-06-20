@@ -39,25 +39,24 @@ GO
 CREATE TABLE [dbo].[Meets] (
     [MeetId] int IDENTITY(1,1) NOT NULL,
     [SportId] int  NOT NULL,
-    [MeetName] nvarchar(max)  NOT NULL,
-    [Location] nvarchar(max)  NOT NULL,
-    [Date] nvarchar(max)  NOT NULL,
-    [Temperature] nvarchar(max)  NOT NULL,
-    [WeatherNotes] nvarchar(max)  NOT NULL,
-    [Gender] nvarchar(max)  NOT NULL,
-    [Sport_SportId] int  NOT NULL
+    [MeetName] varchar(50)  NOT NULL,
+    [Location] varchar(50)  NOT NULL,
+    [Date] datetime  NOT NULL,
+    [Temperature] smallint  NOT NULL,
+    [WeatherNotes] varchar(max)  NOT NULL,
+    [Gender] varchar(6)  NOT NULL
 );
 GO
 
 -- Creating table 'Athletes'
 CREATE TABLE [dbo].[Athletes] (
     [AthleteId] int IDENTITY(1,1) NOT NULL,
-    [FullName] nvarchar(max)  NOT NULL,
-    [FirstName] nvarchar(max)  NOT NULL,
-    [LastName] nvarchar(max)  NOT NULL,
-    [NickName] nvarchar(max)  NOT NULL,
+    [FullName] varchar(51)  NOT NULL,
+    [FirstName] varchar(25)  NOT NULL,
+    [LastName] varchar(25)  NOT NULL,
+    [NickName] varchar(25)  NOT NULL,
     [Birthday] datetime  NOT NULL,
-    [Grade] nvarchar(max)  NOT NULL,
+    [Grade] varchar(16)  NOT NULL,
     [Roster_RosterId] int  NOT NULL
 );
 GO

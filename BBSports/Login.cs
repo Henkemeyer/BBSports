@@ -17,14 +17,14 @@ namespace BBSports
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void Login_Click(object sender, EventArgs e)
         {
-
-        }
-
-        private void bLogin_Click(object sender, EventArgs e)
-        {
-            if (tbUsername.Text == "Henkemeyer" && tbPassword.Text == "a")
+            //Replace with commented out code eventually
+            this.Hide();
+            var home = new HomePage();
+            home.Closed += (s, args) => this.Close();
+            home.Show();
+            /* if (tbUsername.Text == "Henkemeyer" && tbPassword.Text == "a")
             {
                 this.Hide();
                 var home = new HomePage();
@@ -34,7 +34,7 @@ namespace BBSports
             else
             {
                 MessageBox.Show("Username and Password do not match.","Uh-Oh");
-            }
+            }*/
         }
     }
 }

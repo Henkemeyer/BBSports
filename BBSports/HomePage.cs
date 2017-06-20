@@ -22,14 +22,18 @@ namespace BBSports
 
         }
 
-        private void lSelect_Click(object sender, EventArgs e)
+        private void CreateMeetTMI_Click(object sender, EventArgs e)
         {
-
+            var meetMan = new MeetManager();
+            meetMan.Closed += (s, args) => this.Close();
+            meetMan.Show();
         }
 
-        private void splitContainer1_Panel2_Paint(object sender, PaintEventArgs e)
+        private void ActivateNewSportTMI_Click(object sender, EventArgs e)
         {
-
+            var activate = new ActivateSport();
+            activate.Closed += (s, args) => this.Close();
+            activate.Show();
         }
     }
 }

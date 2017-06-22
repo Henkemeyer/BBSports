@@ -32,7 +32,7 @@
             this.gbGender = new System.Windows.Forms.GroupBox();
             this.rbMale = new System.Windows.Forms.RadioButton();
             this.rbFemale = new System.Windows.Forms.RadioButton();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.cbSeason = new System.Windows.Forms.ComboBox();
             this.lSeason = new System.Windows.Forms.Label();
             this.lLevel = new System.Windows.Forms.Label();
             this.cbLevel = new System.Windows.Forms.ComboBox();
@@ -89,20 +89,20 @@
             this.rbFemale.Text = "Female";
             this.rbFemale.UseVisualStyleBackColor = true;
             // 
-            // comboBox1
+            // cbSeason
             // 
-            this.comboBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
+            this.cbSeason.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbSeason.FormattingEnabled = true;
+            this.cbSeason.Items.AddRange(new object[] {
             "Fall",
             "Winter",
             "Spring",
             "Summer",
             "All-Year"});
-            this.comboBox1.Location = new System.Drawing.Point(161, 113);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(250, 28);
-            this.comboBox1.TabIndex = 3;
+            this.cbSeason.Location = new System.Drawing.Point(161, 113);
+            this.cbSeason.Name = "cbSeason";
+            this.cbSeason.Size = new System.Drawing.Size(250, 28);
+            this.cbSeason.TabIndex = 3;
             // 
             // lSeason
             // 
@@ -201,6 +201,7 @@
             this.bActivate.TabIndex = 13;
             this.bActivate.Text = "Activate";
             this.bActivate.UseVisualStyleBackColor = true;
+            this.bActivate.Click += new System.EventHandler(this.Activate_Click);
             // 
             // ActivateSport
             // 
@@ -216,7 +217,7 @@
             this.Controls.Add(this.cbLevel);
             this.Controls.Add(this.lLevel);
             this.Controls.Add(this.lSeason);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.cbSeason);
             this.Controls.Add(this.gbGender);
             this.Controls.Add(this.lSportName);
             this.MaximizeBox = false;
@@ -237,7 +238,7 @@
         private System.Windows.Forms.GroupBox gbGender;
         private System.Windows.Forms.RadioButton rbMale;
         private System.Windows.Forms.RadioButton rbFemale;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox cbSeason;
         private System.Windows.Forms.Label lSeason;
         private System.Windows.Forms.Label lLevel;
         private System.Windows.Forms.ComboBox cbLevel;

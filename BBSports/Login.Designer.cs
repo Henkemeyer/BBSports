@@ -128,6 +128,7 @@
             this.Controls.Add(this.bLogin);
             this.Controls.Add(this.bNewUser);
             this.Name = "Login";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Welcome";
             this.ResumeLayout(false);
             this.PerformLayout();

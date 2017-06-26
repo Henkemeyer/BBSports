@@ -81,12 +81,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActivateSport.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ActivateSport.Designer.cs">
-      <DependentUpon>ActivateSport.cs</DependentUpon>
-    </Compile>
     <Compile Include="HomePage.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -98,6 +92,12 @@
     </Compile>
     <Compile Include="Login.Designer.cs">
       <DependentUpon>Login.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AthleteManager.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AthleteManager.Designer.cs">
+      <DependentUpon>AthleteManager.cs</DependentUpon>
     </Compile>
     <Compile Include="MeetManager.cs">
       <SubType>Form</SubType>
@@ -113,14 +113,20 @@
     <Compile Include="Racing.Designer.cs">
       <DependentUpon>Racing.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="ActivateSport.resx">
-      <DependentUpon>ActivateSport.cs</DependentUpon>
-    </EmbeddedResource>
+    <Compile Include="TeamManager.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TeamManager.Designer.cs">
+      <DependentUpon>TeamManager.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="HomePage.resx">
       <DependentUpon>HomePage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AthleteManager.resx">
+      <DependentUpon>AthleteManager.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MeetManager.resx">
       <DependentUpon>MeetManager.cs</DependentUpon>
@@ -133,9 +139,13 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="Racing.resx">
       <DependentUpon>Racing.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TeamManager.resx">
+      <DependentUpon>TeamManager.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -153,6 +163,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="BBSports.edmx.sql" />
+    <None Include="Resources\Search.ico" />
+    <None Include="Resources\Magnify.png" />
     <Content Include="SQLQuery5.sql" />
   </ItemGroup>
   <ItemGroup>

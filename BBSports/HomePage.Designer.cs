@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.toolMenuProgram = new System.Windows.Forms.ToolStripMenuItem();
-            this.activateNewSportTMI = new System.Windows.Forms.ToolStripMenuItem();
+            this.teamManagerTMI = new System.Windows.Forms.ToolStripMenuItem();
             this.changeTeamTMI = new System.Windows.Forms.ToolStripMenuItem();
             this.manageMeetsTMI = new System.Windows.Forms.ToolStripMenuItem();
             this.exitTMI = new System.Windows.Forms.ToolStripMenuItem();
@@ -38,13 +38,14 @@
             this.athletesTMI = new System.Windows.Forms.ToolStripMenuItem();
             this.schoolRecordsTMI = new System.Windows.Forms.ToolStripMenuItem();
             this.menuHome = new System.Windows.Forms.MenuStrip();
+            this.activateNewSportTMI = new System.Windows.Forms.ToolStripMenuItem();
             this.menuHome.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolMenuProgram
-            // 
+            //
             this.toolMenuProgram.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.activateNewSportTMI,
+            this.teamManagerTMI,
             this.changeTeamTMI,
             this.manageMeetsTMI,
             this.exitTMI});
@@ -52,12 +53,12 @@
             this.toolMenuProgram.Size = new System.Drawing.Size(78, 24);
             this.toolMenuProgram.Text = "Program";
             // 
-            // activateNewSportTMI
+            // teamManagerTMI
             // 
-            this.activateNewSportTMI.Name = "activateNewSportTMI";
-            this.activateNewSportTMI.Size = new System.Drawing.Size(212, 26);
-            this.activateNewSportTMI.Text = "Activate New Sport";
-            this.activateNewSportTMI.Click += new System.EventHandler(this.ActivateNewSportTMI_Click);
+            this.teamManagerTMI.Name = "teamManagerTMI";
+            this.teamManagerTMI.Size = new System.Drawing.Size(212, 26);
+            this.teamManagerTMI.Text = "Manage Teams";
+            this.teamManagerTMI.Click += new System.EventHandler(this.ManageTeamsTMI_Click);
             // 
             // changeTeamTMI
             // 
@@ -77,6 +78,7 @@
             this.exitTMI.Name = "exitTMI";
             this.exitTMI.Size = new System.Drawing.Size(212, 26);
             this.exitTMI.Text = "Exit";
+            this.exitTMI.Click += new System.EventHandler(this.exitTMI_Click);
             // 
             // toolMenuView
             // 
@@ -108,6 +110,7 @@
             // 
             // menuHome
             // 
+            this.menuHome.BackColor = System.Drawing.SystemColors.ControlLight;
             this.menuHome.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuHome.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolMenuProgram,
@@ -138,7 +141,7 @@
 
         #endregion
         private System.Windows.Forms.ToolStripMenuItem toolMenuProgram;
-        private System.Windows.Forms.ToolStripMenuItem activateNewSportTMI;
+        private System.Windows.Forms.ToolStripMenuItem teamManagerTMI;
         private System.Windows.Forms.ToolStripMenuItem changeTeamTMI;
         private System.Windows.Forms.ToolStripMenuItem manageMeetsTMI;
         private System.Windows.Forms.ToolStripMenuItem exitTMI;
@@ -147,5 +150,6 @@
         private System.Windows.Forms.ToolStripMenuItem athletesTMI;
         private System.Windows.Forms.ToolStripMenuItem schoolRecordsTMI;
         private System.Windows.Forms.MenuStrip menuHome;
+        private System.Windows.Forms.ToolStripMenuItem activateNewSportTMI;
     }
 }

@@ -14,9 +14,16 @@ namespace BBSports
 {
     public partial class HomePage : Form
     {
+        private string cs = "";
+
+        public int ADMINISTRATION = 1;
+        public int team = 1;
+
         public HomePage()
         {
             InitializeComponent();
+
+            GetConString();
 
             AddTeamOptions();
 
@@ -26,22 +33,20 @@ namespace BBSports
             raceForm.WindowState = FormWindowState.Maximized;
         }
 
-        private String ConString()
+        private void GetConString()
         {
-            String cs = "";
             cs = ConfigurationManager.ConnectionStrings["BBSports.DB"].ConnectionString;
-            return cs;
         }
 
         private void AddTeamOptions()
         {
-            String cs = ConString();
             List<string> teams = new List<string>();
 
             string sql = @"select TeamName from dbo.Teams
                           where AdministrationId = "+ 1 +
                          "and Active = 1";
 
+            this.Enabled = true;
             using (SqlConnection connection = new SqlConnection(cs))
             {
                 using (var command = new SqlCommand(sql, connection))
@@ -55,6 +60,7 @@ namespace BBSports
                 }
             }
             teams.Sort();
+            this.changeTeamTMI.DropDownItems.Clear();
             foreach ( string s in teams)
             {
                 ToolStripMenuItem myMenuTeam = new ToolStripMenuItem();
@@ -80,12 +86,18 @@ namespace BBSports
             meetMan.WindowState = FormWindowState.Maximized;
         }
 
-        private void ActivateNewSportTMI_Click(object sender, EventArgs e)
+        private void ManageTeamsTMI_Click(object sender, EventArgs e)
         {
-            this.Enabled = false;
-            var activate = new ActivateSport();
-            activate.Closed += (s, args) => this.Enabled = true;
-            activate.Show();
+            ActiveMdiChild.Close();
+            TeamManager teams = new TeamManager();
+            teams.MdiParent = this;
+            teams.Show();
+            teams.WindowState = FormWindowState.Maximized;
+        }
+
+        private void exitTMI_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

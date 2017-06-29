@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MeetManager));
             this.scMeetManager = new System.Windows.Forms.SplitContainer();
+            this.bSearch = new System.Windows.Forms.Button();
             this.gbMeetParam = new System.Windows.Forms.GroupBox();
             this.rbFemale = new System.Windows.Forms.RadioButton();
             this.rbCurrent = new System.Windows.Forms.RadioButton();
@@ -41,7 +42,7 @@
             this.dateTPBegin = new System.Windows.Forms.DateTimePicker();
             this.dgMeetsList = new System.Windows.Forms.DataGridView();
             this.MeetDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.MeetId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Meet = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.MeetName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Gender = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.gbOtherScore = new System.Windows.Forms.GroupBox();
@@ -69,7 +70,7 @@
             this.tbLocation = new System.Windows.Forms.TextBox();
             this.lLocation = new System.Windows.Forms.Label();
             this.tbMeetName = new System.Windows.Forms.TextBox();
-            this.bSearch = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.scMeetManager)).BeginInit();
             this.scMeetManager.Panel1.SuspendLayout();
             this.scMeetManager.Panel2.SuspendLayout();
@@ -93,6 +94,7 @@
             // 
             // scMeetManager.Panel1
             // 
+            this.scMeetManager.Panel1.AutoScroll = true;
             this.scMeetManager.Panel1.Controls.Add(this.bSearch);
             this.scMeetManager.Panel1.Controls.Add(this.gbMeetParam);
             this.scMeetManager.Panel1.Controls.Add(this.lEndDate);
@@ -103,6 +105,8 @@
             // 
             // scMeetManager.Panel2
             // 
+            this.scMeetManager.Panel2.AutoScroll = true;
+            this.scMeetManager.Panel2.Controls.Add(this.label1);
             this.scMeetManager.Panel2.Controls.Add(this.gbOtherScore);
             this.scMeetManager.Panel2.Controls.Add(this.gbScore);
             this.scMeetManager.Panel2.Controls.Add(this.bClear);
@@ -123,6 +127,17 @@
             this.scMeetManager.Size = new System.Drawing.Size(1243, 927);
             this.scMeetManager.SplitterDistance = 435;
             this.scMeetManager.TabIndex = 7;
+            // 
+            // bSearch
+            // 
+            this.bSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.bSearch.Image = ((System.Drawing.Image)(resources.GetObject("bSearch.Image")));
+            this.bSearch.Location = new System.Drawing.Point(377, 854);
+            this.bSearch.Name = "bSearch";
+            this.bSearch.Size = new System.Drawing.Size(58, 55);
+            this.bSearch.TabIndex = 8;
+            this.bSearch.UseVisualStyleBackColor = true;
+            this.bSearch.Click += new System.EventHandler(this.Search_Click);
             // 
             // gbMeetParam
             // 
@@ -196,7 +211,8 @@
             // 
             // lBeginDate
             // 
-            this.lBeginDate.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.lBeginDate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lBeginDate.AutoSize = true;
             this.lBeginDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lBeginDate.Location = new System.Drawing.Point(12, 766);
@@ -217,7 +233,6 @@
             // 
             // dateTPBegin
             // 
-            this.dateTPBegin.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.dateTPBegin.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dateTPBegin.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dateTPBegin.Location = new System.Drawing.Point(12, 789);
@@ -235,7 +250,7 @@
             this.dgMeetsList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgMeetsList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.MeetDate,
-            this.MeetId,
+            this.Meet,
             this.MeetName,
             this.Gender});
             this.dgMeetsList.Location = new System.Drawing.Point(0, 0);
@@ -254,13 +269,13 @@
             this.MeetDate.Name = "MeetDate";
             this.MeetDate.ReadOnly = true;
             // 
-            // MeetId
+            // Meet
             // 
-            this.MeetId.DataPropertyName = "MeetId";
-            this.MeetId.HeaderText = "Meet Id";
-            this.MeetId.Name = "MeetId";
-            this.MeetId.ReadOnly = true;
-            this.MeetId.Visible = false;
+            this.Meet.DataPropertyName = "MeetId";
+            this.Meet.HeaderText = "Meet Id";
+            this.Meet.Name = "Meet";
+            this.Meet.ReadOnly = true;
+            this.Meet.Visible = false;
             // 
             // MeetName
             // 
@@ -286,7 +301,7 @@
             this.gbOtherScore.Controls.Add(this.lScore);
             this.gbOtherScore.Controls.Add(this.lPlace);
             this.gbOtherScore.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbOtherScore.Location = new System.Drawing.Point(323, 350);
+            this.gbOtherScore.Location = new System.Drawing.Point(313, 350);
             this.gbOtherScore.Name = "gbOtherScore";
             this.gbOtherScore.Size = new System.Drawing.Size(382, 76);
             this.gbOtherScore.TabIndex = 34;
@@ -351,7 +366,7 @@
             this.gbScore.Controls.Add(this.lOtherScore);
             this.gbScore.Controls.Add(this.lOtherPlace);
             this.gbScore.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbScore.Location = new System.Drawing.Point(323, 276);
+            this.gbScore.Location = new System.Drawing.Point(313, 276);
             this.gbScore.Name = "gbScore";
             this.gbScore.Size = new System.Drawing.Size(382, 68);
             this.gbScore.TabIndex = 33;
@@ -412,7 +427,7 @@
             this.bClear.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.bClear.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.bClear.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bClear.Location = new System.Drawing.Point(154, 811);
+            this.bClear.Location = new System.Drawing.Point(149, 811);
             this.bClear.Name = "bClear";
             this.bClear.Size = new System.Drawing.Size(142, 47);
             this.bClear.TabIndex = 28;
@@ -448,7 +463,7 @@
             // 
             this.bSubmit.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.bSubmit.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bSubmit.Location = new System.Drawing.Point(461, 812);
+            this.bSubmit.Location = new System.Drawing.Point(456, 812);
             this.bSubmit.Name = "bSubmit";
             this.bSubmit.Size = new System.Drawing.Size(193, 46);
             this.bSubmit.TabIndex = 25;
@@ -484,7 +499,7 @@
             this.richTBWeatherNotes.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.richTBWeatherNotes.Location = new System.Drawing.Point(154, 479);
             this.richTBWeatherNotes.Name = "richTBWeatherNotes";
-            this.richTBWeatherNotes.Size = new System.Drawing.Size(500, 96);
+            this.richTBWeatherNotes.Size = new System.Drawing.Size(490, 96);
             this.richTBWeatherNotes.TabIndex = 20;
             this.richTBWeatherNotes.Text = "";
             // 
@@ -507,7 +522,7 @@
             this.richTBMeetNotes.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.richTBMeetNotes.Location = new System.Drawing.Point(154, 638);
             this.richTBMeetNotes.Name = "richTBMeetNotes";
-            this.richTBMeetNotes.Size = new System.Drawing.Size(500, 131);
+            this.richTBMeetNotes.Size = new System.Drawing.Size(490, 131);
             this.richTBMeetNotes.TabIndex = 18;
             this.richTBMeetNotes.Text = "";
             // 
@@ -541,7 +556,7 @@
             0,
             -2147483648});
             this.numericTemperature.Name = "numericTemperature";
-            this.numericTemperature.Size = new System.Drawing.Size(117, 26);
+            this.numericTemperature.Size = new System.Drawing.Size(107, 26);
             this.numericTemperature.TabIndex = 16;
             // 
             // lTemperature
@@ -564,7 +579,7 @@
             this.tbLocation.Location = new System.Drawing.Point(154, 155);
             this.tbLocation.MaxLength = 50;
             this.tbLocation.Name = "tbLocation";
-            this.tbLocation.Size = new System.Drawing.Size(500, 26);
+            this.tbLocation.Size = new System.Drawing.Size(490, 26);
             this.tbLocation.TabIndex = 14;
             // 
             // lLocation
@@ -587,20 +602,17 @@
             this.tbMeetName.Location = new System.Drawing.Point(154, 63);
             this.tbMeetName.MaxLength = 50;
             this.tbMeetName.Name = "tbMeetName";
-            this.tbMeetName.Size = new System.Drawing.Size(500, 34);
+            this.tbMeetName.Size = new System.Drawing.Size(490, 34);
             this.tbMeetName.TabIndex = 12;
             this.tbMeetName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // bSearch
+            // label1
             // 
-            this.bSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bSearch.Image = ((System.Drawing.Image)(resources.GetObject("bSearch.Image")));
-            this.bSearch.Location = new System.Drawing.Point(377, 854);
-            this.bSearch.Name = "bSearch";
-            this.bSearch.Size = new System.Drawing.Size(58, 55);
-            this.bSearch.TabIndex = 8;
-            this.bSearch.UseVisualStyleBackColor = true;
-            this.bSearch.Click += new System.EventHandler(this.Search_Click);
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(794, 924);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(0, 17);
+            this.label1.TabIndex = 35;
             // 
             // MeetManager
             // 
@@ -663,10 +675,6 @@
         private System.Windows.Forms.Label lBeginDate;
         private System.Windows.Forms.DateTimePicker dateTPEnd;
         private System.Windows.Forms.DateTimePicker dateTPBegin;
-        private System.Windows.Forms.DataGridViewTextBoxColumn MeetDate;
-        private System.Windows.Forms.DataGridViewTextBoxColumn MeetId;
-        private System.Windows.Forms.DataGridViewTextBoxColumn MeetName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Gender;
         private System.Windows.Forms.CheckBox cbGenders;
         private System.Windows.Forms.Button bClear;
         private System.Windows.Forms.GroupBox gbOtherScore;
@@ -680,5 +688,10 @@
         private System.Windows.Forms.NumericUpDown numericPlace;
         private System.Windows.Forms.NumericUpDown numericScore;
         private System.Windows.Forms.Button bSearch;
+        private System.Windows.Forms.DataGridViewTextBoxColumn MeetDate;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Meet;
+        private System.Windows.Forms.DataGridViewTextBoxColumn MeetName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Gender;
+        private System.Windows.Forms.Label label1;
     }
 }

@@ -86,7 +86,7 @@ namespace BBSports
                 cbGenders.Enabled = false;
                 gbOtherScore.Enabled = false;
 
-                var meetId = Convert.ToInt32(dgMeetsList.SelectedRows[0].Cells[0].Value);
+                meetId = Convert.ToInt32(dgMeetsList.SelectedRows[0].Cells[0].Value);
                 string getMeet = @"Select MeetName, Location, MeetDate, Temperature, WeatherNotes, MeetNotes " +
                                  "from Meets where MeetId = " + meetId.ToString();
 

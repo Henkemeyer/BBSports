@@ -95,7 +95,16 @@ namespace BBSports
             teams.WindowState = FormWindowState.Maximized;
         }
 
-        private void exitTMI_Click(object sender, EventArgs e)
+        private void ManageAthletesTMI_Click(object sender, EventArgs e)
+        {
+            ActiveMdiChild.Close();
+            AthleteManager athMan = new AthleteManager();
+            athMan.MdiParent = this;
+            athMan.Show();
+            athMan.WindowState = FormWindowState.Maximized;
+        }
+
+        private void ExitTMI_Click(object sender, EventArgs e)
         {
             this.Close();
         }

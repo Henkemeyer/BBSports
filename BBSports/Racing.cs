@@ -36,12 +36,6 @@ namespace BBSports
             DataTable meets = new DataTable();
             SqlDataAdapter adapter = new SqlDataAdapter();
             BindingSource recentMeets = new BindingSource();
-            string include = "";
-
-            if (rbMale.Checked)
-                include = "Male";
-            else if (rbFemale.Checked)
-                include = "Female";
 
             try
             {
@@ -51,11 +45,11 @@ namespace BBSports
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
 
-                        cmd.Parameters.Add("@beginDate", SqlDbType.DateTime).Value = System.DateTime.Now.AddMonths(-6);
-                        cmd.Parameters.Add("@endDate", SqlDbType.DateTime).Value = System.DateTime.Now.AddMonths(3);
+                        cmd.Parameters.Add("@beginDate", SqlDbType.DateTime).Value = System.DateTime.Now.AddMonths(-4);
+                        cmd.Parameters.Add("@endDate", SqlDbType.DateTime).Value = System.DateTime.Now.AddDays(3);
                         cmd.Parameters.Add("@sportId", SqlDbType.Int).Value = 1;
                         cmd.Parameters.Add("@teamId", SqlDbType.Int).Value = 1;
-                        cmd.Parameters.Add("@include", SqlDbType.VarChar).Value = include;
+                        cmd.Parameters.Add("@include", SqlDbType.VarChar).Value = "Current";
 
                         adapter.SelectCommand = cmd;
                         adapter.Fill(meets);

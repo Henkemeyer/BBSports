@@ -42,6 +42,14 @@
             this.rbSFemale = new System.Windows.Forms.RadioButton();
             this.lsearch = new System.Windows.Forms.Label();
             this.dgTeams = new System.Windows.Forms.DataGridView();
+            this.Team = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TeamName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Gender = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Level = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Active = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.bClear = new System.Windows.Forms.Button();
+            this.lWarning = new System.Windows.Forms.Label();
+            this.bDeactivate = new System.Windows.Forms.Button();
             this.lHeader = new System.Windows.Forms.Label();
             this.bActivate = new System.Windows.Forms.Button();
             this.cbSports = new System.Windows.Forms.ComboBox();
@@ -58,11 +66,6 @@
             this.rbMale = new System.Windows.Forms.RadioButton();
             this.rbFemale = new System.Windows.Forms.RadioButton();
             this.lSportName = new System.Windows.Forms.Label();
-            this.MeetId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TeamName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Gender = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Level = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Active = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -93,6 +96,9 @@
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.Controls.Add(this.bClear);
+            this.splitContainer1.Panel2.Controls.Add(this.lWarning);
+            this.splitContainer1.Panel2.Controls.Add(this.bDeactivate);
             this.splitContainer1.Panel2.Controls.Add(this.lHeader);
             this.splitContainer1.Panel2.Controls.Add(this.bActivate);
             this.splitContainer1.Panel2.Controls.Add(this.cbSports);
@@ -113,8 +119,11 @@
             // 
             // bSearch
             // 
+            this.bSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.bSearch.Image = global::BBSports.Properties.Resources.Magnify;
             this.bSearch.Location = new System.Drawing.Point(474, 703);
+            this.bSearch.MinimumSize = new System.Drawing.Size(46, 46);
             this.bSearch.Name = "bSearch";
             this.bSearch.Size = new System.Drawing.Size(46, 48);
             this.bSearch.TabIndex = 8;
@@ -123,6 +132,8 @@
             // 
             // cbSActivated
             // 
+            this.cbSActivated.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.cbSActivated.AutoSize = true;
             this.cbSActivated.Checked = true;
             this.cbSActivated.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -135,6 +146,8 @@
             // 
             // lSSeason
             // 
+            this.lSSeason.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lSSeason.AutoSize = true;
             this.lSSeason.Location = new System.Drawing.Point(43, 662);
             this.lSSeason.Name = "lSSeason";
@@ -144,6 +157,8 @@
             // 
             // cbSSeason
             // 
+            this.cbSSeason.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.cbSSeason.AutoCompleteCustomSource.AddRange(new string[] {
             "All",
             "Fall",
@@ -151,6 +166,7 @@
             "Spring",
             "Summer",
             "All-Year"});
+            this.cbSSeason.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbSSeason.FormattingEnabled = true;
             this.cbSSeason.Items.AddRange(new object[] {
             "All",
@@ -166,6 +182,8 @@
             // 
             // lSSport
             // 
+            this.lSSport.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lSSport.AutoSize = true;
             this.lSSport.Location = new System.Drawing.Point(43, 611);
             this.lSSport.Name = "lSSport";
@@ -175,6 +193,9 @@
             // 
             // cbSSports
             // 
+            this.cbSSports.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbSSports.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbSSports.FormattingEnabled = true;
             this.cbSSports.Location = new System.Drawing.Point(138, 608);
             this.cbSSports.Name = "cbSSports";
@@ -183,6 +204,8 @@
             // 
             // gbSGender
             // 
+            this.gbSGender.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.gbSGender.Controls.Add(this.rbSAll);
             this.gbSGender.Controls.Add(this.rbSCoed);
             this.gbSGender.Controls.Add(this.rbSMale);
@@ -196,9 +219,11 @@
             // 
             // rbSAll
             // 
+            this.rbSAll.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.rbSAll.AutoSize = true;
             this.rbSAll.Checked = true;
-            this.rbSAll.Location = new System.Drawing.Point(131, 58);
+            this.rbSAll.Location = new System.Drawing.Point(101, 61);
             this.rbSAll.Name = "rbSAll";
             this.rbSAll.Size = new System.Drawing.Size(49, 24);
             this.rbSAll.TabIndex = 3;
@@ -208,6 +233,8 @@
             // 
             // rbSCoed
             // 
+            this.rbSCoed.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.rbSCoed.AutoSize = true;
             this.rbSCoed.Location = new System.Drawing.Point(28, 58);
             this.rbSCoed.Name = "rbSCoed";
@@ -218,8 +245,10 @@
             // 
             // rbSMale
             // 
+            this.rbSMale.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.rbSMale.AutoSize = true;
-            this.rbSMale.Location = new System.Drawing.Point(131, 25);
+            this.rbSMale.Location = new System.Drawing.Point(101, 28);
             this.rbSMale.Name = "rbSMale";
             this.rbSMale.Size = new System.Drawing.Size(44, 24);
             this.rbSMale.TabIndex = 1;
@@ -228,6 +257,8 @@
             // 
             // rbSFemale
             // 
+            this.rbSFemale.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.rbSFemale.AutoSize = true;
             this.rbSFemale.Location = new System.Drawing.Point(28, 28);
             this.rbSFemale.Name = "rbSFemale";
@@ -238,6 +269,8 @@
             // 
             // lsearch
             // 
+            this.lsearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lsearch.AutoSize = true;
             this.lsearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lsearch.Location = new System.Drawing.Point(23, 578);
@@ -252,7 +285,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgTeams.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgTeams.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.MeetId,
+            this.Team,
             this.TeamName,
             this.Gender,
             this.Level,
@@ -263,208 +296,17 @@
             this.dgTeams.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgTeams.Size = new System.Drawing.Size(685, 560);
             this.dgTeams.TabIndex = 0;
+            this.dgTeams.TabStop = false;
             this.dgTeams.VirtualMode = true;
             this.dgTeams.DoubleClick += new System.EventHandler(this.Teams_DoubleClick);
             // 
-            // lHeader
+            // Team
             // 
-            this.lHeader.AutoSize = true;
-            this.lHeader.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lHeader.Location = new System.Drawing.Point(206, 43);
-            this.lHeader.Name = "lHeader";
-            this.lHeader.Size = new System.Drawing.Size(153, 31);
-            this.lHeader.TabIndex = 26;
-            this.lHeader.Text = "New Team";
-            // 
-            // bActivate
-            // 
-            this.bActivate.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bActivate.Location = new System.Drawing.Point(570, 578);
-            this.bActivate.Margin = new System.Windows.Forms.Padding(4);
-            this.bActivate.Name = "bActivate";
-            this.bActivate.Size = new System.Drawing.Size(145, 48);
-            this.bActivate.TabIndex = 25;
-            this.bActivate.Text = "Activate";
-            this.bActivate.UseVisualStyleBackColor = true;
-            // 
-            // cbSports
-            // 
-            this.cbSports.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbSports.FormattingEnabled = true;
-            this.cbSports.Location = new System.Drawing.Point(393, 136);
-            this.cbSports.Margin = new System.Windows.Forms.Padding(4);
-            this.cbSports.Name = "cbSports";
-            this.cbSports.Size = new System.Drawing.Size(418, 28);
-            this.cbSports.TabIndex = 24;
-            // 
-            // tbTeamName
-            // 
-            this.tbTeamName.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbTeamName.Location = new System.Drawing.Point(393, 186);
-            this.tbTeamName.Margin = new System.Windows.Forms.Padding(4);
-            this.tbTeamName.Name = "tbTeamName";
-            this.tbTeamName.Size = new System.Drawing.Size(418, 26);
-            this.tbTeamName.TabIndex = 23;
-            // 
-            // lTeamName
-            // 
-            this.lTeamName.AutoSize = true;
-            this.lTeamName.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lTeamName.Location = new System.Drawing.Point(208, 187);
-            this.lTeamName.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lTeamName.Name = "lTeamName";
-            this.lTeamName.Size = new System.Drawing.Size(126, 25);
-            this.lTeamName.TabIndex = 22;
-            this.lTeamName.Text = "Team Name:";
-            // 
-            // lOther
-            // 
-            this.lOther.AutoSize = true;
-            this.lOther.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lOther.Location = new System.Drawing.Point(208, 504);
-            this.lOther.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lOther.Name = "lOther";
-            this.lOther.Size = new System.Drawing.Size(92, 25);
-            this.lOther.TabIndex = 21;
-            this.lOther.Text = "*If Other*";
-            this.lOther.Visible = false;
-            // 
-            // tbOther
-            // 
-            this.tbOther.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbOther.Location = new System.Drawing.Point(393, 503);
-            this.tbOther.Margin = new System.Windows.Forms.Padding(4);
-            this.tbOther.Name = "tbOther";
-            this.tbOther.Size = new System.Drawing.Size(418, 26);
-            this.tbOther.TabIndex = 20;
-            this.tbOther.Visible = false;
-            // 
-            // cbLevel
-            // 
-            this.cbLevel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbLevel.FormattingEnabled = true;
-            this.cbLevel.Items.AddRange(new object[] {
-            "Club",
-            "Division I",
-            "Division II",
-            "Division III",
-            "High School",
-            "Middle School",
-            "Premier Club",
-            "Recreation",
-            "(Other)"});
-            this.cbLevel.Location = new System.Drawing.Point(393, 441);
-            this.cbLevel.Margin = new System.Windows.Forms.Padding(4);
-            this.cbLevel.Name = "cbLevel";
-            this.cbLevel.Size = new System.Drawing.Size(418, 28);
-            this.cbLevel.TabIndex = 19;
-            // 
-            // lLevel
-            // 
-            this.lLevel.AutoSize = true;
-            this.lLevel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lLevel.Location = new System.Drawing.Point(208, 444);
-            this.lLevel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lLevel.Name = "lLevel";
-            this.lLevel.Size = new System.Drawing.Size(65, 25);
-            this.lLevel.TabIndex = 18;
-            this.lLevel.Text = "Level:";
-            // 
-            // lSeason
-            // 
-            this.lSeason.AutoSize = true;
-            this.lSeason.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lSeason.Location = new System.Drawing.Point(208, 237);
-            this.lSeason.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lSeason.Name = "lSeason";
-            this.lSeason.Size = new System.Drawing.Size(86, 25);
-            this.lSeason.TabIndex = 17;
-            this.lSeason.Text = "Season:";
-            // 
-            // cbSeason
-            // 
-            this.cbSeason.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbSeason.FormattingEnabled = true;
-            this.cbSeason.Items.AddRange(new object[] {
-            "Fall",
-            "Winter",
-            "Spring",
-            "Summer",
-            "All-Year"});
-            this.cbSeason.Location = new System.Drawing.Point(393, 236);
-            this.cbSeason.Margin = new System.Windows.Forms.Padding(4);
-            this.cbSeason.Name = "cbSeason";
-            this.cbSeason.Size = new System.Drawing.Size(418, 28);
-            this.cbSeason.TabIndex = 16;
-            // 
-            // gbGender
-            // 
-            this.gbGender.Controls.Add(this.rbCoed);
-            this.gbGender.Controls.Add(this.rbMale);
-            this.gbGender.Controls.Add(this.rbFemale);
-            this.gbGender.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbGender.Location = new System.Drawing.Point(198, 316);
-            this.gbGender.Margin = new System.Windows.Forms.Padding(4);
-            this.gbGender.Name = "gbGender";
-            this.gbGender.Padding = new System.Windows.Forms.Padding(4);
-            this.gbGender.Size = new System.Drawing.Size(613, 96);
-            this.gbGender.TabIndex = 15;
-            this.gbGender.TabStop = false;
-            this.gbGender.Text = "Gender:";
-            // 
-            // rbCoed
-            // 
-            this.rbCoed.AutoSize = true;
-            this.rbCoed.Location = new System.Drawing.Point(458, 48);
-            this.rbCoed.Name = "rbCoed";
-            this.rbCoed.Size = new System.Drawing.Size(77, 24);
-            this.rbCoed.TabIndex = 2;
-            this.rbCoed.TabStop = true;
-            this.rbCoed.Text = "Co-Ed";
-            this.rbCoed.UseVisualStyleBackColor = true;
-            // 
-            // rbMale
-            // 
-            this.rbMale.AutoSize = true;
-            this.rbMale.Location = new System.Drawing.Point(248, 48);
-            this.rbMale.Margin = new System.Windows.Forms.Padding(4);
-            this.rbMale.Name = "rbMale";
-            this.rbMale.Size = new System.Drawing.Size(66, 24);
-            this.rbMale.TabIndex = 1;
-            this.rbMale.Text = "Male";
-            this.rbMale.UseVisualStyleBackColor = true;
-            // 
-            // rbFemale
-            // 
-            this.rbFemale.AutoSize = true;
-            this.rbFemale.Checked = true;
-            this.rbFemale.Location = new System.Drawing.Point(30, 48);
-            this.rbFemale.Margin = new System.Windows.Forms.Padding(4);
-            this.rbFemale.Name = "rbFemale";
-            this.rbFemale.Size = new System.Drawing.Size(85, 24);
-            this.rbFemale.TabIndex = 0;
-            this.rbFemale.TabStop = true;
-            this.rbFemale.Text = "Female";
-            this.rbFemale.UseVisualStyleBackColor = true;
-            // 
-            // lSportName
-            // 
-            this.lSportName.AutoSize = true;
-            this.lSportName.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lSportName.Location = new System.Drawing.Point(208, 133);
-            this.lSportName.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lSportName.Name = "lSportName";
-            this.lSportName.Size = new System.Drawing.Size(65, 25);
-            this.lSportName.TabIndex = 14;
-            this.lSportName.Text = "Sport:";
-            // 
-            // MeetId
-            // 
-            this.MeetId.DataPropertyName = "MeetId";
-            this.MeetId.HeaderText = "Meet Id";
-            this.MeetId.Name = "MeetId";
-            this.MeetId.ReadOnly = true;
-            this.MeetId.Visible = false;
+            this.Team.DataPropertyName = "TeamId";
+            this.Team.HeaderText = "Team Id";
+            this.Team.Name = "Team";
+            this.Team.ReadOnly = true;
+            this.Team.Visible = false;
             // 
             // TeamName
             // 
@@ -498,11 +340,296 @@
             this.Active.ReadOnly = true;
             this.Active.TrueValue = "1";
             // 
+            // bClear
+            // 
+            this.bClear.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.bClear.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bClear.Location = new System.Drawing.Point(388, 597);
+            this.bClear.MinimumSize = new System.Drawing.Size(100, 48);
+            this.bClear.Name = "bClear";
+            this.bClear.Size = new System.Drawing.Size(144, 48);
+            this.bClear.TabIndex = 9;
+            this.bClear.Text = "Clear";
+            this.bClear.UseVisualStyleBackColor = true;
+            this.bClear.Click += new System.EventHandler(this.Clear_Click);
+            // 
+            // lWarning
+            // 
+            this.lWarning.AutoSize = true;
+            this.lWarning.ForeColor = System.Drawing.Color.Red;
+            this.lWarning.Location = new System.Drawing.Point(213, 688);
+            this.lWarning.Name = "lWarning";
+            this.lWarning.Size = new System.Drawing.Size(387, 20);
+            this.lWarning.TabIndex = 28;
+            this.lWarning.Text = "*Deactivated Teams are subject to a 48 hour lock.*";
+            this.lWarning.Visible = false;
+            // 
+            // bDeactivate
+            // 
+            this.bDeactivate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.bDeactivate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.bDeactivate.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bDeactivate.Location = new System.Drawing.Point(143, 595);
+            this.bDeactivate.MinimumSize = new System.Drawing.Size(100, 48);
+            this.bDeactivate.Name = "bDeactivate";
+            this.bDeactivate.Size = new System.Drawing.Size(144, 48);
+            this.bDeactivate.TabIndex = 8;
+            this.bDeactivate.Text = "Deactivate";
+            this.bDeactivate.UseVisualStyleBackColor = false;
+            this.bDeactivate.Visible = false;
+            this.bDeactivate.Click += new System.EventHandler(this.Deactivate_Click);
+            // 
+            // lHeader
+            // 
+            this.lHeader.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lHeader.AutoSize = true;
+            this.lHeader.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lHeader.Location = new System.Drawing.Point(160, 42);
+            this.lHeader.Name = "lHeader";
+            this.lHeader.Size = new System.Drawing.Size(153, 31);
+            this.lHeader.TabIndex = 99;
+            this.lHeader.Text = "New Team";
+            // 
+            // bActivate
+            // 
+            this.bActivate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.bActivate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.bActivate.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.bActivate.FlatAppearance.BorderSize = 0;
+            this.bActivate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.bActivate.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bActivate.Location = new System.Drawing.Point(620, 597);
+            this.bActivate.Margin = new System.Windows.Forms.Padding(4);
+            this.bActivate.MinimumSize = new System.Drawing.Size(100, 48);
+            this.bActivate.Name = "bActivate";
+            this.bActivate.Size = new System.Drawing.Size(144, 48);
+            this.bActivate.TabIndex = 7;
+            this.bActivate.Text = "Activate";
+            this.bActivate.UseVisualStyleBackColor = false;
+            this.bActivate.Click += new System.EventHandler(this.Activate_Click);
+            // 
+            // cbSports
+            // 
+            this.cbSports.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbSports.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbSports.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbSports.FormattingEnabled = true;
+            this.cbSports.Location = new System.Drawing.Point(347, 135);
+            this.cbSports.Margin = new System.Windows.Forms.Padding(4);
+            this.cbSports.MinimumSize = new System.Drawing.Size(250, 0);
+            this.cbSports.Name = "cbSports";
+            this.cbSports.Size = new System.Drawing.Size(417, 28);
+            this.cbSports.TabIndex = 1;
+            // 
+            // tbTeamName
+            // 
+            this.tbTeamName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbTeamName.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbTeamName.Location = new System.Drawing.Point(347, 185);
+            this.tbTeamName.Margin = new System.Windows.Forms.Padding(4);
+            this.tbTeamName.MinimumSize = new System.Drawing.Size(250, 26);
+            this.tbTeamName.Name = "tbTeamName";
+            this.tbTeamName.Size = new System.Drawing.Size(417, 26);
+            this.tbTeamName.TabIndex = 2;
+            // 
+            // lTeamName
+            // 
+            this.lTeamName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lTeamName.AutoSize = true;
+            this.lTeamName.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lTeamName.Location = new System.Drawing.Point(162, 186);
+            this.lTeamName.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lTeamName.Name = "lTeamName";
+            this.lTeamName.Size = new System.Drawing.Size(126, 25);
+            this.lTeamName.TabIndex = 99;
+            this.lTeamName.Text = "Team Name:";
+            // 
+            // lOther
+            // 
+            this.lOther.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lOther.AutoSize = true;
+            this.lOther.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lOther.Location = new System.Drawing.Point(162, 503);
+            this.lOther.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lOther.Name = "lOther";
+            this.lOther.Size = new System.Drawing.Size(92, 25);
+            this.lOther.TabIndex = 99;
+            this.lOther.Text = "*If Other*";
+            this.lOther.Visible = false;
+            // 
+            // tbOther
+            // 
+            this.tbOther.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbOther.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbOther.Location = new System.Drawing.Point(347, 502);
+            this.tbOther.Margin = new System.Windows.Forms.Padding(4);
+            this.tbOther.MinimumSize = new System.Drawing.Size(250, 26);
+            this.tbOther.Name = "tbOther";
+            this.tbOther.Size = new System.Drawing.Size(417, 26);
+            this.tbOther.TabIndex = 6;
+            this.tbOther.Visible = false;
+            // 
+            // cbLevel
+            // 
+            this.cbLevel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbLevel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbLevel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbLevel.FormattingEnabled = true;
+            this.cbLevel.Items.AddRange(new object[] {
+            "Club",
+            "Division I",
+            "Division II",
+            "Division III",
+            "High School",
+            "Middle School",
+            "Premier Club",
+            "Recreation",
+            "(Other)"});
+            this.cbLevel.Location = new System.Drawing.Point(347, 440);
+            this.cbLevel.Margin = new System.Windows.Forms.Padding(4);
+            this.cbLevel.MinimumSize = new System.Drawing.Size(250, 0);
+            this.cbLevel.Name = "cbLevel";
+            this.cbLevel.Size = new System.Drawing.Size(417, 28);
+            this.cbLevel.TabIndex = 5;
+            this.cbLevel.SelectedIndexChanged += new System.EventHandler(this.Level_SelectedIndexChanged);
+            // 
+            // lLevel
+            // 
+            this.lLevel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lLevel.AutoSize = true;
+            this.lLevel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lLevel.Location = new System.Drawing.Point(162, 443);
+            this.lLevel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lLevel.Name = "lLevel";
+            this.lLevel.Size = new System.Drawing.Size(65, 25);
+            this.lLevel.TabIndex = 99;
+            this.lLevel.Text = "Level:";
+            // 
+            // lSeason
+            // 
+            this.lSeason.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lSeason.AutoSize = true;
+            this.lSeason.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lSeason.Location = new System.Drawing.Point(162, 236);
+            this.lSeason.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lSeason.Name = "lSeason";
+            this.lSeason.Size = new System.Drawing.Size(86, 25);
+            this.lSeason.TabIndex = 99;
+            this.lSeason.Text = "Season:";
+            // 
+            // cbSeason
+            // 
+            this.cbSeason.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbSeason.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbSeason.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbSeason.FormattingEnabled = true;
+            this.cbSeason.Items.AddRange(new object[] {
+            "Fall",
+            "Winter",
+            "Spring",
+            "Summer",
+            "All-Year"});
+            this.cbSeason.Location = new System.Drawing.Point(347, 235);
+            this.cbSeason.Margin = new System.Windows.Forms.Padding(4);
+            this.cbSeason.MinimumSize = new System.Drawing.Size(250, 0);
+            this.cbSeason.Name = "cbSeason";
+            this.cbSeason.Size = new System.Drawing.Size(417, 28);
+            this.cbSeason.TabIndex = 3;
+            // 
+            // gbGender
+            // 
+            this.gbGender.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbGender.Controls.Add(this.rbCoed);
+            this.gbGender.Controls.Add(this.rbMale);
+            this.gbGender.Controls.Add(this.rbFemale);
+            this.gbGender.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gbGender.Location = new System.Drawing.Point(152, 315);
+            this.gbGender.Margin = new System.Windows.Forms.Padding(4);
+            this.gbGender.Name = "gbGender";
+            this.gbGender.Padding = new System.Windows.Forms.Padding(4);
+            this.gbGender.Size = new System.Drawing.Size(612, 96);
+            this.gbGender.TabIndex = 4;
+            this.gbGender.TabStop = false;
+            this.gbGender.Text = "Gender:";
+            // 
+            // rbCoed
+            // 
+            this.rbCoed.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.rbCoed.AutoSize = true;
+            this.rbCoed.Location = new System.Drawing.Point(236, 48);
+            this.rbCoed.Name = "rbCoed";
+            this.rbCoed.Size = new System.Drawing.Size(90, 29);
+            this.rbCoed.TabIndex = 2;
+            this.rbCoed.TabStop = true;
+            this.rbCoed.Text = "Co-Ed";
+            this.rbCoed.UseVisualStyleBackColor = true;
+            // 
+            // rbMale
+            // 
+            this.rbMale.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.rbMale.AutoSize = true;
+            this.rbMale.Location = new System.Drawing.Point(148, 48);
+            this.rbMale.Margin = new System.Windows.Forms.Padding(4);
+            this.rbMale.Name = "rbMale";
+            this.rbMale.Size = new System.Drawing.Size(76, 29);
+            this.rbMale.TabIndex = 1;
+            this.rbMale.TabStop = true;
+            this.rbMale.Text = "Male";
+            this.rbMale.UseVisualStyleBackColor = true;
+            // 
+            // rbFemale
+            // 
+            this.rbFemale.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.rbFemale.AutoSize = true;
+            this.rbFemale.Checked = true;
+            this.rbFemale.Location = new System.Drawing.Point(30, 48);
+            this.rbFemale.Margin = new System.Windows.Forms.Padding(4);
+            this.rbFemale.Name = "rbFemale";
+            this.rbFemale.Size = new System.Drawing.Size(98, 29);
+            this.rbFemale.TabIndex = 0;
+            this.rbFemale.TabStop = true;
+            this.rbFemale.Text = "Female";
+            this.rbFemale.UseVisualStyleBackColor = true;
+            // 
+            // lSportName
+            // 
+            this.lSportName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lSportName.AutoSize = true;
+            this.lSportName.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lSportName.Location = new System.Drawing.Point(162, 132);
+            this.lSportName.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lSportName.Name = "lSportName";
+            this.lSportName.Size = new System.Drawing.Size(65, 25);
+            this.lSportName.TabIndex = 99;
+            this.lSportName.Text = "Sport:";
+            // 
             // TeamManager
             // 
+            this.AcceptButton = this.bActivate;
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
+            this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(1638, 808);
+            this.ControlBox = false;
             this.Controls.Add(this.splitContainer1);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(4);
@@ -555,10 +682,13 @@
         private System.Windows.Forms.ComboBox cbSSeason;
         private System.Windows.Forms.Button bSearch;
         private System.Windows.Forms.CheckBox cbSActivated;
-        private System.Windows.Forms.DataGridViewTextBoxColumn MeetId;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Team;
         private System.Windows.Forms.DataGridViewTextBoxColumn TeamName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Gender;
         private System.Windows.Forms.DataGridViewTextBoxColumn Level;
         private System.Windows.Forms.DataGridViewCheckBoxColumn Active;
+        private System.Windows.Forms.Button bDeactivate;
+        private System.Windows.Forms.Label lWarning;
+        private System.Windows.Forms.Button bClear;
     }
 }

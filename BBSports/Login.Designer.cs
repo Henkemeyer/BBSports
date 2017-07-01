@@ -127,6 +127,8 @@
             this.Controls.Add(this.tbUsername);
             this.Controls.Add(this.bLogin);
             this.Controls.Add(this.bNewUser);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "Login";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Welcome";

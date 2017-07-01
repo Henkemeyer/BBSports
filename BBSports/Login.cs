@@ -12,29 +12,17 @@ namespace BBSports
 {
     public partial class Login : Form
     {
-        public Login()
+        HomePage homebase = null;
+        public Login(HomePage hp)
         {
             InitializeComponent();
+            homebase = hp;
         }
 
         private void Login_Click(object sender, EventArgs e)
         {
-            //Replace with commented out code eventually
-            this.Hide();
-            var home = new HomePage();
-            home.Closed += (s, args) => this.Close();
-            home.Show();
-            /* if (tbUsername.Text == "Henkemeyer" && tbPassword.Text == "a")
-            {
-                this.Hide();
-                var home = new HomePage();
-                home.Closed += (s, args) => this.Close();
-                home.Show();
-            }
-            else
-            {
-                MessageBox.Show("Username and Password do not match.","Uh-Oh");
-            }*/
+            homebase.SetAdmin(1);
+            this.Close();
         }
     }
 }

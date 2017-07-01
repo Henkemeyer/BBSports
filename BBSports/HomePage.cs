@@ -16,26 +16,71 @@ namespace BBSports
     {
         private string cs = "";
 
-        public int ADMINISTRATION = 1;
-        public int team = 1;
+        private void GetConString()
+        {
+            cs = ConfigurationManager.ConnectionStrings["BBSports.DB"].ConnectionString;
+        }
 
+        public int adminId = 0;
+        public int teamId = 0;
+        public int sportId = 0;
+
+        public int GetAdmin()
+        {
+            return adminId;
+        }
+
+        public void SetAdmin(int aId)
+        {
+            adminId = aId;
+        }
+
+        public int GetTeamId()
+        {
+            return teamId;
+        }
+
+        public void SetTeamId(int tId)
+        {
+            teamId = tId;
+        }
+        
+        public int GetSportId()
+        {
+            return sportId;
+        }
+
+        public void SetSportId(int sport)
+        {
+            sportId = sport;
+        }
+
+        // Begin HomePage Logic
+        //
+        //
         public HomePage()
         {
             InitializeComponent();
 
             GetConString();
-
-            AddTeamOptions();
-
-            Racing raceForm = new Racing();
-            raceForm.MdiParent = this;
-            raceForm.Show();
-            raceForm.WindowState = FormWindowState.Maximized;
+            ChangeUser();
         }
 
-        private void GetConString()
+        private void ChangeUser()
         {
-            cs = ConfigurationManager.ConnectionStrings["BBSports.DB"].ConnectionString;
+            Login login = new Login(this);
+            login.ShowDialog();
+            LoadFirstPage();
+        }
+
+        public void LoadFirstPage()
+        {
+            Racing startPage = new Racing(this);
+            startPage.MdiParent = this;
+            startPage.Show();
+            startPage.WindowState = FormWindowState.Maximized;
+
+            AddTeamOptions();
         }
 
         private void AddTeamOptions()
@@ -43,10 +88,9 @@ namespace BBSports
             List<string> teams = new List<string>();
 
             string sql = @"select TeamName from dbo.Teams
-                          where AdministrationId = "+ 1 +
+                          where AdministrationId = "+ adminId +
                          "and Active = 1";
-
-            this.Enabled = true;
+            
             using (SqlConnection connection = new SqlConnection(cs))
             {
                 using (var command = new SqlCommand(sql, connection))
@@ -74,13 +118,39 @@ namespace BBSports
         private void MenuItemClickHandler(object sender, EventArgs e)
         {
             ToolStripMenuItem clickedItem = (ToolStripMenuItem)sender;
-            MessageBox.Show("We did it!");
+            string teamName = clickedItem.Text;
+
+            using (SqlConnection connection = new SqlConnection(cs))
+            {
+                using (var command = new SqlCommand("SwitchTeams", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add("@adminId", SqlDbType.Int).Value = GetAdmin();
+                    command.Parameters.Add("@teamName", SqlDbType.VarChar).Value = teamName;
+
+                    connection.Open();
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            SetSportId(reader.GetInt32(0));
+                            SetTeamId(reader.GetInt32(1));
+                        }
+                    }
+                }
+            }
+            this.changeTeamTMI.Checked = false;
+            foreach(ToolStripMenuItem item in changeTeamTMI.DropDownItems)
+            {
+                item.Checked = false;
+            }
+            clickedItem.Checked = true;
         }
 
         private void ManageMeetsTMI_Click(object sender, EventArgs e)
         {
             ActiveMdiChild.Close();
-            MeetManager meetMan = new MeetManager();
+            MeetManager meetMan = new MeetManager(this);
             meetMan.MdiParent = this;
             meetMan.Show();
             meetMan.WindowState = FormWindowState.Maximized;
@@ -89,7 +159,7 @@ namespace BBSports
         private void ManageTeamsTMI_Click(object sender, EventArgs e)
         {
             ActiveMdiChild.Close();
-            TeamManager teams = new TeamManager();
+            TeamManager teams = new TeamManager(this);
             teams.MdiParent = this;
             teams.Show();
             teams.WindowState = FormWindowState.Maximized;
@@ -98,15 +168,30 @@ namespace BBSports
         private void ManageAthletesTMI_Click(object sender, EventArgs e)
         {
             ActiveMdiChild.Close();
-            AthleteManager athMan = new AthleteManager();
+            AthleteManager athMan = new AthleteManager(this);
             athMan.MdiParent = this;
             athMan.Show();
             athMan.WindowState = FormWindowState.Maximized;
+        }
+
+        private void PerformancesTMI_Click(object sender, EventArgs e)
+        {
+            ActiveMdiChild.Close();
+            Racing raceForm = new Racing(this);
+            raceForm.MdiParent = this;
+            raceForm.Show();
+            raceForm.WindowState = FormWindowState.Maximized;
+        }
+
+        private void SwitchUserTMI_Click(object sender, EventArgs e)
+        {
+            ChangeUser();
         }
 
         private void ExitTMI_Click(object sender, EventArgs e)
         {
             this.Close();
         }
+
     }
 }

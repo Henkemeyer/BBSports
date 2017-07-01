@@ -16,10 +16,12 @@ namespace BBSports
     {
         private string cs = "";
         private int athleteId = 0;
+        private HomePage homebase = null;
 
-        public AthleteManager()
+        public AthleteManager(HomePage hp)
         {
             InitializeComponent();
+            homebase = hp;
             StartUp();
         }
 
@@ -41,7 +43,7 @@ namespace BBSports
             List<string> grades = new List<string>();
 
             string getGrades = @"select c.Grades from Classifications c, Administration a
-                          where a.AdministrationId = " + 1 +
+                          where a.AdministrationId = " + homebase.GetAdmin() +
                          "and a.Classification = c.Classification " +
                          "order by c.ClassId asc";
 
@@ -77,7 +79,6 @@ namespace BBSports
             SqlDataAdapter adapter = new SqlDataAdapter();
             BindingSource orgAthletes = new BindingSource();
             string gender = "Female";
-            int team = 0;
             string grades = "";
             string teams = "";
 
@@ -88,14 +89,14 @@ namespace BBSports
 
             foreach(var g in clbSGrades.CheckedItems)
             {
-                grades += g.ToString();
+                grades += "'" + g.ToString() + "'";
                 if (clbSGrades.CheckedItems.IndexOf(g) != clbSGrades.CheckedItems.Count - 1)
                     grades += ", ";
             }
 
             foreach (var t in clbSTeams.CheckedItems)
             {
-                teams += t.ToString();
+                teams += "'" + t.ToString() + "'";
                 if (clbSTeams.CheckedItems.IndexOf(t) != clbSTeams.CheckedItems.Count - 1)
                     teams += ", ";
             }
@@ -108,8 +109,8 @@ namespace BBSports
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
 
-                        cmd.Parameters.Add("@adminId", SqlDbType.Int).Value = 1;
-                        cmd.Parameters.Add("@teamId", SqlDbType.Int).Value = team;
+                        cmd.Parameters.Add("@adminId", SqlDbType.Int).Value = homebase.GetAdmin();
+                        cmd.Parameters.Add("@teamId", SqlDbType.Int).Value = homebase.GetTeamId();
                         cmd.Parameters.Add("@gender", SqlDbType.VarChar).Value = gender;
                         cmd.Parameters.Add("@grades", SqlDbType.VarChar).Value = grades;
                         cmd.Parameters.Add("@teams", SqlDbType.VarChar).Value = teams;
@@ -136,6 +137,7 @@ namespace BBSports
         private void Clear()
         {
             lHeader.Text = "New Athlete";
+            clbSTeams.Enabled = true;
             athleteId = 0;
             tbFirst.Text = "";
             tbMiddle.Text = "";
@@ -165,7 +167,7 @@ namespace BBSports
                 gender = "Female";
 
             string sql = @"select TeamName from dbo.Teams
-                          where AdministrationId = " + 1 +
+                          where AdministrationId = " + homebase.GetAdmin() +
                          "and Active = 1 " +
                          "and Gender <> '" + gender + "'";
 
@@ -206,7 +208,7 @@ namespace BBSports
                 gender = "Gender";
 
             string getSTeams = @"select TeamName from dbo.Teams
-                                where AdministrationId = " + 1 +
+                                where AdministrationId = " + homebase.GetAdmin() +
                                 " and Gender = " + gender +
                                 " and Active = 1";
 
@@ -249,14 +251,14 @@ namespace BBSports
 
             athleteId = Convert.ToInt32(dgAthletes.SelectedRows[0].Cells[0].Value);
 
-            string sql = @"select FirstName, MiddleName, LastName, Nickname, " +
+            string getAth = @"select FirstName, MiddleName, LastName, Nickname, " +
                     "Birthday, Gender, Notes, Grade from Athletes where AthleteId = " + athleteId;
 
             string gender = "";
 
             using (SqlConnection connection = new SqlConnection(cs))
             {
-                using (var command = new SqlCommand(sql, connection))
+                using (var command = new SqlCommand(getAth, connection))
                 {
                     connection.Open();
                     using (var reader = command.ExecuteReader())
@@ -279,7 +281,29 @@ namespace BBSports
             else
                 rbMale.Checked = true;
 
+            //GetTeams(); This might be redundent.
+
+            string getTeams = @"select t.TeamName from Teams t, Roster r " +
+                    "where r.AthleteId = " + athleteId + " and r.TeamId = t.TeamId " +
+                    "and t.AdministrationId = " + homebase.GetAdmin();
+
+            using (SqlConnection conn = new SqlConnection(cs))
+            {
+                using (var command = new SqlCommand(getTeams, conn))
+                {
+                    conn.Open();
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            clbTeams.SetItemChecked(clbTeams.Items.IndexOf(reader.GetString(0)), true);
+                        }
+                    }
+                }
+            }
+
             gbGender.Enabled = false;
+            clbSTeams.Enabled = false;
             lHeader.Text = "Edit Athlete";
         }
 
@@ -311,18 +335,22 @@ namespace BBSports
                             cmd.Parameters.Add("@first", SqlDbType.VarChar).Value = tbFirst.Text;
                             cmd.Parameters.Add("@middle", SqlDbType.VarChar).Value = tbMiddle.Text;
                             cmd.Parameters.Add("@last", SqlDbType.VarChar).Value = tbLast.Text;
-                            cmd.Parameters.Add("@nick", SqlDbType.VarChar).Value = tbLast.Text;
+                            cmd.Parameters.Add("@nick", SqlDbType.VarChar).Value = tbNickname.Text;
                             cmd.Parameters.Add("@birthday", SqlDbType.Date).Value = dateTPBirthday.Value;
                             cmd.Parameters.Add("@gender", SqlDbType.VarChar).Value = gender;
                             cmd.Parameters.Add("@notes", SqlDbType.VarChar).Value = richTBNotes.Text;
                             cmd.Parameters.Add("@strength", SqlDbType.VarChar).Value = "";
                             cmd.Parameters.Add("@grade", SqlDbType.VarChar).Value = cbGrade.Text;
 
+                            SqlParameter retrieve = cmd.Parameters.Add("@athleteId", SqlDbType.Int);
+                            retrieve.Direction = ParameterDirection.ReturnValue;
+
                             connection.Open();
                             cmd.ExecuteNonQuery();
 
-                            athleteId = (int)cmd.Parameters["@RETURN_VALUE"].Value;
-                            AddToTeams();
+                            athleteId = (int)retrieve.Value;
+                            if (athleteId > 0)
+                                EditTeams();
                         }
                     }
                     Clear();
@@ -338,38 +366,36 @@ namespace BBSports
             }
         }
 
-        private void AddToTeams()
+        private void EditTeams()
         {
-            string sql = @"";
-            string teamNames = "";
             List<String> rosterIn = new List<String>();
 
             using (SqlConnection connection = new SqlConnection(cs))
             {
+                connection.Open();
                 foreach (var team in clbTeams.CheckedItems)
                 {
-                    teamNames += team.ToString();
-                }
-                sql = @"select TeamId from Teams where AdministrationId = " + 1 +
-                    " and TeamName in (" + teamNames + ")";
-
-                using (var command = new SqlCommand(sql, connection))
-                {
-                    connection.Open();
-                    using (var reader = command.ExecuteReader())
+                    using (var command = new SqlCommand("SwitchTeams", connection))
                     {
-                        while (reader.Read())
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.Add("@adminId", SqlDbType.Int).Value = homebase.GetAdmin();
+                        command.Parameters.Add("@teamName", SqlDbType.VarChar).Value = team.ToString();
+
+                        using (var reader = command.ExecuteReader())
                         {
-                            rosterIn.Add(@"insert into Roster values(" + reader.GetInt32(0) + ", " + athleteId +
-                                ", " + cbGrade.Text + ", 'Active', 0, 'N/A')");
+                            while (reader.Read())
+                            {
+                                rosterIn.Add(@"insert into Roster values(" + reader.GetInt32(1) + ", " + athleteId +
+                                    ", '" + cbGrade.Text + "', 'Active', 0, 'N/A')");
+                            }
                         }
                     }
                 }
+
                 foreach (string s in rosterIn)
                 {
                     using (var cmd = new SqlCommand(s, connection))
                     {
-                        connection.Open();
                         cmd.ExecuteNonQuery();
                     }
                 }

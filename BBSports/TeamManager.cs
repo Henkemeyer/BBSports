@@ -16,11 +16,13 @@ namespace BBSports
     {
         private string cs = "";
         private int teamId = 0;
+        private int adminId = 0;
+        private HomePage homebase = null;
 
-        public TeamManager()
+        public TeamManager(HomePage hp)
         {
             InitializeComponent();
-
+            homebase = hp;
             StartUp();
         }
 
@@ -28,7 +30,7 @@ namespace BBSports
         {
             cs = ConfigurationManager.ConnectionStrings["BBSports.DB"].ConnectionString;
             cbSSeason.SelectedIndex = cbSSeason.FindString("All");
-
+            adminId = homebase.GetAdmin();
             SetAvailableSports();
             GetTeams();
         }
@@ -89,7 +91,7 @@ namespace BBSports
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
 
-                        cmd.Parameters.Add("@administrationId", SqlDbType.Int).Value = 1;
+                        cmd.Parameters.Add("@administrationId", SqlDbType.Int).Value = adminId;
                         cmd.Parameters.Add("@sportName", SqlDbType.VarChar).Value = cbSSports.Text;
                         cmd.Parameters.Add("@level", SqlDbType.VarChar).Value = "All";
                         cmd.Parameters.Add("@season", SqlDbType.VarChar).Value = cbSSeason.Text;
@@ -126,7 +128,7 @@ namespace BBSports
         private void TeamName_TextChanged(object sender, EventArgs e)
         {
             string check = "";
-            string unique = @"Select 'duplicate' from Teams where AdministrationId = " + 1 +
+            string unique = @"Select 'duplicate' from Teams where AdministrationId = " + adminId +
                             " and TeamName = '" + tbTeamName.Text + "'";
 
             using (SqlConnection connection = new SqlConnection(cs))
@@ -188,7 +190,7 @@ namespace BBSports
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
 
-                        cmd.Parameters.Add("@adminId", SqlDbType.Int).Value = 1;
+                        cmd.Parameters.Add("@adminId", SqlDbType.Int).Value = adminId;
                         cmd.Parameters.Add("@sportName", SqlDbType.VarChar).Value = cbSports.Text;
                         cmd.Parameters.Add("@teamId", SqlDbType.Int).Value = teamId;
                         cmd.Parameters.Add("@teamName", SqlDbType.VarChar).Value = tbTeamName.Text;

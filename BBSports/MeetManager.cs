@@ -16,10 +16,12 @@ namespace BBSports
     {
         private string cs = "";
         private int meetId = 0;
+        private HomePage homebase = null;
 
-        public MeetManager()
+        public MeetManager(HomePage hp)
         {
             InitializeComponent();
+            homebase = hp;
             StartUp();
         }
 
@@ -62,8 +64,8 @@ namespace BBSports
 
                         cmd.Parameters.Add("@beginDate", SqlDbType.DateTime).Value = dateTPBegin.Value;
                         cmd.Parameters.Add("@endDate", SqlDbType.DateTime).Value = dateTPEnd.Value;
-                        cmd.Parameters.Add("@sportId", SqlDbType.Int).Value = 1;
-                        cmd.Parameters.Add("@teamId", SqlDbType.Int).Value = 1;
+                        cmd.Parameters.Add("@sportId", SqlDbType.Int).Value = homebase.GetSportId();
+                        cmd.Parameters.Add("@teamId", SqlDbType.Int).Value = homebase.GetTeamId();
                         cmd.Parameters.Add("@include", SqlDbType.VarChar).Value = include;
 
                         adapter.SelectCommand = cmd;
@@ -145,7 +147,7 @@ namespace BBSports
                             cmd.CommandType = CommandType.StoredProcedure;
 
                             cmd.Parameters.Add("@meetId", SqlDbType.Int).Value = meetId;
-                            cmd.Parameters.Add("@teamId", SqlDbType.Int).Value = 1;
+                            cmd.Parameters.Add("@teamId", SqlDbType.Int).Value = homebase.GetTeamId();
                             cmd.Parameters.Add("@meetName", SqlDbType.VarChar).Value = tbMeetName.Text;
                             cmd.Parameters.Add("@location", SqlDbType.VarChar).Value = tbLocation.Text;
                             cmd.Parameters.Add("@meetDate", SqlDbType.DateTime).Value = dateTP.Value;

@@ -16,7 +16,7 @@ namespace BBSports
     {
         private string cs = "";
 
-        public Racing()
+        public Racing(HomePage HP)
         {
             InitializeComponent();
             StartUp();

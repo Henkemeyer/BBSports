@@ -29,72 +29,84 @@
         private void InitializeComponent()
         {
             this.toolMenuProgram = new System.Windows.Forms.ToolStripMenuItem();
-            this.changeTeamTMI = new System.Windows.Forms.ToolStripMenuItem();
+            this.performancesTMI = new System.Windows.Forms.ToolStripMenuItem();
             this.manageAthletesTMI = new System.Windows.Forms.ToolStripMenuItem();
             this.manageMeetsTMI = new System.Windows.Forms.ToolStripMenuItem();
             this.teamManagerTMI = new System.Windows.Forms.ToolStripMenuItem();
+            this.switchUserTMI = new System.Windows.Forms.ToolStripMenuItem();
             this.exitTMI = new System.Windows.Forms.ToolStripMenuItem();
             this.toolMenuView = new System.Windows.Forms.ToolStripMenuItem();
             this.meetPDFTMI = new System.Windows.Forms.ToolStripMenuItem();
             this.schoolRecordsTMI = new System.Windows.Forms.ToolStripMenuItem();
-            this.rosterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rosterTMI = new System.Windows.Forms.ToolStripMenuItem();
             this.menuHome = new System.Windows.Forms.MenuStrip();
             this.activateNewSportTMI = new System.Windows.Forms.ToolStripMenuItem();
+            this.changeTeamTMI = new System.Windows.Forms.ToolStripMenuItem();
             this.menuHome.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolMenuProgram
             // 
             this.toolMenuProgram.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.changeTeamTMI,
+            this.performancesTMI,
             this.manageAthletesTMI,
             this.manageMeetsTMI,
             this.teamManagerTMI,
+            this.switchUserTMI,
             this.exitTMI});
             this.toolMenuProgram.Name = "toolMenuProgram";
-            this.toolMenuProgram.Size = new System.Drawing.Size(78, 24);
-            this.toolMenuProgram.Text = "Program";
+            this.toolMenuProgram.Size = new System.Drawing.Size(75, 24);
+            this.toolMenuProgram.Text = "Manage";
             // 
-            // changeTeamTMI
+            // performancesTMI
             // 
-            this.changeTeamTMI.Name = "changeTeamTMI";
-            this.changeTeamTMI.Size = new System.Drawing.Size(196, 26);
-            this.changeTeamTMI.Text = "Change Team";
+            this.performancesTMI.Name = "performancesTMI";
+            this.performancesTMI.Size = new System.Drawing.Size(181, 26);
+            this.performancesTMI.Text = "Performances";
+            this.performancesTMI.Click += new System.EventHandler(this.PerformancesTMI_Click);
             // 
             // manageAthletesTMI
             // 
             this.manageAthletesTMI.Name = "manageAthletesTMI";
-            this.manageAthletesTMI.Size = new System.Drawing.Size(196, 26);
-            this.manageAthletesTMI.Text = "Manage Athletes";
+            this.manageAthletesTMI.Size = new System.Drawing.Size(181, 26);
+            this.manageAthletesTMI.Text = "Athletes";
             this.manageAthletesTMI.Click += new System.EventHandler(this.ManageAthletesTMI_Click);
             // 
             // manageMeetsTMI
             // 
             this.manageMeetsTMI.Name = "manageMeetsTMI";
-            this.manageMeetsTMI.Size = new System.Drawing.Size(196, 26);
-            this.manageMeetsTMI.Text = "Manage Meets";
+            this.manageMeetsTMI.Size = new System.Drawing.Size(181, 26);
+            this.manageMeetsTMI.Text = "Meets";
             this.manageMeetsTMI.Click += new System.EventHandler(this.ManageMeetsTMI_Click);
             // 
             // teamManagerTMI
             // 
             this.teamManagerTMI.Name = "teamManagerTMI";
-            this.teamManagerTMI.Size = new System.Drawing.Size(196, 26);
-            this.teamManagerTMI.Text = "Manage Teams";
+            this.teamManagerTMI.Size = new System.Drawing.Size(181, 26);
+            this.teamManagerTMI.Text = "Teams";
             this.teamManagerTMI.Click += new System.EventHandler(this.ManageTeamsTMI_Click);
+            // 
+            // switchUserTMI
+            // 
+            this.switchUserTMI.Name = "switchUserTMI";
+            this.switchUserTMI.Size = new System.Drawing.Size(181, 26);
+            this.switchUserTMI.Text = "Switch User";
+            this.switchUserTMI.Click += new System.EventHandler(this.SwitchUserTMI_Click);
             // 
             // exitTMI
             // 
             this.exitTMI.Name = "exitTMI";
-            this.exitTMI.Size = new System.Drawing.Size(196, 26);
+            this.exitTMI.Size = new System.Drawing.Size(181, 26);
             this.exitTMI.Text = "Exit";
             this.exitTMI.Click += new System.EventHandler(this.ExitTMI_Click);
             // 
             // toolMenuView
             // 
             this.toolMenuView.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.changeTeamTMI,
+            this.rosterTMI,
             this.meetPDFTMI,
-            this.schoolRecordsTMI,
-            this.rosterToolStripMenuItem});
+            this.schoolRecordsTMI});
             this.toolMenuView.Name = "toolMenuView";
             this.toolMenuView.Size = new System.Drawing.Size(53, 24);
             this.toolMenuView.Text = "View";
@@ -111,11 +123,11 @@
             this.schoolRecordsTMI.Size = new System.Drawing.Size(186, 26);
             this.schoolRecordsTMI.Text = "School Records";
             // 
-            // rosterToolStripMenuItem
+            // rosterTMI
             // 
-            this.rosterToolStripMenuItem.Name = "rosterToolStripMenuItem";
-            this.rosterToolStripMenuItem.Size = new System.Drawing.Size(186, 26);
-            this.rosterToolStripMenuItem.Text = "Roster";
+            this.rosterTMI.Name = "rosterTMI";
+            this.rosterTMI.Size = new System.Drawing.Size(186, 26);
+            this.rosterTMI.Text = "Roster";
             // 
             // menuHome
             // 
@@ -134,6 +146,12 @@
             // 
             this.activateNewSportTMI.Name = "activateNewSportTMI";
             this.activateNewSportTMI.Size = new System.Drawing.Size(32, 19);
+            // 
+            // changeTeamTMI
+            // 
+            this.changeTeamTMI.Name = "changeTeamTMI";
+            this.changeTeamTMI.Size = new System.Drawing.Size(186, 26);
+            this.changeTeamTMI.Text = "Change Team";
             // 
             // HomePage
             // 
@@ -157,7 +175,6 @@
         #endregion
         private System.Windows.Forms.ToolStripMenuItem toolMenuProgram;
         private System.Windows.Forms.ToolStripMenuItem teamManagerTMI;
-        private System.Windows.Forms.ToolStripMenuItem changeTeamTMI;
         private System.Windows.Forms.ToolStripMenuItem manageMeetsTMI;
         private System.Windows.Forms.ToolStripMenuItem exitTMI;
         private System.Windows.Forms.ToolStripMenuItem toolMenuView;
@@ -166,6 +183,9 @@
         private System.Windows.Forms.MenuStrip menuHome;
         private System.Windows.Forms.ToolStripMenuItem activateNewSportTMI;
         private System.Windows.Forms.ToolStripMenuItem manageAthletesTMI;
-        private System.Windows.Forms.ToolStripMenuItem rosterToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem rosterTMI;
+        private System.Windows.Forms.ToolStripMenuItem performancesTMI;
+        private System.Windows.Forms.ToolStripMenuItem switchUserTMI;
+        private System.Windows.Forms.ToolStripMenuItem changeTeamTMI;
     }
 }

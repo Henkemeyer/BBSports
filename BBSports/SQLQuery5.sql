@@ -1,7 +1,7 @@
-﻿alter table dbo.RacingEvents add SportId int;
+﻿alter table dbo.Meets add Alumni bit Default 0;
 alter table dbo.Administration drop column Type;
 alter table dbo.Athletes alter column Birthday date;
-truncate table Athletes
+truncate table MeetTeams
 EXEC sp_rename 'dbo.Administration.AdminstrationId', 'AdministrationId', 'COLUMN';  
 
 update	dbo.Teams
@@ -15,7 +15,7 @@ insert into dbo.Administration
 values('University of Wisconsin Stout', '1/1/2018', 100, 0)
 
 insert into dbo.Meets
-values(1, 'Stout Alumni', 'Menomonie Red Cedar Trail', '9/2/2017', null, null, null, 'Female')
+values(1, 'Stout Alumni', 'Menomonie Red Cedar Trail', '9/2/2017', 0, ' ', ' ', 'Male', 1)
 
 insert into SupportedSports
 values('Outdoor Track and Field')
@@ -28,12 +28,14 @@ select * from MeetTeams
 select * from Athletes
 select * from Roster
 select * from Classifications
+select * from Coaches
+select * from AthleteStatus
 
 exec dbo.GetTeams 1, 'Cross Country', 'All', 'All', 'All', 1
 
-update Administration
-set Classification = 'College'
-where SportsId = 2
+update MeetTeams
+set TeamId = 1
+where MeetTeamId = 2
 
 declare @administrationId int,
 		@sportName varchar(50),
@@ -49,27 +51,10 @@ insert into RacingEvents values('1 Mile', 1609, 'Female', 2)
 select * from RacingEvents Order by SportId, Gender, Distance
 
 
-declare @admin int,
-		@gender char(6),
-		@team varchar(max),
-		@grades varchar(max)
 
-select @admin = 1,
-		@gender = 'All',
-		@team = 'Test'
-
-select  a.AthleteId,
-		a.FullName,
-		a.Birthday,
-		a.Gender,
-		a.Grade
-from	Athletes a,
-		Roster r,
-		Teams t
-where	t.AdministrationId = 1
-and		t.TeamName in (@team)
-and		t.TeamId = r.TeamId
-and		r.Eligibility in ('Freshman', 'Sophmore', 'Junior', 'Senior', 'Super Senior')
-and		r.AthleteId = a.AthleteId
-and		a.Gender = case when @gender = 'All' then A.Gender
-					else @gender end
+select  TeamId,
+		Gender
+from	Teams
+where	SportId = 1
+and		AdministrationId = 1
+and		Gender <> 'Male'

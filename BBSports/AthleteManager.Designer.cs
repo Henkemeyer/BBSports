@@ -43,6 +43,7 @@
             this.Gender = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Grade = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Birthday = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.maskedTextBox1 = new System.Windows.Forms.MaskedTextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.cbGrade = new System.Windows.Forms.ComboBox();
             this.lGrade = new System.Windows.Forms.Label();
@@ -94,6 +95,7 @@
             // scAthletes.Panel2
             // 
             this.scAthletes.Panel2.AutoScroll = true;
+            this.scAthletes.Panel2.Controls.Add(this.maskedTextBox1);
             this.scAthletes.Panel2.Controls.Add(this.label1);
             this.scAthletes.Panel2.Controls.Add(this.cbGrade);
             this.scAthletes.Panel2.Controls.Add(this.lGrade);
@@ -271,6 +273,15 @@
             this.Birthday.Name = "Birthday";
             this.Birthday.ReadOnly = true;
             // 
+            // maskedTextBox1
+            // 
+            this.maskedTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.maskedTextBox1.Location = new System.Drawing.Point(146, 252);
+            this.maskedTextBox1.Mask = "##/##/####";
+            this.maskedTextBox1.Name = "maskedTextBox1";
+            this.maskedTextBox1.Size = new System.Drawing.Size(100, 26);
+            this.maskedTextBox1.TabIndex = 101;
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -429,11 +440,11 @@
             // 
             this.dateTPBirthday.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dateTPBirthday.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dateTPBirthday.Location = new System.Drawing.Point(56, 209);
+            this.dateTPBirthday.Location = new System.Drawing.Point(126, 209);
             this.dateTPBirthday.MaxDate = new System.DateTime(2999, 12, 31, 0, 0, 0, 0);
             this.dateTPBirthday.MinDate = new System.DateTime(1900, 1, 1, 0, 0, 0, 0);
             this.dateTPBirthday.Name = "dateTPBirthday";
-            this.dateTPBirthday.Size = new System.Drawing.Size(275, 26);
+            this.dateTPBirthday.Size = new System.Drawing.Size(205, 26);
             this.dateTPBirthday.TabIndex = 5;
             // 
             // tbMiddle
@@ -604,5 +615,6 @@
         private System.Windows.Forms.RadioButton rbSAll;
         private System.Windows.Forms.RadioButton rbSMale;
         private System.Windows.Forms.RadioButton rbSFemale;
+        private System.Windows.Forms.MaskedTextBox maskedTextBox1;
     }
 }

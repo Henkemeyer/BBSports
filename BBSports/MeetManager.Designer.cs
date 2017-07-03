@@ -45,6 +45,7 @@
             this.Meet = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.MeetName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Gender = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.label1 = new System.Windows.Forms.Label();
             this.gbOtherScore = new System.Windows.Forms.GroupBox();
             this.numericOtherPlace = new System.Windows.Forms.NumericUpDown();
             this.numericOtherScore = new System.Windows.Forms.NumericUpDown();
@@ -56,7 +57,7 @@
             this.lOtherScore = new System.Windows.Forms.Label();
             this.lOtherPlace = new System.Windows.Forms.Label();
             this.bClear = new System.Windows.Forms.Button();
-            this.cbGenders = new System.Windows.Forms.CheckBox();
+            this.cxbGenders = new System.Windows.Forms.CheckBox();
             this.lMeetName = new System.Windows.Forms.Label();
             this.bSubmit = new System.Windows.Forms.Button();
             this.lDate = new System.Windows.Forms.Label();
@@ -70,7 +71,7 @@
             this.tbLocation = new System.Windows.Forms.TextBox();
             this.lLocation = new System.Windows.Forms.Label();
             this.tbMeetName = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.cxbAlumni = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.scMeetManager)).BeginInit();
             this.scMeetManager.Panel1.SuspendLayout();
             this.scMeetManager.Panel2.SuspendLayout();
@@ -106,11 +107,12 @@
             // scMeetManager.Panel2
             // 
             this.scMeetManager.Panel2.AutoScroll = true;
+            this.scMeetManager.Panel2.Controls.Add(this.cxbAlumni);
             this.scMeetManager.Panel2.Controls.Add(this.label1);
             this.scMeetManager.Panel2.Controls.Add(this.gbOtherScore);
             this.scMeetManager.Panel2.Controls.Add(this.gbScore);
             this.scMeetManager.Panel2.Controls.Add(this.bClear);
-            this.scMeetManager.Panel2.Controls.Add(this.cbGenders);
+            this.scMeetManager.Panel2.Controls.Add(this.cxbGenders);
             this.scMeetManager.Panel2.Controls.Add(this.lMeetName);
             this.scMeetManager.Panel2.Controls.Add(this.bSubmit);
             this.scMeetManager.Panel2.Controls.Add(this.lDate);
@@ -293,6 +295,14 @@
             this.Gender.Name = "Gender";
             this.Gender.ReadOnly = true;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(794, 924);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(0, 17);
+            this.label1.TabIndex = 35;
+            // 
             // gbOtherScore
             // 
             this.gbOtherScore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -301,7 +311,7 @@
             this.gbOtherScore.Controls.Add(this.lScore);
             this.gbOtherScore.Controls.Add(this.lPlace);
             this.gbOtherScore.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbOtherScore.Location = new System.Drawing.Point(313, 350);
+            this.gbOtherScore.Location = new System.Drawing.Point(303, 350);
             this.gbOtherScore.Name = "gbOtherScore";
             this.gbOtherScore.Size = new System.Drawing.Size(382, 76);
             this.gbOtherScore.TabIndex = 34;
@@ -366,7 +376,7 @@
             this.gbScore.Controls.Add(this.lOtherScore);
             this.gbScore.Controls.Add(this.lOtherPlace);
             this.gbScore.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbScore.Location = new System.Drawing.Point(313, 276);
+            this.gbScore.Location = new System.Drawing.Point(303, 276);
             this.gbScore.Name = "gbScore";
             this.gbScore.Size = new System.Drawing.Size(382, 68);
             this.gbScore.TabIndex = 33;
@@ -427,7 +437,7 @@
             this.bClear.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.bClear.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.bClear.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bClear.Location = new System.Drawing.Point(149, 811);
+            this.bClear.Location = new System.Drawing.Point(144, 811);
             this.bClear.Name = "bClear";
             this.bClear.Size = new System.Drawing.Size(142, 47);
             this.bClear.TabIndex = 28;
@@ -435,17 +445,17 @@
             this.bClear.UseVisualStyleBackColor = true;
             this.bClear.Click += new System.EventHandler(this.Clear_Click);
             // 
-            // cbGenders
+            // cxbGenders
             // 
-            this.cbGenders.AutoSize = true;
-            this.cbGenders.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbGenders.Location = new System.Drawing.Point(152, 320);
-            this.cbGenders.Name = "cbGenders";
-            this.cbGenders.Size = new System.Drawing.Size(144, 24);
-            this.cbGenders.TabIndex = 27;
-            this.cbGenders.Text = "Both Genders?";
-            this.cbGenders.UseVisualStyleBackColor = true;
-            this.cbGenders.CheckedChanged += new System.EventHandler(this.Genders_CheckedChanged);
+            this.cxbGenders.AutoSize = true;
+            this.cxbGenders.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cxbGenders.Location = new System.Drawing.Point(152, 320);
+            this.cxbGenders.Name = "cxbGenders";
+            this.cxbGenders.Size = new System.Drawing.Size(144, 24);
+            this.cxbGenders.TabIndex = 27;
+            this.cxbGenders.Text = "Both Genders?";
+            this.cxbGenders.UseVisualStyleBackColor = true;
+            this.cxbGenders.CheckedChanged += new System.EventHandler(this.Genders_CheckedChanged);
             // 
             // lMeetName
             // 
@@ -463,7 +473,7 @@
             // 
             this.bSubmit.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.bSubmit.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bSubmit.Location = new System.Drawing.Point(456, 812);
+            this.bSubmit.Location = new System.Drawing.Point(451, 812);
             this.bSubmit.Name = "bSubmit";
             this.bSubmit.Size = new System.Drawing.Size(193, 46);
             this.bSubmit.TabIndex = 25;
@@ -499,7 +509,7 @@
             this.richTBWeatherNotes.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.richTBWeatherNotes.Location = new System.Drawing.Point(154, 479);
             this.richTBWeatherNotes.Name = "richTBWeatherNotes";
-            this.richTBWeatherNotes.Size = new System.Drawing.Size(490, 96);
+            this.richTBWeatherNotes.Size = new System.Drawing.Size(480, 96);
             this.richTBWeatherNotes.TabIndex = 20;
             this.richTBWeatherNotes.Text = "";
             // 
@@ -522,7 +532,7 @@
             this.richTBMeetNotes.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.richTBMeetNotes.Location = new System.Drawing.Point(154, 638);
             this.richTBMeetNotes.Name = "richTBMeetNotes";
-            this.richTBMeetNotes.Size = new System.Drawing.Size(490, 131);
+            this.richTBMeetNotes.Size = new System.Drawing.Size(480, 131);
             this.richTBMeetNotes.TabIndex = 18;
             this.richTBMeetNotes.Text = "";
             // 
@@ -556,7 +566,7 @@
             0,
             -2147483648});
             this.numericTemperature.Name = "numericTemperature";
-            this.numericTemperature.Size = new System.Drawing.Size(107, 26);
+            this.numericTemperature.Size = new System.Drawing.Size(97, 26);
             this.numericTemperature.TabIndex = 16;
             // 
             // lTemperature
@@ -579,7 +589,7 @@
             this.tbLocation.Location = new System.Drawing.Point(154, 155);
             this.tbLocation.MaxLength = 50;
             this.tbLocation.Name = "tbLocation";
-            this.tbLocation.Size = new System.Drawing.Size(490, 26);
+            this.tbLocation.Size = new System.Drawing.Size(480, 26);
             this.tbLocation.TabIndex = 14;
             // 
             // lLocation
@@ -602,17 +612,20 @@
             this.tbMeetName.Location = new System.Drawing.Point(154, 63);
             this.tbMeetName.MaxLength = 50;
             this.tbMeetName.Name = "tbMeetName";
-            this.tbMeetName.Size = new System.Drawing.Size(490, 34);
+            this.tbMeetName.Size = new System.Drawing.Size(480, 34);
             this.tbMeetName.TabIndex = 12;
             this.tbMeetName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // label1
+            // cxbAlumni
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(794, 924);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(0, 17);
-            this.label1.TabIndex = 35;
+            this.cxbAlumni.AutoSize = true;
+            this.cxbAlumni.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cxbAlumni.Location = new System.Drawing.Point(361, 597);
+            this.cxbAlumni.Name = "cxbAlumni";
+            this.cxbAlumni.Size = new System.Drawing.Size(133, 24);
+            this.cxbAlumni.TabIndex = 36;
+            this.cxbAlumni.Text = "Alumni Meet?";
+            this.cxbAlumni.UseVisualStyleBackColor = true;
             // 
             // MeetManager
             // 
@@ -675,7 +688,7 @@
         private System.Windows.Forms.Label lBeginDate;
         private System.Windows.Forms.DateTimePicker dateTPEnd;
         private System.Windows.Forms.DateTimePicker dateTPBegin;
-        private System.Windows.Forms.CheckBox cbGenders;
+        private System.Windows.Forms.CheckBox cxbGenders;
         private System.Windows.Forms.Button bClear;
         private System.Windows.Forms.GroupBox gbOtherScore;
         private System.Windows.Forms.Label lScore;
@@ -693,5 +706,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn MeetName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Gender;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.CheckBox cxbAlumni;
     }
 }

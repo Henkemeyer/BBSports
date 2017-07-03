@@ -166,10 +166,8 @@ namespace BBSports
             else
                 gender = "Female";
 
-            string sql = @"select TeamName from dbo.Teams
-                          where AdministrationId = " + homebase.GetAdmin() +
-                         "and Active = 1 " +
-                         "and Gender <> '" + gender + "'";
+            string sql = String.Format(@"select TeamName from dbo.Teams where AdministrationId = {0} " +
+                         "and Active = 1 and Gender <> '{1}'", homebase.GetAdmin(), gender);
 
             using (SqlConnection connection = new SqlConnection(cs))
             {
@@ -200,17 +198,15 @@ namespace BBSports
         private void GetSTeams()
         {
             List<string> sTeams = new List<string>();
-            string gender = "'Female'";
+            string gender = "Female";
 
             if (rbSMale.Checked)
-                gender = "'Male'";
+                gender = "Male";
             else if (rbSAll.Checked)
                 gender = "Gender";
 
-            string getSTeams = @"select TeamName from dbo.Teams
-                                where AdministrationId = " + homebase.GetAdmin() +
-                                " and Gender = " + gender +
-                                " and Active = 1";
+            string getSTeams = String.Format(@"select TeamName from dbo.Teams where AdministrationId = {0} " +
+                                " and Gender = '{1}' and Active = 1", homebase.GetAdmin(), gender);
 
             using (SqlConnection connection = new SqlConnection(cs))
             {
@@ -272,6 +268,7 @@ namespace BBSports
                             dateTPBirthday.Value = reader.GetSqlDateTime(4).Value.Date;
                             gender = reader.GetString(5);
                             richTBNotes.Text = reader.GetString(6);
+                            cbGrade.SelectedIndex = cbGrade.FindString(reader.GetString(7));
                         }
                     }
                 }
@@ -280,9 +277,7 @@ namespace BBSports
                 rbFemale.Checked = true;
             else
                 rbMale.Checked = true;
-
-            //GetTeams(); This might be redundent.
-
+            
             string getTeams = @"select t.TeamName from Teams t, Roster r " +
                     "where r.AthleteId = " + athleteId + " and r.TeamId = t.TeamId " +
                     "and t.AdministrationId = " + homebase.GetAdmin();
@@ -318,6 +313,8 @@ namespace BBSports
             if (clbTeams.CheckedItems.Count < 1)
                 errMsg += "Athlete must belong to a sport";
 
+
+
             if (errMsg.Equals(""))
             {
                 if (rbMale.Checked)
@@ -342,15 +339,13 @@ namespace BBSports
                             cmd.Parameters.Add("@strength", SqlDbType.VarChar).Value = "";
                             cmd.Parameters.Add("@grade", SqlDbType.VarChar).Value = cbGrade.Text;
 
-                            SqlParameter retrieve = cmd.Parameters.Add("@athleteId", SqlDbType.Int);
-                            retrieve.Direction = ParameterDirection.ReturnValue;
-
-                            connection.Open();
-                            cmd.ExecuteNonQuery();
-
-                            athleteId = (int)retrieve.Value;
+                            using (var reader = cmd.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                    athleteId = reader.GetInt32(0);
+                            }
                             if (athleteId > 0)
-                                EditTeams();
+                                AddToRosters();
                         }
                     }
                     Clear();
@@ -366,7 +361,7 @@ namespace BBSports
             }
         }
 
-        private void EditTeams()
+        private void AddToRosters()
         {
             List<String> rosterIn = new List<String>();
 

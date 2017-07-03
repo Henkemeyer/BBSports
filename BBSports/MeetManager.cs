@@ -36,6 +36,40 @@ namespace BBSports
             dateTPEnd.Value = System.DateTime.Now.AddMonths(3);
 
             GetMeets();
+            string grabGender = @"Select Gender from Teams where TeamId = " + homebase.GetTeamId();
+            string gender = "";
+            int two = 0;
+
+            using (SqlConnection connection = new SqlConnection(cs))
+            {
+                using (var cmd = new SqlCommand(grabGender, connection))
+                {
+                    connection.Open();
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                            gender = reader.GetString(0);
+                    }
+                }
+
+                if (gender != "Co-ed")
+                {
+                    string convienent = @"select count(1) from Teams where AdministrationId = " + homebase.GetAdmin() +
+                                        " and SportId = " + homebase.GetSportId() + " and Gender <> '" + gender + "'";
+
+                    using (var cmd = new SqlCommand(convienent, connection))
+                    {
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                                two = reader.GetInt32(0);
+                        }
+                    }
+                }
+            }
+            if (two == 1)
+                cxbGenders.Visible = false;
+                gbOtherScore.Visible = false;
         }
 
         private void GetMeets()
@@ -85,12 +119,13 @@ namespace BBSports
         {
             if (this.dgMeetsList.SelectedRows.Count > 0)
             {
-                cbGenders.Enabled = false;
+                cxbGenders.Enabled = false;
                 gbOtherScore.Enabled = false;
 
                 meetId = Convert.ToInt32(dgMeetsList.SelectedRows[0].Cells[0].Value);
-                string getMeet = @"Select MeetName, Location, MeetDate, Temperature, WeatherNotes, MeetNotes " +
-                                 "from Meets where MeetId = " + meetId.ToString();
+                string getMeet = String.Format(@"Select m.MeetName, m.Location, m.MeetDate, m.Temperature, m.WeatherNotes, m.MeetNotes, " +
+                                 "m.Alumni, mt.Score, mt.Place from Meets m and MeetTeams mt " +
+                                 "where mt.MeetId = {0} and mt.TeamId = {1} and mt.MeetId = m.MeetId", meetId.ToString(), homebase.GetTeamId());
 
                 using (SqlConnection connection = new SqlConnection(cs))
                 {
@@ -107,6 +142,9 @@ namespace BBSports
                                 numericTemperature.Value = Convert.ToDecimal(reader.GetSqlInt16(3).ToString());
                                 richTBWeatherNotes.Text = reader.GetString(4);
                                 richTBMeetNotes.Text = reader.GetString(5);
+                                cxbAlumni.Checked = reader.GetBoolean(6);
+                                numericScore.Value = Convert.ToDecimal(reader.GetSqlInt16(7).ToString());
+                                numericPlace.Value = Convert.ToDecimal(reader.GetSqlInt16(8).ToString());
                             }
                         }
                     }
@@ -116,63 +154,65 @@ namespace BBSports
 
         private void Submit_Click(object sender, EventArgs e)
         {
-            if (meetId > 0)
+            Boolean valid = true;
+            String errMsg = "";
+
+            if (tbMeetName.Text.Equals(""))
+                errMsg = "Please enter in a meet name.\r\n";
+
+            if (dateTP.Text.Equals(""))
+                errMsg += "Please enter in a meet date.\r\n";
+
+            if (!errMsg.Equals(""))
             {
-                Boolean valid = true;
-                String errMsg = "";
+                MessageBox.Show(errMsg, "Error");
+                valid = false;
+            }
 
-                if (tbMeetName.Text.Equals(""))
-                    errMsg = "Please enter in a meet name.\r\n";
+            if (valid)
+            {
+                int gender = 0, alumni = 0;
 
-                if (dateTP.Text.Equals(""))
-                    errMsg += "Please enter in a meet date.\r\n";
+                if (cxbGenders.Checked)
+                    gender = 1;
 
-                if (!errMsg.Equals(""))
+                if (cxbAlumni.Checked)
+                    alumni = 1;
+
+                using (SqlConnection connection = new SqlConnection(cs))
                 {
-                    MessageBox.Show(errMsg, "Error");
-                    valid = false;
-                }
-
-                if (valid)
-                {
-                    int gender = 0;
-
-                    if (cbGenders.Checked)
-                        gender = 1;
-
-                    using (SqlConnection connection = new SqlConnection(cs))
+                    using (var cmd = new SqlCommand("AddEditMeet", connection))
                     {
-                        using (var cmd = new SqlCommand("AddEditMeet", connection))
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        cmd.Parameters.Add("@meetId", SqlDbType.Int).Value = meetId;
+                        cmd.Parameters.Add("@teamId", SqlDbType.Int).Value = homebase.GetTeamId();
+                        cmd.Parameters.Add("@meetName", SqlDbType.VarChar).Value = tbMeetName.Text;
+                        cmd.Parameters.Add("@location", SqlDbType.VarChar).Value = tbLocation.Text;
+                        cmd.Parameters.Add("@meetDate", SqlDbType.DateTime).Value = dateTP.Value;
+                        cmd.Parameters.Add("@temp", SqlDbType.Int).Value = Decimal.ToInt32(numericTemperature.Value);
+                        cmd.Parameters.Add("@weatherNotes", SqlDbType.VarChar).Value = richTBWeatherNotes.Text;
+                        cmd.Parameters.Add("@meetNotes", SqlDbType.VarChar).Value = richTBMeetNotes.Text;
+                        cmd.Parameters.Add("@bothGenders", SqlDbType.Bit).Value = gender;
+                        cmd.Parameters.Add("@score", SqlDbType.Int).Value = Decimal.ToInt32(numericScore.Value);
+                        cmd.Parameters.Add("@place", SqlDbType.Int).Value = Decimal.ToInt32(numericPlace.Value);
+                        if (gender.Equals(1))
                         {
-                            cmd.CommandType = CommandType.StoredProcedure;
-
-                            cmd.Parameters.Add("@meetId", SqlDbType.Int).Value = meetId;
-                            cmd.Parameters.Add("@teamId", SqlDbType.Int).Value = homebase.GetTeamId();
-                            cmd.Parameters.Add("@meetName", SqlDbType.VarChar).Value = tbMeetName.Text;
-                            cmd.Parameters.Add("@location", SqlDbType.VarChar).Value = tbLocation.Text;
-                            cmd.Parameters.Add("@meetDate", SqlDbType.DateTime).Value = dateTP.Value;
-                            cmd.Parameters.Add("@temp", SqlDbType.Int).Value = Decimal.ToInt32(numericTemperature.Value);
-                            cmd.Parameters.Add("@weatherNotes", SqlDbType.VarChar).Value = richTBWeatherNotes.Text;
-                            cmd.Parameters.Add("@meetNotes", SqlDbType.VarChar).Value = richTBMeetNotes.Text;
-                            cmd.Parameters.Add("@bothGenders", SqlDbType.Bit).Value = gender;
-                            cmd.Parameters.Add("@score", SqlDbType.Int).Value = Decimal.ToInt32(numericScore.Value);
-                            cmd.Parameters.Add("@place", SqlDbType.Int).Value = Decimal.ToInt32(numericPlace.Value);
-                            if (gender.Equals(1))
-                            {
-                                cmd.Parameters.Add("@otherScore", SqlDbType.Int).Value = Decimal.ToInt32(numericOtherScore.Value);
-                                cmd.Parameters.Add("@otherPlace", SqlDbType.Int).Value = Decimal.ToInt32(numericOtherPlace.Value);
-                            }
-                            else
-                            {
-                                cmd.Parameters.Add("@otherScore", SqlDbType.Int).Value = 0;
-                                cmd.Parameters.Add("@otherPlace", SqlDbType.Int).Value = 0;
-                            }
-
-                            connection.Open();
-                            cmd.ExecuteNonQuery();
+                            cmd.Parameters.Add("@otherScore", SqlDbType.Int).Value = Decimal.ToInt32(numericOtherScore.Value);
+                            cmd.Parameters.Add("@otherPlace", SqlDbType.Int).Value = Decimal.ToInt32(numericOtherPlace.Value);
                         }
+                        else
+                        {
+                            cmd.Parameters.Add("@otherScore", SqlDbType.Int).Value = 0;
+                            cmd.Parameters.Add("@otherPlace", SqlDbType.Int).Value = 0;
+                        }
+                        cmd.Parameters.Add("@alumni", SqlDbType.Bit).Value = alumni;
+
+                        connection.Open();
+                        cmd.ExecuteNonQuery();
                     }
                     ClearInfo();
+                    bSearch.PerformClick();
                 }
             }
         }
@@ -187,18 +227,23 @@ namespace BBSports
             tbMeetName.Text = "";
             tbLocation.Text = "";
             dateTP.Value = System.DateTime.Now;
-            cbGenders.Checked = false;
-            richTBMeetNotes.Text = "";
+            cxbGenders.Checked = false;
             numericTemperature.Value = 0;
+            numericPlace.Value = 1;
+            numericScore.Value = 0;
+            numericOtherPlace.Value = 1;
+            numericOtherScore.Value = 0;
             richTBWeatherNotes.Text = "";
+            richTBMeetNotes.Text = "";
+            cxbAlumni.Checked = false;
             meetId = 0;
-            cbGenders.Enabled = true;
+            cxbGenders.Enabled = true;
             gbOtherScore.Enabled = true;
         }
 
         private void Genders_CheckedChanged(object sender, EventArgs e)
         {
-            this.gbOtherScore.Visible = this.cbGenders.Checked;
+            this.gbOtherScore.Visible = this.cxbGenders.Checked;
         }
 
         private void Search_Click(object sender, EventArgs e)

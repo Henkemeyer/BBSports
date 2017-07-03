@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 
@@ -88,9 +83,9 @@ namespace BBSports
             List<string> teams = new List<string>();
 
             string sql = @"select TeamName from dbo.Teams
-                          where AdministrationId = "+ adminId +
+                          where AdministrationId = " + adminId +
                          "and Active = 1";
-            
+
             using (SqlConnection connection = new SqlConnection(cs))
             {
                 using (var command = new SqlCommand(sql, connection))
@@ -105,6 +100,7 @@ namespace BBSports
             }
             teams.Sort();
             this.changeTeamTMI.DropDownItems.Clear();
+            Boolean select = true;
             foreach ( string s in teams)
             {
                 ToolStripMenuItem myMenuTeam = new ToolStripMenuItem();
@@ -112,39 +108,48 @@ namespace BBSports
                 myMenuTeam.Text = s;
                 myMenuTeam.Click += new EventHandler(MenuItemClickHandler);
                 this.changeTeamTMI.DropDownItems.Add(myMenuTeam);
+                if (select)
+                {
+                    myMenuTeam.PerformClick();
+                    select = false;
+                }
             }
         }
 
         private void MenuItemClickHandler(object sender, EventArgs e)
         {
             ToolStripMenuItem clickedItem = (ToolStripMenuItem)sender;
-            string teamName = clickedItem.Text;
-
-            using (SqlConnection connection = new SqlConnection(cs))
+            if (clickedItem.Checked == false)
             {
-                using (var command = new SqlCommand("SwitchTeams", connection))
-                {
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.Add("@adminId", SqlDbType.Int).Value = GetAdmin();
-                    command.Parameters.Add("@teamName", SqlDbType.VarChar).Value = teamName;
+                string teamName = clickedItem.Text;
 
-                    connection.Open();
-                    using (var reader = command.ExecuteReader())
+                using (SqlConnection connection = new SqlConnection(cs))
+                {
+                    using (var command = new SqlCommand("SwitchTeams", connection))
                     {
-                        while (reader.Read())
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.Add("@adminId", SqlDbType.Int).Value = GetAdmin();
+                        command.Parameters.Add("@teamName", SqlDbType.VarChar).Value = teamName;
+
+                        connection.Open();
+                        using (var reader = command.ExecuteReader())
                         {
-                            SetSportId(reader.GetInt32(0));
-                            SetTeamId(reader.GetInt32(1));
+                            while (reader.Read())
+                            {
+                                SetSportId(reader.GetInt32(0));
+                                SetTeamId(reader.GetInt32(1));
+                            }
                         }
                     }
                 }
+                foreach (ToolStripMenuItem item in changeTeamTMI.DropDownItems)
+                {
+                    item.Checked = false;
+                }
+                clickedItem.Checked = true;
+                if(ActiveMdiChild != null)
+                    ActiveMdiChild.Refresh();                
             }
-            this.changeTeamTMI.Checked = false;
-            foreach(ToolStripMenuItem item in changeTeamTMI.DropDownItems)
-            {
-                item.Checked = false;
-            }
-            clickedItem.Checked = true;
         }
 
         private void ManageMeetsTMI_Click(object sender, EventArgs e)
@@ -176,11 +181,14 @@ namespace BBSports
 
         private void PerformancesTMI_Click(object sender, EventArgs e)
         {
-            ActiveMdiChild.Close();
-            Racing raceForm = new Racing(this);
-            raceForm.MdiParent = this;
-            raceForm.Show();
-            raceForm.WindowState = FormWindowState.Maximized;
+            if (GetSportId() == 1 && GetSportId() == 2 && GetSportId() == 3)
+            {
+                ActiveMdiChild.Close();
+                Racing raceForm = new Racing(this);
+                raceForm.MdiParent = this;
+                raceForm.Show();
+                raceForm.WindowState = FormWindowState.Maximized;
+            }
         }
 
         private void SwitchUserTMI_Click(object sender, EventArgs e)
@@ -192,6 +200,5 @@ namespace BBSports
         {
             this.Close();
         }
-
     }
 }

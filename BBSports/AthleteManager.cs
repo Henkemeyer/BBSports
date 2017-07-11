@@ -306,6 +306,7 @@ namespace BBSports
         {
             string errMsg = "";
             string gender = "Female";
+            int zip;
 
             if (tbFirst.Text.Equals("") || tbLast.Text.Equals(""))
                 errMsg += "Athlete must have a first and last name.";
@@ -313,7 +314,10 @@ namespace BBSports
             if (clbTeams.CheckedItems.Count < 1)
                 errMsg += "Athlete must belong to a sport";
 
-
+            if (Int32.TryParse(mtbZipcode.Text, out zip) == false)
+            {
+                zip = 0;
+            }
 
             if (errMsg.Equals(""))
             {
@@ -338,6 +342,8 @@ namespace BBSports
                             cmd.Parameters.Add("@notes", SqlDbType.VarChar).Value = richTBNotes.Text;
                             cmd.Parameters.Add("@strength", SqlDbType.VarChar).Value = "";
                             cmd.Parameters.Add("@grade", SqlDbType.VarChar).Value = cbGrade.Text;
+                            cmd.Parameters.Add("@zipcode", SqlDbType.Int).Value = zip;
+                            connection.Open();
 
                             using (var reader = cmd.ExecuteReader())
                             {
@@ -364,36 +370,42 @@ namespace BBSports
         private void AddToRosters()
         {
             List<String> rosterIn = new List<String>();
-
-            using (SqlConnection connection = new SqlConnection(cs))
+            try
             {
-                connection.Open();
-                foreach (var team in clbTeams.CheckedItems)
+                using (SqlConnection connection = new SqlConnection(cs))
                 {
-                    using (var command = new SqlCommand("SwitchTeams", connection))
+                    connection.Open();
+                    foreach (var team in clbTeams.CheckedItems)
                     {
-                        command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.Add("@adminId", SqlDbType.Int).Value = homebase.GetAdmin();
-                        command.Parameters.Add("@teamName", SqlDbType.VarChar).Value = team.ToString();
-
-                        using (var reader = command.ExecuteReader())
+                        using (var command = new SqlCommand("SwitchTeams", connection))
                         {
-                            while (reader.Read())
+                            command.CommandType = CommandType.StoredProcedure;
+                            command.Parameters.Add("@adminId", SqlDbType.Int).Value = homebase.GetAdmin();
+                            command.Parameters.Add("@teamName", SqlDbType.VarChar).Value = team.ToString();
+
+                            using (var reader = command.ExecuteReader())
                             {
-                                rosterIn.Add(@"insert into Roster values(" + reader.GetInt32(1) + ", " + athleteId +
-                                    ", '" + cbGrade.Text + "', 'Active', 0, 'N/A')");
+                                while (reader.Read())
+                                {
+                                    rosterIn.Add(@"insert into Roster values(" + reader.GetInt32(1) + ", " + athleteId +
+                                        ", '" + cbGrade.Text + "', 'Active', 0, 'N/A')");
+                                }
                             }
                         }
                     }
-                }
 
-                foreach (string s in rosterIn)
-                {
-                    using (var cmd = new SqlCommand(s, connection))
+                    foreach (string s in rosterIn)
                     {
-                        cmd.ExecuteNonQuery();
+                        using (var cmd = new SqlCommand(s, connection))
+                        {
+                            cmd.ExecuteNonQuery();
+                        }
                     }
                 }
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show(ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
     }

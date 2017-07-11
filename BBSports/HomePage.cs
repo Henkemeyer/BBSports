@@ -70,12 +70,12 @@ namespace BBSports
 
         public void LoadFirstPage()
         {
+            AddTeamOptions();
+
             Racing startPage = new Racing(this);
             startPage.MdiParent = this;
             startPage.Show();
             startPage.WindowState = FormWindowState.Maximized;
-
-            AddTeamOptions();
         }
 
         private void AddTeamOptions()
@@ -181,7 +181,7 @@ namespace BBSports
 
         private void PerformancesTMI_Click(object sender, EventArgs e)
         {
-            if (GetSportId() == 1 && GetSportId() == 2 && GetSportId() == 3)
+            if (GetSportId() == 1 || GetSportId() == 2 || GetSportId() == 3)
             {
                 ActiveMdiChild.Close();
                 Racing raceForm = new Racing(this);
@@ -199,6 +199,24 @@ namespace BBSports
         private void ExitTMI_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void RosterTMI_Click(object sender, EventArgs e)
+        {
+            ActiveMdiChild.Close();
+            Roster roster = new Roster(this);
+            roster.MdiParent = this;
+            roster.Show();
+            roster.WindowState = FormWindowState.Maximized;
+        }
+
+        private void LiftingTMI_Click(object sender, EventArgs e)
+        {
+            ActiveMdiChild.Close();
+            Lifting lift = new Lifting(this);
+            lift.MdiParent = this;
+            lift.Show();
+            lift.WindowState = FormWindowState.Maximized;
         }
     }
 }

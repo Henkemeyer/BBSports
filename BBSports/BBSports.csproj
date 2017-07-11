@@ -53,6 +53,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
@@ -77,11 +78,23 @@
   <ItemGroup>
     <Compile Include="ComboBoxItem.cs" />
     <Compile Include="CommonQueries.cs" />
+    <Compile Include="Directory.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Directory.Designer.cs">
+      <DependentUpon>Directory.cs</DependentUpon>
+    </Compile>
     <Compile Include="HomePage.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="HomePage.Designer.cs">
       <DependentUpon>HomePage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Lifting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Lifting.Designer.cs">
+      <DependentUpon>Lifting.cs</DependentUpon>
     </Compile>
     <Compile Include="Login.cs">
       <SubType>Form</SubType>
@@ -109,14 +122,27 @@
     <Compile Include="Racing.Designer.cs">
       <DependentUpon>Racing.cs</DependentUpon>
     </Compile>
+    <Compile Include="Roster.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Roster.Designer.cs">
+      <DependentUpon>Roster.cs</DependentUpon>
+    </Compile>
     <Compile Include="TeamManager.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="TeamManager.Designer.cs">
       <DependentUpon>TeamManager.cs</DependentUpon>
     </Compile>
+    <Compile Include="Test.cs" />
+    <EmbeddedResource Include="Directory.resx">
+      <DependentUpon>Directory.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="HomePage.resx">
       <DependentUpon>HomePage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Lifting.resx">
+      <DependentUpon>Lifting.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
@@ -139,6 +165,9 @@
     </Compile>
     <EmbeddedResource Include="Racing.resx">
       <DependentUpon>Racing.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Roster.resx">
+      <DependentUpon>Roster.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TeamManager.resx">
       <DependentUpon>TeamManager.cs</DependentUpon>

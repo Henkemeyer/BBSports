@@ -29,6 +29,11 @@
         private void InitializeComponent()
         {
             this.scRacing = new System.Windows.Forms.SplitContainer();
+            this.bUpdate = new System.Windows.Forms.Button();
+            this.lEndDate = new System.Windows.Forms.Label();
+            this.lStartDate = new System.Windows.Forms.Label();
+            this.dateTPEnd = new System.Windows.Forms.DateTimePicker();
+            this.dateTPStart = new System.Windows.Forms.DateTimePicker();
             this.lMeet = new System.Windows.Forms.Label();
             this.gbSplitDistance = new System.Windows.Forms.GroupBox();
             this.rbLong = new System.Windows.Forms.RadioButton();
@@ -38,15 +43,13 @@
             this.lEvent = new System.Windows.Forms.Label();
             this.cbAthlete = new System.Windows.Forms.ComboBox();
             this.cbEvent = new System.Windows.Forms.ComboBox();
+            this.lSplits = new System.Windows.Forms.Label();
+            this.tlpSplits = new System.Windows.Forms.TableLayoutPanel();
+            this.lName = new System.Windows.Forms.Label();
             this.numericPlace = new System.Windows.Forms.NumericUpDown();
             this.lPlace = new System.Windows.Forms.Label();
-            this.lSplits = new System.Windows.Forms.Label();
             this.bReset = new System.Windows.Forms.Button();
             this.bSubmit = new System.Windows.Forms.Button();
-            this.dateTPStart = new System.Windows.Forms.DateTimePicker();
-            this.dateTPEnd = new System.Windows.Forms.DateTimePicker();
-            this.lStartDate = new System.Windows.Forms.Label();
-            this.lEndDate = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.scRacing)).BeginInit();
             this.scRacing.Panel1.SuspendLayout();
             this.scRacing.Panel2.SuspendLayout();
@@ -66,6 +69,7 @@
             // scRacing.Panel1
             // 
             this.scRacing.Panel1.AutoScroll = true;
+            this.scRacing.Panel1.Controls.Add(this.bUpdate);
             this.scRacing.Panel1.Controls.Add(this.lEndDate);
             this.scRacing.Panel1.Controls.Add(this.lStartDate);
             this.scRacing.Panel1.Controls.Add(this.dateTPEnd);
@@ -81,14 +85,76 @@
             // scRacing.Panel2
             // 
             this.scRacing.Panel2.AutoScroll = true;
+            this.scRacing.Panel2.Controls.Add(this.lSplits);
+            this.scRacing.Panel2.Controls.Add(this.tlpSplits);
+            this.scRacing.Panel2.Controls.Add(this.lName);
             this.scRacing.Panel2.Controls.Add(this.numericPlace);
             this.scRacing.Panel2.Controls.Add(this.lPlace);
-            this.scRacing.Panel2.Controls.Add(this.lSplits);
             this.scRacing.Panel2.Controls.Add(this.bReset);
             this.scRacing.Panel2.Controls.Add(this.bSubmit);
             this.scRacing.Size = new System.Drawing.Size(1172, 643);
             this.scRacing.SplitterDistance = 388;
             this.scRacing.TabIndex = 4;
+            // 
+            // bUpdate
+            // 
+            this.bUpdate.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.bUpdate.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bUpdate.Location = new System.Drawing.Point(115, 556);
+            this.bUpdate.Name = "bUpdate";
+            this.bUpdate.Size = new System.Drawing.Size(114, 44);
+            this.bUpdate.TabIndex = 25;
+            this.bUpdate.Text = "Update";
+            this.bUpdate.UseVisualStyleBackColor = true;
+            this.bUpdate.Click += new System.EventHandler(this.Update_Click);
+            // 
+            // lEndDate
+            // 
+            this.lEndDate.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.lEndDate.AutoSize = true;
+            this.lEndDate.Location = new System.Drawing.Point(219, 111);
+            this.lEndDate.Name = "lEndDate";
+            this.lEndDate.Size = new System.Drawing.Size(67, 17);
+            this.lEndDate.TabIndex = 24;
+            this.lEndDate.Text = "End Date";
+            // 
+            // lStartDate
+            // 
+            this.lStartDate.AutoSize = true;
+            this.lStartDate.Location = new System.Drawing.Point(41, 111);
+            this.lStartDate.Name = "lStartDate";
+            this.lStartDate.Size = new System.Drawing.Size(72, 17);
+            this.lStartDate.TabIndex = 23;
+            this.lStartDate.Text = "Start Date";
+            // 
+            // dateTPEnd
+            // 
+            this.dateTPEnd.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.dateTPEnd.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dateTPEnd.CustomFormat = "mm/dd/yyyy";
+            this.dateTPEnd.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dateTPEnd.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dateTPEnd.Location = new System.Drawing.Point(221, 131);
+            this.dateTPEnd.MaxDate = new System.DateTime(2099, 12, 31, 0, 0, 0, 0);
+            this.dateTPEnd.MinDate = new System.DateTime(1965, 1, 1, 0, 0, 0, 0);
+            this.dateTPEnd.Name = "dateTPEnd";
+            this.dateTPEnd.Size = new System.Drawing.Size(136, 26);
+            this.dateTPEnd.TabIndex = 22;
+            this.dateTPEnd.ValueChanged += new System.EventHandler(this.MeetSearch_ValueChanged);
+            // 
+            // dateTPStart
+            // 
+            this.dateTPStart.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dateTPStart.CustomFormat = "mm/dd/yyyy";
+            this.dateTPStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dateTPStart.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dateTPStart.Location = new System.Drawing.Point(44, 131);
+            this.dateTPStart.MaxDate = new System.DateTime(2099, 12, 31, 0, 0, 0, 0);
+            this.dateTPStart.MinDate = new System.DateTime(1965, 1, 1, 0, 0, 0, 0);
+            this.dateTPStart.Name = "dateTPStart";
+            this.dateTPStart.Size = new System.Drawing.Size(136, 26);
+            this.dateTPStart.TabIndex = 21;
+            this.dateTPStart.ValueChanged += new System.EventHandler(this.MeetSearch_ValueChanged);
             // 
             // lMeet
             // 
@@ -102,8 +168,7 @@
             // 
             // gbSplitDistance
             // 
-            this.gbSplitDistance.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbSplitDistance.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.gbSplitDistance.Controls.Add(this.rbLong);
             this.gbSplitDistance.Controls.Add(this.rbShort);
             this.gbSplitDistance.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -116,8 +181,7 @@
             // 
             // rbLong
             // 
-            this.rbLong.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.rbLong.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.rbLong.AutoSize = true;
             this.rbLong.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rbLong.Location = new System.Drawing.Point(189, 59);
@@ -130,8 +194,7 @@
             // 
             // rbShort
             // 
-            this.rbShort.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.rbShort.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.rbShort.AutoSize = true;
             this.rbShort.Checked = true;
             this.rbShort.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -200,6 +263,46 @@
             this.cbEvent.Size = new System.Drawing.Size(284, 28);
             this.cbEvent.TabIndex = 17;
             // 
+            // lSplits
+            // 
+            this.lSplits.AutoSize = true;
+            this.lSplits.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lSplits.Location = new System.Drawing.Point(21, 23);
+            this.lSplits.Name = "lSplits";
+            this.lSplits.Size = new System.Drawing.Size(79, 29);
+            this.lSplits.TabIndex = 8;
+            this.lSplits.Text = "Splits:";
+            // 
+            // tlpSplits
+            // 
+            this.tlpSplits.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tlpSplits.AutoSize = true;
+            this.tlpSplits.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.tlpSplits.ColumnCount = 2;
+            this.tlpSplits.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpSplits.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpSplits.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tlpSplits.Location = new System.Drawing.Point(3, 60);
+            this.tlpSplits.Name = "tlpSplits";
+            this.tlpSplits.RowCount = 2;
+            this.tlpSplits.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpSplits.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpSplits.Size = new System.Drawing.Size(0, 372);
+            this.tlpSplits.TabIndex = 13;
+            // 
+            // lName
+            // 
+            this.lName.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.lName.AutoSize = true;
+            this.lName.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lName.Location = new System.Drawing.Point(214, 28);
+            this.lName.Name = "lName";
+            this.lName.Size = new System.Drawing.Size(245, 24);
+            this.lName.TabIndex = 11;
+            this.lName.Text = "                                               ";
+            // 
             // numericPlace
             // 
             this.numericPlace.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
@@ -225,16 +328,6 @@
             this.lPlace.TabIndex = 9;
             this.lPlace.Text = "Finishing Place:";
             // 
-            // lSplits
-            // 
-            this.lSplits.AutoSize = true;
-            this.lSplits.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lSplits.Location = new System.Drawing.Point(62, 50);
-            this.lSplits.Name = "lSplits";
-            this.lSplits.Size = new System.Drawing.Size(79, 29);
-            this.lSplits.TabIndex = 8;
-            this.lSplits.Text = "Splits:";
-            // 
             // bReset
             // 
             this.bReset.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
@@ -245,6 +338,7 @@
             this.bReset.TabIndex = 7;
             this.bReset.Text = "Reset";
             this.bReset.UseVisualStyleBackColor = true;
+            this.bReset.Click += new System.EventHandler(this.Reset_Click);
             // 
             // bSubmit
             // 
@@ -257,54 +351,6 @@
             this.bSubmit.TabIndex = 6;
             this.bSubmit.Text = "Submit";
             this.bSubmit.UseVisualStyleBackColor = true;
-            // 
-            // dateTPStart
-            // 
-            this.dateTPStart.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dateTPStart.CustomFormat = "mm/dd/yyyy";
-            this.dateTPStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dateTPStart.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dateTPStart.Location = new System.Drawing.Point(44, 131);
-            this.dateTPStart.MaxDate = new System.DateTime(2099, 12, 31, 0, 0, 0, 0);
-            this.dateTPStart.MinDate = new System.DateTime(1965, 1, 1, 0, 0, 0, 0);
-            this.dateTPStart.Name = "dateTPStart";
-            this.dateTPStart.Size = new System.Drawing.Size(136, 26);
-            this.dateTPStart.TabIndex = 21;
-            this.dateTPStart.ValueChanged += new System.EventHandler(this.MeetSearch_ValueChanged);
-            // 
-            // dateTPEnd
-            // 
-            this.dateTPEnd.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.dateTPEnd.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dateTPEnd.CustomFormat = "mm/dd/yyyy";
-            this.dateTPEnd.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dateTPEnd.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dateTPEnd.Location = new System.Drawing.Point(221, 131);
-            this.dateTPEnd.MaxDate = new System.DateTime(2099, 12, 31, 0, 0, 0, 0);
-            this.dateTPEnd.MinDate = new System.DateTime(1965, 1, 1, 0, 0, 0, 0);
-            this.dateTPEnd.Name = "dateTPEnd";
-            this.dateTPEnd.Size = new System.Drawing.Size(136, 26);
-            this.dateTPEnd.TabIndex = 22;
-            this.dateTPEnd.ValueChanged += new System.EventHandler(this.MeetSearch_ValueChanged);
-            // 
-            // lStartDate
-            // 
-            this.lStartDate.AutoSize = true;
-            this.lStartDate.Location = new System.Drawing.Point(41, 111);
-            this.lStartDate.Name = "lStartDate";
-            this.lStartDate.Size = new System.Drawing.Size(72, 17);
-            this.lStartDate.TabIndex = 23;
-            this.lStartDate.Text = "Start Date";
-            // 
-            // lEndDate
-            // 
-            this.lEndDate.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.lEndDate.AutoSize = true;
-            this.lEndDate.Location = new System.Drawing.Point(219, 111);
-            this.lEndDate.Name = "lEndDate";
-            this.lEndDate.Size = new System.Drawing.Size(67, 17);
-            this.lEndDate.TabIndex = 24;
-            this.lEndDate.Text = "End Date";
             // 
             // Racing
             // 
@@ -352,5 +398,8 @@
         private System.Windows.Forms.Label lStartDate;
         private System.Windows.Forms.DateTimePicker dateTPEnd;
         private System.Windows.Forms.DateTimePicker dateTPStart;
+        private System.Windows.Forms.Button bUpdate;
+        private System.Windows.Forms.TableLayoutPanel tlpSplits;
+        private System.Windows.Forms.Label lName;
     }
 }

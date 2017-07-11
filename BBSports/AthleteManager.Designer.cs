@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.scAthletes = new System.Windows.Forms.SplitContainer();
             this.clbSTeams = new System.Windows.Forms.CheckedListBox();
             this.clbSGrades = new System.Windows.Forms.CheckedListBox();
@@ -67,6 +68,9 @@
             this.lMiddle = new System.Windows.Forms.Label();
             this.lFirst = new System.Windows.Forms.Label();
             this.lHeader = new System.Windows.Forms.Label();
+            this.mtbZipcode = new System.Windows.Forms.MaskedTextBox();
+            this.lZipcode = new System.Windows.Forms.Label();
+            this.toolTipZip = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.scAthletes)).BeginInit();
             this.scAthletes.Panel1.SuspendLayout();
             this.scAthletes.Panel2.SuspendLayout();
@@ -95,6 +99,8 @@
             // scAthletes.Panel2
             // 
             this.scAthletes.Panel2.AutoScroll = true;
+            this.scAthletes.Panel2.Controls.Add(this.lZipcode);
+            this.scAthletes.Panel2.Controls.Add(this.mtbZipcode);
             this.scAthletes.Panel2.Controls.Add(this.maskedTextBox1);
             this.scAthletes.Panel2.Controls.Add(this.label1);
             this.scAthletes.Panel2.Controls.Add(this.cbGrade);
@@ -276,7 +282,7 @@
             // maskedTextBox1
             // 
             this.maskedTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.maskedTextBox1.Location = new System.Drawing.Point(146, 252);
+            this.maskedTextBox1.Location = new System.Drawing.Point(76, 241);
             this.maskedTextBox1.Mask = "##/##/####";
             this.maskedTextBox1.Name = "maskedTextBox1";
             this.maskedTextBox1.Size = new System.Drawing.Size(100, 26);
@@ -549,6 +555,33 @@
             this.lHeader.TabIndex = 0;
             this.lHeader.Text = "New Athlete";
             // 
+            // mtbZipcode
+            // 
+            this.mtbZipcode.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.mtbZipcode.CutCopyMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals;
+            this.mtbZipcode.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mtbZipcode.Location = new System.Drawing.Point(682, 277);
+            this.mtbZipcode.Mask = "#####";
+            this.mtbZipcode.Name = "mtbZipcode";
+            this.mtbZipcode.Size = new System.Drawing.Size(100, 26);
+            this.mtbZipcode.TabIndex = 102;
+            // 
+            // lZipcode
+            // 
+            this.lZipcode.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.lZipcode.AutoSize = true;
+            this.lZipcode.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lZipcode.Location = new System.Drawing.Point(575, 283);
+            this.lZipcode.Name = "lZipcode";
+            this.lZipcode.Size = new System.Drawing.Size(67, 20);
+            this.lZipcode.TabIndex = 103;
+            this.lZipcode.Text = "Zipcode";
+            // 
+            // toolTipZip
+            // 
+            this.toolTipZip.IsBalloon = true;
+            this.toolTipZip.ToolTipTitle = "Zipcode is used to help find athletes outside of the organization.";
+            // 
             // AthleteManager
             // 
             this.AcceptButton = this.bSubmit;
@@ -616,5 +649,8 @@
         private System.Windows.Forms.RadioButton rbSMale;
         private System.Windows.Forms.RadioButton rbSFemale;
         private System.Windows.Forms.MaskedTextBox maskedTextBox1;
+        private System.Windows.Forms.Label lZipcode;
+        private System.Windows.Forms.MaskedTextBox mtbZipcode;
+        private System.Windows.Forms.ToolTip toolTipZip;
     }
 }

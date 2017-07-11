@@ -1,14 +1,14 @@
-﻿alter table dbo.Meets add Alumni bit Default 0;
-alter table dbo.Administration drop column Type;
+﻿alter table dbo.RacingEvents add EventType varchar(10) default 'Track';
+alter table dbo.Test drop column Type;
 alter table dbo.Athletes alter column Birthday date;
-truncate table MeetTeams
-EXEC sp_rename 'dbo.Administration.AdminstrationId', 'AdministrationId', 'COLUMN';  
+truncate table Athletes
+EXEC sp_rename 'dbo.RacingEvents.[Event Name]', 'EventName', 'COLUMN';  
 
-update	dbo.Teams
-set		Gender = RTRIM(Ltrim(Gender))
-where	TeamId = 2
+update	dbo.RacingEvents
+set		Distance = 6436
+where	RacingEventId = 2
 
-drop table dbo.Athlete
+drop table dbo.Test
 drop procedure dbo.ActivateNewSport
 
 insert into dbo.Administration
@@ -30,8 +30,9 @@ select * from Roster
 select * from Classifications
 select * from Coaches
 select * from AthleteStatus
+select * from RacingEvents
 
-exec dbo.GetTeams 1, 'Cross Country', 'All', 'All', 'All', 1
+exec dbo.AddEditAthlete 0, 'Stephanie', 'Ann', 'Henkemeyer', 'Pothead', '12/23/1999', 'Female', ' ', ' ', 'Twelfth', 55068
 
 update MeetTeams
 set TeamId = 1
@@ -50,11 +51,20 @@ insert into RacingEvents values('60 Meter Hurdles', 60, 'Female', 2)
 insert into RacingEvents values('1 Mile', 1609, 'Female', 2)
 select * from RacingEvents Order by SportId, Gender, Distance
 
+select r.* from RacingEvents r, Teams t
+where t.TeamId = 4 and t.Gender = r.Gender and r.SportId = t.SportId
+order by distance desc
 
-
-select  TeamId,
-		Gender
-from	Teams
-where	SportId = 1
-and		AdministrationId = 1
-and		Gender <> 'Male'
+select distinct a.AthleteId, a.FullName 
+from Athletes a, 
+	Teams t, 
+	Roster r
+where t.AdministrationId = 1 
+and t.Active = 1 
+and t.TeamId = r.TeamId
+and r.Eligibility <> 'Alumni' 
+and r.Status <> 'Cut' 
+and r.AthleteId = a.AthleteId
+and a.AthleteId not in(select sg.AthleteId 
+						from StrengthGroups sg
+						where sg.AdministrationId = t.AdministrationId)

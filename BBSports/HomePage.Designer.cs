@@ -36,12 +36,14 @@
             this.switchUserTMI = new System.Windows.Forms.ToolStripMenuItem();
             this.exitTMI = new System.Windows.Forms.ToolStripMenuItem();
             this.toolMenuView = new System.Windows.Forms.ToolStripMenuItem();
+            this.changeTeamTMI = new System.Windows.Forms.ToolStripMenuItem();
+            this.rosterTMI = new System.Windows.Forms.ToolStripMenuItem();
             this.meetPDFTMI = new System.Windows.Forms.ToolStripMenuItem();
             this.schoolRecordsTMI = new System.Windows.Forms.ToolStripMenuItem();
-            this.rosterTMI = new System.Windows.Forms.ToolStripMenuItem();
             this.menuHome = new System.Windows.Forms.MenuStrip();
             this.activateNewSportTMI = new System.Windows.Forms.ToolStripMenuItem();
-            this.changeTeamTMI = new System.Windows.Forms.ToolStripMenuItem();
+            this.workoutsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.LiftingTMI = new System.Windows.Forms.ToolStripMenuItem();
             this.menuHome.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -69,7 +71,7 @@
             // 
             this.manageAthletesTMI.Name = "manageAthletesTMI";
             this.manageAthletesTMI.Size = new System.Drawing.Size(181, 26);
-            this.manageAthletesTMI.Text = "Athletes";
+            this.manageAthletesTMI.Text = "Add Athletes";
             this.manageAthletesTMI.Click += new System.EventHandler(this.ManageAthletesTMI_Click);
             // 
             // manageMeetsTMI
@@ -111,6 +113,19 @@
             this.toolMenuView.Size = new System.Drawing.Size(53, 24);
             this.toolMenuView.Text = "View";
             // 
+            // changeTeamTMI
+            // 
+            this.changeTeamTMI.Name = "changeTeamTMI";
+            this.changeTeamTMI.Size = new System.Drawing.Size(186, 26);
+            this.changeTeamTMI.Text = "Change Team";
+            // 
+            // rosterTMI
+            // 
+            this.rosterTMI.Name = "rosterTMI";
+            this.rosterTMI.Size = new System.Drawing.Size(186, 26);
+            this.rosterTMI.Text = "Roster";
+            this.rosterTMI.Click += new System.EventHandler(this.RosterTMI_Click);
+            // 
             // meetPDFTMI
             // 
             this.meetPDFTMI.Name = "meetPDFTMI";
@@ -123,19 +138,14 @@
             this.schoolRecordsTMI.Size = new System.Drawing.Size(186, 26);
             this.schoolRecordsTMI.Text = "School Records";
             // 
-            // rosterTMI
-            // 
-            this.rosterTMI.Name = "rosterTMI";
-            this.rosterTMI.Size = new System.Drawing.Size(186, 26);
-            this.rosterTMI.Text = "Roster";
-            // 
             // menuHome
             // 
             this.menuHome.BackColor = System.Drawing.SystemColors.ControlLight;
             this.menuHome.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuHome.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolMenuProgram,
-            this.toolMenuView});
+            this.toolMenuView,
+            this.workoutsToolStripMenuItem});
             this.menuHome.Location = new System.Drawing.Point(0, 0);
             this.menuHome.Name = "menuHome";
             this.menuHome.Size = new System.Drawing.Size(1235, 28);
@@ -147,11 +157,20 @@
             this.activateNewSportTMI.Name = "activateNewSportTMI";
             this.activateNewSportTMI.Size = new System.Drawing.Size(32, 19);
             // 
-            // changeTeamTMI
+            // workoutsToolStripMenuItem
             // 
-            this.changeTeamTMI.Name = "changeTeamTMI";
-            this.changeTeamTMI.Size = new System.Drawing.Size(186, 26);
-            this.changeTeamTMI.Text = "Change Team";
+            this.workoutsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.LiftingTMI});
+            this.workoutsToolStripMenuItem.Name = "workoutsToolStripMenuItem";
+            this.workoutsToolStripMenuItem.Size = new System.Drawing.Size(83, 24);
+            this.workoutsToolStripMenuItem.Text = "Workouts";
+            // 
+            // LiftingTMI
+            // 
+            this.LiftingTMI.Name = "LiftingTMI";
+            this.LiftingTMI.Size = new System.Drawing.Size(181, 26);
+            this.LiftingTMI.Text = "Lift Workouts";
+            this.LiftingTMI.Click += new System.EventHandler(this.LiftingTMI_Click);
             // 
             // HomePage
             // 
@@ -187,5 +206,7 @@
         private System.Windows.Forms.ToolStripMenuItem performancesTMI;
         private System.Windows.Forms.ToolStripMenuItem switchUserTMI;
         private System.Windows.Forms.ToolStripMenuItem changeTeamTMI;
+        private System.Windows.Forms.ToolStripMenuItem workoutsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem LiftingTMI;
     }
 }

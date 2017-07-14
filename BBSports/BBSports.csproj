@@ -134,7 +134,6 @@
     <Compile Include="TeamManager.Designer.cs">
       <DependentUpon>TeamManager.cs</DependentUpon>
     </Compile>
-    <Compile Include="Test.cs" />
     <EmbeddedResource Include="Directory.resx">
       <DependentUpon>Directory.cs</DependentUpon>
     </EmbeddedResource>

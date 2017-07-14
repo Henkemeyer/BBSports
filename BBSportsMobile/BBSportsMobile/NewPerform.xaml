@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BBSportsMobile.NewPerform"
+             Title="New Performance">
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="Meet" />
+            <Label Text="Event" />
+            <Label Text="Athlete(s)" />
+            <Button x:Name="bContinue" Text="Continue" Clicked="Continue_Clicked" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

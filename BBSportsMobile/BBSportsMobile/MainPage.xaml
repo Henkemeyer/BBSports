@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BBSportsMobile.MainPage"
+             Title="Please sign in below">
+    <ContentPage.Padding>
+        <OnPlatform x:TypeArguments="Thickness"
+                    iOS="20, 40, 20, 20"
+                    Android="20, 20, 20, 20"
+                    WinPhone="20, 20, 20, 20" />
+    </ContentPage.Padding>
+    <ContentPage.Content>
+        <StackLayout VerticalOptions="FillAndExpand"
+                     HorizontalOptions="FillAndExpand"
+                     Orientation="Vertical"
+                     Spacing="15">
+            <Label Text="Username" />
+            <Entry x:Name="username" />
+            <Label Text="Password" />
+            <Entry x:Name="password" />
+            <Button x:Name="loginButton" Text="Login" Clicked="LoginButton_Clicked" />
+            <Button x:Name="newUser" Text="New User" IsEnabled="false" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

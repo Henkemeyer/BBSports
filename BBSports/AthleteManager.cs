@@ -29,7 +29,6 @@ namespace BBSports
         {
             cs = ConfigurationManager.ConnectionStrings["BBSports.DB"].ConnectionString;
             
-            dateTPBirthday.Value = System.DateTime.Now.AddYears(-15);
             cbGrade.SelectedIndex = 0;
 
             GetGrades();
@@ -43,7 +42,7 @@ namespace BBSports
             List<string> grades = new List<string>();
 
             string getGrades = @"select c.Grades from Classifications c, Administration a
-                          where a.AdministrationId = " + homebase.GetAdmin() +
+                          where a.AdministrationId = " + homebase.AdminId +
                          "and a.Classification = c.Classification " +
                          "order by c.ClassId asc";
 
@@ -109,8 +108,8 @@ namespace BBSports
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
 
-                        cmd.Parameters.Add("@adminId", SqlDbType.Int).Value = homebase.GetAdmin();
-                        cmd.Parameters.Add("@teamId", SqlDbType.Int).Value = homebase.GetTeamId();
+                        cmd.Parameters.Add("@adminId", SqlDbType.Int).Value = homebase.AdminId;
+                        cmd.Parameters.Add("@teamId", SqlDbType.Int).Value = homebase.AdminId;
                         cmd.Parameters.Add("@gender", SqlDbType.VarChar).Value = gender;
                         cmd.Parameters.Add("@grades", SqlDbType.VarChar).Value = grades;
                         cmd.Parameters.Add("@teams", SqlDbType.VarChar).Value = teams;
@@ -136,7 +135,8 @@ namespace BBSports
 
         private void Clear()
         {
-            lHeader.Text = "New Athlete";
+            this.Refresh();
+           /* lHeader.Text = "New Athlete";
             clbSTeams.Enabled = true;
             athleteId = 0;
             tbFirst.Text = "";
@@ -146,7 +146,7 @@ namespace BBSports
             dateTPBirthday.Value = System.DateTime.Now.AddYears(-15);
             richTBNotes.Text = "";
             cbGrade.SelectedIndex = 0;
-            GetAthletes();
+            GetAthletes();*/
         }
 
         //Gets new team list to assign athlete to based on gender of athlete.
@@ -167,7 +167,7 @@ namespace BBSports
                 gender = "Female";
 
             string sql = String.Format(@"select TeamName from dbo.Teams where AdministrationId = {0} " +
-                         "and Active = 1 and Gender <> '{1}'", homebase.GetAdmin(), gender);
+                         "and Active = 1 and Gender <> '{1}'", homebase.AdminId, gender);
 
             using (SqlConnection connection = new SqlConnection(cs))
             {
@@ -206,7 +206,7 @@ namespace BBSports
                 gender = "Gender";
 
             string getSTeams = String.Format(@"select TeamName from dbo.Teams where AdministrationId = {0} " +
-                                " and Gender = '{1}' and Active = 1", homebase.GetAdmin(), gender);
+                                " and Gender = '{1}' and Active = 1", homebase.AdminId, gender);
 
             using (SqlConnection connection = new SqlConnection(cs))
             {
@@ -247,8 +247,8 @@ namespace BBSports
 
             athleteId = Convert.ToInt32(dgAthletes.SelectedRows[0].Cells[0].Value);
 
-            string getAth = @"select FirstName, MiddleName, LastName, Nickname, " +
-                    "Birthday, Gender, Notes, Grade from Athletes where AthleteId = " + athleteId;
+            string getAth = @"select FirstName, MiddleName, LastName, Nickname, Gender, Birthday, " +
+                            "Notes, Grade, City, State from Users where UserId = " + athleteId;
 
             string gender = "";
 
@@ -265,10 +265,12 @@ namespace BBSports
                             tbMiddle.Text = reader.GetString(1);
                             tbLast.Text = reader.GetString(2);
                             tbNickname.Text = reader.GetString(3);
-                            dateTPBirthday.Value = reader.GetSqlDateTime(4).Value.Date;
-                            gender = reader.GetString(5);
+                            gender = reader.GetString(4);
+                            mtbBirthday.Text = reader.GetDateTime(5).ToShortDateString();
                             richTBNotes.Text = reader.GetString(6);
                             cbGrade.SelectedIndex = cbGrade.FindString(reader.GetString(7));
+                            tbCity.Text = reader.GetString(8);
+                            tbState.Text = reader.GetString(9);
                         }
                     }
                 }
@@ -280,7 +282,7 @@ namespace BBSports
             
             string getTeams = @"select t.TeamName from Teams t, Roster r " +
                     "where r.AthleteId = " + athleteId + " and r.TeamId = t.TeamId " +
-                    "and t.AdministrationId = " + homebase.GetAdmin();
+                    "and t.AdministrationId = " + homebase.AdminId;
 
             using (SqlConnection conn = new SqlConnection(cs))
             {
@@ -314,11 +316,6 @@ namespace BBSports
             if (clbTeams.CheckedItems.Count < 1)
                 errMsg += "Athlete must belong to a sport";
 
-            if (Int32.TryParse(mtbZipcode.Text, out zip) == false)
-            {
-                zip = 0;
-            }
-
             if (errMsg.Equals(""))
             {
                 if (rbMale.Checked)
@@ -337,12 +334,11 @@ namespace BBSports
                             cmd.Parameters.Add("@middle", SqlDbType.VarChar).Value = tbMiddle.Text;
                             cmd.Parameters.Add("@last", SqlDbType.VarChar).Value = tbLast.Text;
                             cmd.Parameters.Add("@nick", SqlDbType.VarChar).Value = tbNickname.Text;
-                            cmd.Parameters.Add("@birthday", SqlDbType.Date).Value = dateTPBirthday.Value;
+                            cmd.Parameters.Add("@birthday", SqlDbType.Date).Value = mtbBirthday.Text;
                             cmd.Parameters.Add("@gender", SqlDbType.VarChar).Value = gender;
                             cmd.Parameters.Add("@notes", SqlDbType.VarChar).Value = richTBNotes.Text;
                             cmd.Parameters.Add("@strength", SqlDbType.VarChar).Value = "";
                             cmd.Parameters.Add("@grade", SqlDbType.VarChar).Value = cbGrade.Text;
-                            cmd.Parameters.Add("@zipcode", SqlDbType.Int).Value = zip;
                             connection.Open();
 
                             using (var reader = cmd.ExecuteReader())
@@ -380,7 +376,7 @@ namespace BBSports
                         using (var command = new SqlCommand("SwitchTeams", connection))
                         {
                             command.CommandType = CommandType.StoredProcedure;
-                            command.Parameters.Add("@adminId", SqlDbType.Int).Value = homebase.GetAdmin();
+                            command.Parameters.Add("@adminId", SqlDbType.Int).Value = homebase.AdminId;
                             command.Parameters.Add("@teamName", SqlDbType.VarChar).Value = team.ToString();
 
                             using (var reader = command.ExecuteReader())

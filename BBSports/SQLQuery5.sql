@@ -1,15 +1,15 @@
-﻿alter table dbo.RacingEvents add EventType varchar(10) default 'Track';
-alter table dbo.Test drop column Type;
-alter table dbo.Athletes alter column Birthday date;
-truncate table Athletes
+﻿alter table dbo.Administration add [State] char(2);
+alter table dbo.Users drop column Pepper;
+alter table dbo.Users alter column [Grade] VARCHAR (15) 
+truncate table Users
 EXEC sp_rename 'dbo.RacingEvents.[Event Name]', 'EventName', 'COLUMN';  
 
 update	dbo.RacingEvents
 set		Distance = 6436
 where	RacingEventId = 2
 
-drop table dbo.Test
-drop procedure dbo.ActivateNewSport
+drop table dbo.Users
+drop procedure dbo.NewUser
 
 insert into dbo.Administration
 values('University of Wisconsin Stout', '1/1/2018', 100, 0)
@@ -18,19 +18,21 @@ insert into dbo.Meets
 values(1, 'Stout Alumni', 'Menomonie Red Cedar Trail', '9/2/2017', 0, ' ', ' ', 'Male', 1)
 
 insert into SupportedSports
-values('Outdoor Track and Field')
+values('Cross Country')
 
 select * from Administration
 select * from Teams
 select * from dbo.SupportedSports
 select * from Meets
 select * from MeetTeams
-select * from Athletes
+select * from Users
 select * from Roster
 select * from Classifications
 select * from Coaches
 select * from AthleteStatus
 select * from RacingEvents
+
+select UserId, Password from Users where Email = 'henkemeyer92@gmail.com'
 
 exec dbo.AddEditAthlete 0, 'Stephanie', 'Ann', 'Henkemeyer', 'Pothead', '12/23/1999', 'Female', ' ', ' ', 'Twelfth', 55068
 

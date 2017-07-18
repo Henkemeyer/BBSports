@@ -30,13 +30,13 @@ namespace BBSports
             List<ComboBoxItem> groups = new List<ComboBoxItem>();
 
             string getGroups = String.Format(@"select StrengthId, StrengthName from StrengthGroups " +
-                                            "where AdministrationId = {0}", homebase.GetAdmin());
+                                            "where AdministrationId = {0}", homebase.AdminId);
 
             string unassigned = String.Format(@"select distinct a.AthleteId, a.FullName from Athletes a, Teams t, Roster r " +
                                                 "where t.AdministrationId = {0} and t.Active = 1 and t.TeamId = r.TeamId " +
                                                 "and r.Eligibility <> 'Alumni' and r.Status <> 'Cut' and r.AthleteId = a.AthleteId " +
                                                 "and a.AthleteId not in(select sg.AthleteId from StrengthGroups sg " +
-                                                            "where sg.AdministrationId = t.AdministrationId)", homebase.GetAdmin());
+                                                            "where sg.AdministrationId = t.AdministrationId)", homebase.AdminId);
 
             try
             {

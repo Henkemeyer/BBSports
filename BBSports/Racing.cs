@@ -29,7 +29,7 @@ namespace BBSports
         // Gets the connection string, gets list of recent meets and relevent events, and athletes.
         private void StartUp()
         {
-            sportId = homebase.GetSportId();
+            sportId = homebase.SportId;
             cs = ConfigurationManager.ConnectionStrings["BBSports.DB"].ConnectionString;
 
             dateTPStart.Value = System.DateTime.Now.AddMonths(-4).Date;
@@ -60,7 +60,7 @@ namespace BBSports
         {
             string getMeets = String.Format(@"select m.MeetId, m.MeetName from Meets m, MeetTeams mt where mt.TeamId = {0} " +
                                             "and mt.MeetId = m.MeetId and m.MeetDate >= '{1}' and m.MeetDate < '{2}' " +
-                                            "order by m.MeetDate desc", homebase.GetTeamId(), dateTPStart.Value.Date,
+                                            "order by m.MeetDate desc", homebase.TeamId, dateTPStart.Value.Date,
                                             dateTPEnd.Value.Date);
 
             try
@@ -91,7 +91,7 @@ namespace BBSports
         {
             string getEvents = String.Format(@"select r.RacingEventId, r.EventName from RacingEvents r, Teams t " +
                                              "where t.TeamId = {0} and t.Gender = r.Gender and r.SportId = t.SportId " +
-                                             "order by r.distance desc", homebase.GetTeamId());
+                                             "order by r.distance desc", homebase.TeamId);
 
             try
             {
@@ -120,7 +120,7 @@ namespace BBSports
         {
             string getAthletes = String.Format(@"select a.AthleteId, a.FullName from Athletes a, Roster r where r.TeamId = {0} " +
                                             "and r.Status = \'Active\' and r.Eligibility <> \'Alumni\' " +
-                                            "and r.AthleteId = a.AthleteId", homebase.GetTeamId());
+                                            "and r.AthleteId = a.AthleteId", homebase.TeamId);
 
             try
             {

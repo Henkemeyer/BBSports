@@ -17,37 +17,36 @@ namespace BBSports
         }
 
         public int adminId = 0;
+        public int athleteId = 0;
         public int teamId = 0;
         public int sportId = 0;
 
-        public int GetAdmin()
+        public int AdminId
         {
-            return adminId;
+            get { return adminId; }
+            
+            set { adminId = value; }
         }
 
-        public void SetAdmin(int aId)
+        public int AthleteId
         {
-            adminId = aId;
+            get { return athleteId; }
+
+            set { athleteId = value; }
         }
 
-        public int GetTeamId()
+        public int TeamId
         {
-            return teamId;
-        }
+            get { return teamId; }
 
-        public void SetTeamId(int tId)
-        {
-            teamId = tId;
+            set { teamId = value; }
         }
         
-        public int GetSportId()
+        public int SportId
         {
-            return sportId;
-        }
+            get { return sportId; }
 
-        public void SetSportId(int sport)
-        {
-            sportId = sport;
+            set { sportId = value; }
         }
 
         // Begin HomePage Logic
@@ -61,21 +60,33 @@ namespace BBSports
             ChangeUser();
         }
 
-        private void ChangeUser()
+        public void ChangeUser()
         {
             Login login = new Login(this);
             login.ShowDialog();
-            LoadFirstPage();
         }
 
         public void LoadFirstPage()
         {
+            if (MdiChildren.Length > 0)
+                ActiveMdiChild.Close();
+
+            menuHome.Visible = true;
             AddTeamOptions();
 
             Racing startPage = new Racing(this);
             startPage.MdiParent = this;
             startPage.Show();
             startPage.WindowState = FormWindowState.Maximized;
+        }
+
+        public void NewUser()
+        {
+            menuHome.Visible = false;
+            NewUser nu = new NewUser(this);
+            nu.MdiParent = this;
+            nu.Show();
+            nu.WindowState = FormWindowState.Maximized;
         }
 
         private void AddTeamOptions()
@@ -128,7 +139,7 @@ namespace BBSports
                     using (var command = new SqlCommand("SwitchTeams", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.Add("@adminId", SqlDbType.Int).Value = GetAdmin();
+                        command.Parameters.Add("@adminId", SqlDbType.Int).Value = this.AdminId;
                         command.Parameters.Add("@teamName", SqlDbType.VarChar).Value = teamName;
 
                         connection.Open();
@@ -136,8 +147,8 @@ namespace BBSports
                         {
                             while (reader.Read())
                             {
-                                SetSportId(reader.GetInt32(0));
-                                SetTeamId(reader.GetInt32(1));
+                                this.SportId = reader.GetInt32(0);
+                                this.TeamId = reader.GetInt32(1);
                             }
                         }
                     }
@@ -181,7 +192,7 @@ namespace BBSports
 
         private void PerformancesTMI_Click(object sender, EventArgs e)
         {
-            if (GetSportId() == 1 || GetSportId() == 2 || GetSportId() == 3)
+            if (this.SportId == 1 || this.SportId == 2 || this.SportId == 3)
             {
                 ActiveMdiChild.Close();
                 Racing raceForm = new Racing(this);
@@ -194,11 +205,6 @@ namespace BBSports
         private void SwitchUserTMI_Click(object sender, EventArgs e)
         {
             ChangeUser();
-        }
-
-        private void ExitTMI_Click(object sender, EventArgs e)
-        {
-            this.Close();
         }
 
         private void RosterTMI_Click(object sender, EventArgs e)
@@ -217,6 +223,11 @@ namespace BBSports
             lift.MdiParent = this;
             lift.Show();
             lift.WindowState = FormWindowState.Maximized;
+        }
+
+        private void ExitTMI_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

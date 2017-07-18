@@ -36,7 +36,7 @@ namespace BBSports
             dateTPEnd.Value = System.DateTime.Now.AddMonths(3);
 
             GetMeets();
-            string grabGender = @"Select Gender from Teams where TeamId = " + homebase.GetTeamId();
+            string grabGender = @"Select Gender from Teams where TeamId = " + homebase.TeamId;
             string gender = "";
             int two = 0;
 
@@ -54,8 +54,8 @@ namespace BBSports
 
                 if (gender != "Co-ed")
                 {
-                    string convienent = @"select count(1) from Teams where AdministrationId = " + homebase.GetAdmin() +
-                                        " and SportId = " + homebase.GetSportId() + " and Gender <> '" + gender + "'";
+                    string convienent = @"select count(1) from Teams where AdministrationId = " + homebase.AdminId +
+                                        " and SportId = " + homebase.SportId + " and Gender <> '" + gender + "'";
 
                     using (var cmd = new SqlCommand(convienent, connection))
                     {
@@ -98,8 +98,8 @@ namespace BBSports
 
                         cmd.Parameters.Add("@beginDate", SqlDbType.DateTime).Value = dateTPBegin.Value;
                         cmd.Parameters.Add("@endDate", SqlDbType.DateTime).Value = dateTPEnd.Value;
-                        cmd.Parameters.Add("@sportId", SqlDbType.Int).Value = homebase.GetSportId();
-                        cmd.Parameters.Add("@teamId", SqlDbType.Int).Value = homebase.GetTeamId();
+                        cmd.Parameters.Add("@sportId", SqlDbType.Int).Value = homebase.SportId;
+                        cmd.Parameters.Add("@teamId", SqlDbType.Int).Value = homebase.TeamId;
                         cmd.Parameters.Add("@include", SqlDbType.VarChar).Value = include;
 
                         adapter.SelectCommand = cmd;
@@ -125,7 +125,7 @@ namespace BBSports
                 meetId = Convert.ToInt32(dgMeetsList.SelectedRows[0].Cells[0].Value);
                 string getMeet = String.Format(@"Select m.MeetName, m.Location, m.MeetDate, m.Temperature, m.WeatherNotes, m.MeetNotes, " +
                                  "m.Alumni, mt.Score, mt.Place from Meets m and MeetTeams mt " +
-                                 "where mt.MeetId = {0} and mt.TeamId = {1} and mt.MeetId = m.MeetId", meetId.ToString(), homebase.GetTeamId());
+                                 "where mt.MeetId = {0} and mt.TeamId = {1} and mt.MeetId = m.MeetId", meetId.ToString(), homebase.TeamId);
 
                 using (SqlConnection connection = new SqlConnection(cs))
                 {
@@ -186,7 +186,7 @@ namespace BBSports
                         cmd.CommandType = CommandType.StoredProcedure;
 
                         cmd.Parameters.Add("@meetId", SqlDbType.Int).Value = meetId;
-                        cmd.Parameters.Add("@teamId", SqlDbType.Int).Value = homebase.GetTeamId();
+                        cmd.Parameters.Add("@teamId", SqlDbType.Int).Value = homebase.TeamId;
                         cmd.Parameters.Add("@meetName", SqlDbType.VarChar).Value = tbMeetName.Text;
                         cmd.Parameters.Add("@location", SqlDbType.VarChar).Value = tbLocation.Text;
                         cmd.Parameters.Add("@meetDate", SqlDbType.DateTime).Value = dateTP.Value;

@@ -66,7 +66,7 @@ namespace BBSports
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
 
-                        cmd.Parameters.Add("@teamId", SqlDbType.Int).Value = homebase.GetTeamId();
+                        cmd.Parameters.Add("@teamId", SqlDbType.Int).Value = homebase.TeamId;
                         cmd.Parameters.Add("@alumni", SqlDbType.VarChar).Value = alumni;
                         cmd.Parameters.Add("@cut", SqlDbType.VarChar).Value = cut;
 

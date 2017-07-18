@@ -30,7 +30,7 @@ namespace BBSports
         {
             cs = ConfigurationManager.ConnectionStrings["BBSports.DB"].ConnectionString;
             cbSSeason.SelectedIndex = cbSSeason.FindString("All");
-            adminId = homebase.GetAdmin();
+            adminId = homebase.AdminId;
             SetAvailableSports();
             GetTeams();
         }

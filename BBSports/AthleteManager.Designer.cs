@@ -44,7 +44,7 @@
             this.Gender = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Grade = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Birthday = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.maskedTextBox1 = new System.Windows.Forms.MaskedTextBox();
+            this.mtbBirthday = new System.Windows.Forms.MaskedTextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.cbGrade = new System.Windows.Forms.ComboBox();
             this.lGrade = new System.Windows.Forms.Label();
@@ -56,7 +56,6 @@
             this.gbGender = new System.Windows.Forms.GroupBox();
             this.rbMale = new System.Windows.Forms.RadioButton();
             this.rbFemale = new System.Windows.Forms.RadioButton();
-            this.dateTPBirthday = new System.Windows.Forms.DateTimePicker();
             this.tbMiddle = new System.Windows.Forms.TextBox();
             this.tbLast = new System.Windows.Forms.TextBox();
             this.tbNickname = new System.Windows.Forms.TextBox();
@@ -68,9 +67,11 @@
             this.lMiddle = new System.Windows.Forms.Label();
             this.lFirst = new System.Windows.Forms.Label();
             this.lHeader = new System.Windows.Forms.Label();
-            this.mtbZipcode = new System.Windows.Forms.MaskedTextBox();
-            this.lZipcode = new System.Windows.Forms.Label();
             this.toolTipZip = new System.Windows.Forms.ToolTip(this.components);
+            this.lCity = new System.Windows.Forms.Label();
+            this.lState = new System.Windows.Forms.Label();
+            this.tbCity = new System.Windows.Forms.TextBox();
+            this.tbState = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.scAthletes)).BeginInit();
             this.scAthletes.Panel1.SuspendLayout();
             this.scAthletes.Panel2.SuspendLayout();
@@ -99,9 +100,11 @@
             // scAthletes.Panel2
             // 
             this.scAthletes.Panel2.AutoScroll = true;
-            this.scAthletes.Panel2.Controls.Add(this.lZipcode);
-            this.scAthletes.Panel2.Controls.Add(this.mtbZipcode);
-            this.scAthletes.Panel2.Controls.Add(this.maskedTextBox1);
+            this.scAthletes.Panel2.Controls.Add(this.tbState);
+            this.scAthletes.Panel2.Controls.Add(this.tbCity);
+            this.scAthletes.Panel2.Controls.Add(this.lState);
+            this.scAthletes.Panel2.Controls.Add(this.lCity);
+            this.scAthletes.Panel2.Controls.Add(this.mtbBirthday);
             this.scAthletes.Panel2.Controls.Add(this.label1);
             this.scAthletes.Panel2.Controls.Add(this.cbGrade);
             this.scAthletes.Panel2.Controls.Add(this.lGrade);
@@ -111,7 +114,6 @@
             this.scAthletes.Panel2.Controls.Add(this.clbTeams);
             this.scAthletes.Panel2.Controls.Add(this.richTBNotes);
             this.scAthletes.Panel2.Controls.Add(this.gbGender);
-            this.scAthletes.Panel2.Controls.Add(this.dateTPBirthday);
             this.scAthletes.Panel2.Controls.Add(this.tbMiddle);
             this.scAthletes.Panel2.Controls.Add(this.tbLast);
             this.scAthletes.Panel2.Controls.Add(this.tbNickname);
@@ -279,14 +281,15 @@
             this.Birthday.Name = "Birthday";
             this.Birthday.ReadOnly = true;
             // 
-            // maskedTextBox1
+            // mtbBirthday
             // 
-            this.maskedTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.maskedTextBox1.Location = new System.Drawing.Point(76, 241);
-            this.maskedTextBox1.Mask = "##/##/####";
-            this.maskedTextBox1.Name = "maskedTextBox1";
-            this.maskedTextBox1.Size = new System.Drawing.Size(100, 26);
-            this.maskedTextBox1.TabIndex = 101;
+            this.mtbBirthday.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mtbBirthday.Location = new System.Drawing.Point(167, 166);
+            this.mtbBirthday.Mask = "00/00/0000";
+            this.mtbBirthday.Name = "mtbBirthday";
+            this.mtbBirthday.Size = new System.Drawing.Size(120, 26);
+            this.mtbBirthday.TabIndex = 101;
+            this.mtbBirthday.ValidatingType = typeof(System.DateTime);
             // 
             // label1
             // 
@@ -411,9 +414,9 @@
             this.gbGender.Controls.Add(this.rbMale);
             this.gbGender.Controls.Add(this.rbFemale);
             this.gbGender.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbGender.Location = new System.Drawing.Point(446, 172);
+            this.gbGender.Location = new System.Drawing.Point(636, 172);
             this.gbGender.Name = "gbGender";
-            this.gbGender.Size = new System.Drawing.Size(381, 77);
+            this.gbGender.Size = new System.Drawing.Size(187, 131);
             this.gbGender.TabIndex = 6;
             this.gbGender.TabStop = false;
             this.gbGender.Text = "Gender*";
@@ -421,7 +424,7 @@
             // rbMale
             // 
             this.rbMale.AutoSize = true;
-            this.rbMale.Location = new System.Drawing.Point(240, 38);
+            this.rbMale.Location = new System.Drawing.Point(29, 87);
             this.rbMale.Name = "rbMale";
             this.rbMale.Size = new System.Drawing.Size(66, 24);
             this.rbMale.TabIndex = 7;
@@ -433,7 +436,7 @@
             // 
             this.rbFemale.AutoSize = true;
             this.rbFemale.Checked = true;
-            this.rbFemale.Location = new System.Drawing.Point(18, 37);
+            this.rbFemale.Location = new System.Drawing.Point(29, 38);
             this.rbFemale.Name = "rbFemale";
             this.rbFemale.Size = new System.Drawing.Size(85, 24);
             this.rbFemale.TabIndex = 6;
@@ -441,17 +444,6 @@
             this.rbFemale.Text = "Female";
             this.rbFemale.UseVisualStyleBackColor = true;
             this.rbFemale.CheckedChanged += new System.EventHandler(this.Gender_CheckedChanged);
-            // 
-            // dateTPBirthday
-            // 
-            this.dateTPBirthday.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dateTPBirthday.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dateTPBirthday.Location = new System.Drawing.Point(126, 209);
-            this.dateTPBirthday.MaxDate = new System.DateTime(2999, 12, 31, 0, 0, 0, 0);
-            this.dateTPBirthday.MinDate = new System.DateTime(1900, 1, 1, 0, 0, 0, 0);
-            this.dateTPBirthday.Name = "dateTPBirthday";
-            this.dateTPBirthday.Size = new System.Drawing.Size(205, 26);
-            this.dateTPBirthday.TabIndex = 5;
             // 
             // tbMiddle
             // 
@@ -499,7 +491,7 @@
             // 
             this.lBirthday.AutoSize = true;
             this.lBirthday.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lBirthday.Location = new System.Drawing.Point(52, 172);
+            this.lBirthday.Location = new System.Drawing.Point(50, 172);
             this.lBirthday.Name = "lBirthday";
             this.lBirthday.Size = new System.Drawing.Size(71, 20);
             this.lBirthday.TabIndex = 99;
@@ -555,32 +547,48 @@
             this.lHeader.TabIndex = 0;
             this.lHeader.Text = "New Athlete";
             // 
-            // mtbZipcode
-            // 
-            this.mtbZipcode.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.mtbZipcode.CutCopyMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals;
-            this.mtbZipcode.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mtbZipcode.Location = new System.Drawing.Point(682, 277);
-            this.mtbZipcode.Mask = "#####";
-            this.mtbZipcode.Name = "mtbZipcode";
-            this.mtbZipcode.Size = new System.Drawing.Size(100, 26);
-            this.mtbZipcode.TabIndex = 102;
-            // 
-            // lZipcode
-            // 
-            this.lZipcode.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.lZipcode.AutoSize = true;
-            this.lZipcode.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lZipcode.Location = new System.Drawing.Point(575, 283);
-            this.lZipcode.Name = "lZipcode";
-            this.lZipcode.Size = new System.Drawing.Size(67, 20);
-            this.lZipcode.TabIndex = 103;
-            this.lZipcode.Text = "Zipcode";
-            // 
             // toolTipZip
             // 
             this.toolTipZip.IsBalloon = true;
             this.toolTipZip.ToolTipTitle = "Zipcode is used to help find athletes outside of the organization.";
+            // 
+            // lCity
+            // 
+            this.lCity.AutoSize = true;
+            this.lCity.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lCity.Location = new System.Drawing.Point(52, 224);
+            this.lCity.Name = "lCity";
+            this.lCity.Size = new System.Drawing.Size(38, 20);
+            this.lCity.TabIndex = 102;
+            this.lCity.Text = "City";
+            // 
+            // lState
+            // 
+            this.lState.AutoSize = true;
+            this.lState.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lState.Location = new System.Drawing.Point(413, 224);
+            this.lState.Name = "lState";
+            this.lState.Size = new System.Drawing.Size(48, 20);
+            this.lState.TabIndex = 103;
+            this.lState.Text = "State";
+            // 
+            // tbCity
+            // 
+            this.tbCity.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbCity.Location = new System.Drawing.Point(127, 221);
+            this.tbCity.MaxLength = 50;
+            this.tbCity.Name = "tbCity";
+            this.tbCity.Size = new System.Drawing.Size(237, 26);
+            this.tbCity.TabIndex = 104;
+            // 
+            // tbState
+            // 
+            this.tbState.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbState.Location = new System.Drawing.Point(498, 221);
+            this.tbState.MaxLength = 2;
+            this.tbState.Name = "tbState";
+            this.tbState.Size = new System.Drawing.Size(55, 26);
+            this.tbState.TabIndex = 105;
             // 
             // AthleteManager
             // 
@@ -623,7 +631,6 @@
         private System.Windows.Forms.TextBox tbLast;
         private System.Windows.Forms.TextBox tbNickname;
         private System.Windows.Forms.TextBox tbFirst;
-        private System.Windows.Forms.DateTimePicker dateTPBirthday;
         private System.Windows.Forms.GroupBox gbGender;
         private System.Windows.Forms.RadioButton rbMale;
         private System.Windows.Forms.RadioButton rbFemale;
@@ -648,9 +655,11 @@
         private System.Windows.Forms.RadioButton rbSAll;
         private System.Windows.Forms.RadioButton rbSMale;
         private System.Windows.Forms.RadioButton rbSFemale;
-        private System.Windows.Forms.MaskedTextBox maskedTextBox1;
-        private System.Windows.Forms.Label lZipcode;
-        private System.Windows.Forms.MaskedTextBox mtbZipcode;
+        private System.Windows.Forms.MaskedTextBox mtbBirthday;
         private System.Windows.Forms.ToolTip toolTipZip;
+        private System.Windows.Forms.TextBox tbState;
+        private System.Windows.Forms.TextBox tbCity;
+        private System.Windows.Forms.Label lState;
+        private System.Windows.Forms.Label lCity;
     }
 }

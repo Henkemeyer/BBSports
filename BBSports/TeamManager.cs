@@ -16,7 +16,6 @@ namespace BBSports
     {
         private string cs = "";
         private int teamId = 0;
-        private int adminId = 0;
         private HomePage homebase = null;
 
         public TeamManager(HomePage hp)
@@ -30,7 +29,6 @@ namespace BBSports
         {
             cs = ConfigurationManager.ConnectionStrings["BBSports.DB"].ConnectionString;
             cbSSeason.SelectedIndex = cbSSeason.FindString("All");
-            adminId = homebase.AdminId;
             SetAvailableSports();
             GetTeams();
         }
@@ -91,7 +89,7 @@ namespace BBSports
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
 
-                        cmd.Parameters.Add("@administrationId", SqlDbType.Int).Value = adminId;
+                        cmd.Parameters.Add("@administrationId", SqlDbType.Int).Value = homebase.AdminId;
                         cmd.Parameters.Add("@sportName", SqlDbType.VarChar).Value = cbSSports.Text;
                         cmd.Parameters.Add("@level", SqlDbType.VarChar).Value = "All";
                         cmd.Parameters.Add("@season", SqlDbType.VarChar).Value = cbSSeason.Text;
@@ -128,7 +126,7 @@ namespace BBSports
         private void TeamName_TextChanged(object sender, EventArgs e)
         {
             string check = "";
-            string unique = @"Select 'duplicate' from Teams where AdministrationId = " + adminId +
+            string unique = @"Select 'duplicate' from Teams where AdministrationId = " + homebase.AdminId +
                             " and TeamName = '" + tbTeamName.Text + "'";
 
             using (SqlConnection connection = new SqlConnection(cs))
@@ -178,26 +176,30 @@ namespace BBSports
             }
 
             if (valid)
-            {                
+            {
                 if (rbFemale.Checked)
                     gender = "Female";
-                else
+                else if (rbMale.Checked)
                     gender = "Male";
+                else gender = "Co-Ed";
 
                 using (SqlConnection connection = new SqlConnection(cs))
                 {
-                    using (var cmd = new SqlCommand("ManageTeam", connection))
+                    using (var cmd = new SqlCommand("AddEditTeams", connection))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
 
-                        cmd.Parameters.Add("@adminId", SqlDbType.Int).Value = adminId;
+                        cmd.Parameters.Add("@adminId", SqlDbType.Int).Value = homebase.AdminId;
+                        cmd.Parameters.Add("@userId", SqlDbType.Int).Value = homebase.AthleteId;
                         cmd.Parameters.Add("@sportName", SqlDbType.VarChar).Value = cbSports.Text;
                         cmd.Parameters.Add("@teamId", SqlDbType.Int).Value = teamId;
                         cmd.Parameters.Add("@teamName", SqlDbType.VarChar).Value = tbTeamName.Text;
                         cmd.Parameters.Add("@season", SqlDbType.VarChar).Value = cbSeason.Text;
                         cmd.Parameters.Add("@gender", SqlDbType.VarChar).Value = gender;
                         cmd.Parameters.Add("@level", SqlDbType.VarChar).Value = cbLevel.Text;
+                        cmd.Parameters.Add("@subLevel", SqlDbType.VarChar).Value = "";
                         cmd.Parameters.Add("@active", SqlDbType.Int).Value = activated;
+                        cmd.Parameters.Add("@position", SqlDbType.VarChar).Value = "";
 
                         connection.Open();
                         cmd.ExecuteNonQuery();
@@ -212,6 +214,7 @@ namespace BBSports
         {
             teamId = 0;
             lHeader.Text = "New Team";
+            cbSports.Enabled = true;
             tbTeamName.Text = "";
             tbOther.Text = "";
             bActivate.Text = "Activate";
@@ -273,6 +276,7 @@ namespace BBSports
                     }
                 }
                 lHeader.Text = "Edit Team";
+                cbSports.Enabled = false;
 
                 if (gender.Equals("Female"))
                     rbFemale.Checked = true;

@@ -4,10 +4,6 @@ using System.ComponentModel;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace BBSports
@@ -15,25 +11,30 @@ namespace BBSports
     public partial class AthleteManager : Form
     {
         private string cs = "";
-        private int athleteId = 0;
         private HomePage homebase = null;
+        private int athleteId = 0;
+        private System.Windows.Forms.ErrorProvider emailErrorProvider;
 
         public AthleteManager(HomePage hp)
         {
             InitializeComponent();
             homebase = hp;
             StartUp();
+
+            emailErrorProvider = new System.Windows.Forms.ErrorProvider();
+            emailErrorProvider.SetIconAlignment(this.tbEmail, ErrorIconAlignment.MiddleRight);
+            emailErrorProvider.SetIconPadding(this.tbEmail, 2);
+            emailErrorProvider.BlinkRate = 1000;
+            emailErrorProvider.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.AlwaysBlink;
         }
 
         private void StartUp()
         {
             cs = ConfigurationManager.ConnectionStrings["BBSports.DB"].ConnectionString;
             
-            cbGrade.SelectedIndex = 0;
+            //cbGrade.SelectedIndex = 0;
 
             GetGrades();
-            GetSTeams();
-            GetAthletes();
             GetTeams();
         }
 
@@ -41,10 +42,10 @@ namespace BBSports
         {
             List<string> grades = new List<string>();
 
-            string getGrades = @"select c.Grades from Classifications c, Administration a
-                          where a.AdministrationId = " + homebase.AdminId +
-                         "and a.Classification = c.Classification " +
-                         "order by c.ClassId asc";
+            string getGrades = @"select c.Grade from Classifications c, Administration a " +
+                         "where a.AdministrationId = " + homebase.AdminId +
+                         "and a.Classification = c.ClassificationId " +
+                         "order by c.ClassificationId asc";
 
             using (SqlConnection connection = new SqlConnection(cs))
             {
@@ -58,73 +59,8 @@ namespace BBSports
                     }
                 }
             }
-            clbSGrades.Items.Clear();
             cbGrade.DataSource = grades;
-            cbGrade.SelectedIndex = 0;
-
-            int num = 0;
-            foreach (string s in grades)
-            {
-                clbSGrades.Items.Add(s);
-                if (!s.Equals("Alumni"))
-                    clbSGrades.SetItemChecked(num, true);
-                num++;
-            }
-        }
-
-        private void GetAthletes()
-        {
-            DataTable athletes = new DataTable();
-            SqlDataAdapter adapter = new SqlDataAdapter();
-            BindingSource orgAthletes = new BindingSource();
-            string gender = "Female";
-            string grades = "";
-            string teams = "";
-
-            if (rbSMale.Checked)
-                gender = "Male";
-            else if (rbSAll.Checked)
-                gender = "All";
-
-            foreach(var g in clbSGrades.CheckedItems)
-            {
-                grades += "'" + g.ToString() + "'";
-                if (clbSGrades.CheckedItems.IndexOf(g) != clbSGrades.CheckedItems.Count - 1)
-                    grades += ", ";
-            }
-
-            foreach (var t in clbSTeams.CheckedItems)
-            {
-                teams += "'" + t.ToString() + "'";
-                if (clbSTeams.CheckedItems.IndexOf(t) != clbSTeams.CheckedItems.Count - 1)
-                    teams += ", ";
-            }
-
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(cs))
-                {
-                    using (var cmd = new SqlCommand("GetAthletes", connection))
-                    {
-                        cmd.CommandType = CommandType.StoredProcedure;
-
-                        cmd.Parameters.Add("@adminId", SqlDbType.Int).Value = homebase.AdminId;
-                        cmd.Parameters.Add("@teamId", SqlDbType.Int).Value = homebase.AdminId;
-                        cmd.Parameters.Add("@gender", SqlDbType.VarChar).Value = gender;
-                        cmd.Parameters.Add("@grades", SqlDbType.VarChar).Value = grades;
-                        cmd.Parameters.Add("@teams", SqlDbType.VarChar).Value = teams;
-
-                        adapter.SelectCommand = cmd;
-                        adapter.Fill(athletes);
-                    }
-                }
-            }
-            catch (SqlException ex)
-            {
-                MessageBox.Show(ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
-            orgAthletes.DataSource = athletes;
-            dgAthletes.DataSource = orgAthletes;
+            //cbGrade.SelectedIndex = 0;
         }
 
         //Clears the screan.
@@ -136,17 +72,14 @@ namespace BBSports
         private void Clear()
         {
             this.Refresh();
-           /* lHeader.Text = "New Athlete";
-            clbSTeams.Enabled = true;
+            lHeader.Text = "New Athlete";
             athleteId = 0;
             tbFirst.Text = "";
             tbMiddle.Text = "";
             tbLast.Text = "";
             tbNickname.Text = "";
-            dateTPBirthday.Value = System.DateTime.Now.AddYears(-15);
-            richTBNotes.Text = "";
-            cbGrade.SelectedIndex = 0;
-            GetAthletes();*/
+            mtbBirthday.Text = "";
+            //cbGrade.SelectedIndex = 0;
         }
 
         //Gets new team list to assign athlete to based on gender of athlete.
@@ -159,15 +92,14 @@ namespace BBSports
         private void GetTeams()
         {
             List<string> teams = new List<string>();
-            string gender = "";
+            string gender = "Female";
 
-            if (rbFemale.Checked)
+            if (rbMale.Checked)
                 gender = "Male";
-            else
-                gender = "Female";
 
-            string sql = String.Format(@"select TeamName from dbo.Teams where AdministrationId = {0} " +
-                         "and Active = 1 and Gender <> '{1}'", homebase.AdminId, gender);
+            string sql = String.Format(@"select t.TeamName from Teams t, Coaches c where t.AdministrationId = {0} " +
+                         "and t.Active = 1 and Gender = '{1}' and c.CoachId = {2} and c.TeamId = t.TeamId", 
+                         homebase.AdminId, gender, homebase.AthleteId);
 
             using (SqlConnection connection = new SqlConnection(cs))
             {
@@ -190,65 +122,10 @@ namespace BBSports
             }
         }
 
-        private void SGender_CheckedChanged(object sender, EventArgs e)
+        private void FoundAthlete(int aId)
         {
-            GetSTeams();
-        }
-
-        private void GetSTeams()
-        {
-            List<string> sTeams = new List<string>();
-            string gender = "Female";
-
-            if (rbSMale.Checked)
-                gender = "Male";
-            else if (rbSAll.Checked)
-                gender = "Gender";
-
-            string getSTeams = String.Format(@"select TeamName from dbo.Teams where AdministrationId = {0} " +
-                                " and Gender = '{1}' and Active = 1", homebase.AdminId, gender);
-
-            using (SqlConnection connection = new SqlConnection(cs))
-            {
-                using (var command = new SqlCommand(getSTeams, connection))
-                {
-                    connection.Open();
-                    using (var reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                            sTeams.Add(reader.GetString(0));
-                    }
-                }
-            }
-            sTeams.Sort();
-            clbSTeams.Items.Clear();
-
-            int num = 0;
-            foreach (string s in sTeams)
-            {
-                clbSTeams.Items.Add(s);
-                clbSTeams.SetItemChecked(num, true);
-                num++;
-            }
-        }
-
-        private void Search_Click(object sender, EventArgs e)
-        {
-            GetAthletes();
-        }
-
-        // When athlete is double clicked it loads their info to be edited.
-        private void Athletes_DoubleClick(object sender, EventArgs e)
-        {
-            if (this.dgAthletes.SelectedRows.Count < 1)
-            {
-                return;
-            }
-
-            athleteId = Convert.ToInt32(dgAthletes.SelectedRows[0].Cells[0].Value);
-
             string getAth = @"select FirstName, MiddleName, LastName, Nickname, Gender, Birthday, " +
-                            "Notes, Grade, City, State from Users where UserId = " + athleteId;
+                            "Grade, City, State from Users where UserId = " + aId;
 
             string gender = "";
 
@@ -267,7 +144,6 @@ namespace BBSports
                             tbNickname.Text = reader.GetString(3);
                             gender = reader.GetString(4);
                             mtbBirthday.Text = reader.GetDateTime(5).ToShortDateString();
-                            richTBNotes.Text = reader.GetString(6);
                             cbGrade.SelectedIndex = cbGrade.FindString(reader.GetString(7));
                             tbCity.Text = reader.GetString(8);
                             tbState.Text = reader.GetString(9);
@@ -279,9 +155,9 @@ namespace BBSports
                 rbFemale.Checked = true;
             else
                 rbMale.Checked = true;
-            
+
             string getTeams = @"select t.TeamName from Teams t, Roster r " +
-                    "where r.AthleteId = " + athleteId + " and r.TeamId = t.TeamId " +
+                    "where r.AthleteId = " + aId + " and r.TeamId = t.TeamId " +
                     "and t.AdministrationId = " + homebase.AdminId;
 
             using (SqlConnection conn = new SqlConnection(cs))
@@ -300,70 +176,71 @@ namespace BBSports
             }
 
             gbGender.Enabled = false;
-            clbSTeams.Enabled = false;
             lHeader.Text = "Edit Athlete";
+            athleteId = aId;
         }
 
-        private void Submit_Click(object sender, EventArgs e)
+        private void Recruit_Click(object sender, EventArgs e)
         {
-            string errMsg = "";
+            int claimed = 0;
+            if (athleteId > 0)
+                claimed = 1;
+
             string gender = "Female";
-            int zip;
+            if (rbMale.Checked)
+                gender = "Male";
 
-            if (tbFirst.Text.Equals("") || tbLast.Text.Equals(""))
-                errMsg += "Athlete must have a first and last name.";
-
-            if (clbTeams.CheckedItems.Count < 1)
-                errMsg += "Athlete must belong to a sport";
-
-            if (errMsg.Equals(""))
+            string password = "Exempt";
+            if (claimed == 0)
             {
-                if (rbMale.Checked)
-                    gender = "Male";
+                int len = tbLast.Text.Length;
+                if (len > 3)
+                    len = 4;
 
-                try
+                password = SaltNPepper.CreateHash(tbLast.Text.Substring(0,len) + 
+                    mtbBirthday.Text.Substring(0,2) + mtbBirthday.Text.Substring(3, 2));
+            }
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(cs))
                 {
-                    using (SqlConnection connection = new SqlConnection(cs))
+                    connection.Open();
+                    using (var cmd = new SqlCommand("UpdateUser", connection))
                     {
-                        using (var cmd = new SqlCommand("AddEditAthlete", connection))
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add("@userId", SqlDbType.Int).Value = athleteId;
+                        cmd.Parameters.Add("@first", SqlDbType.VarChar).Value = tbFirst.Text;
+                        cmd.Parameters.Add("@middle", SqlDbType.VarChar).Value = tbMiddle.Text;
+                        cmd.Parameters.Add("@last", SqlDbType.VarChar).Value = tbLast.Text;
+                        cmd.Parameters.Add("@nick", SqlDbType.VarChar).Value = tbNickname.Text;
+                        cmd.Parameters.Add("@gender", SqlDbType.Char).Value = gender;
+                        cmd.Parameters.Add("@birthday", SqlDbType.Date).Value = DateTime.Parse(mtbBirthday.Text);
+                        cmd.Parameters.Add("@notes", SqlDbType.VarChar).Value = "";
+                        cmd.Parameters.Add("@grade", SqlDbType.VarChar).Value = cbGrade.Text;
+                        cmd.Parameters.Add("@city", SqlDbType.VarChar).Value = tbCity.Text;
+                        cmd.Parameters.Add("@state", SqlDbType.Char).Value = tbState.Text.ToUpper();
+                        cmd.Parameters.Add("@email", SqlDbType.VarChar).Value = tbEmail.Text;
+                        cmd.Parameters.Add("@password", SqlDbType.VarChar).Value = password;
+                        cmd.Parameters.Add("@claimed", SqlDbType.Int).Value = claimed;
+
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            cmd.CommandType = CommandType.StoredProcedure;
-
-                            cmd.Parameters.Add("@athleteId", SqlDbType.Int).Value = athleteId;
-                            cmd.Parameters.Add("@first", SqlDbType.VarChar).Value = tbFirst.Text;
-                            cmd.Parameters.Add("@middle", SqlDbType.VarChar).Value = tbMiddle.Text;
-                            cmd.Parameters.Add("@last", SqlDbType.VarChar).Value = tbLast.Text;
-                            cmd.Parameters.Add("@nick", SqlDbType.VarChar).Value = tbNickname.Text;
-                            cmd.Parameters.Add("@birthday", SqlDbType.Date).Value = mtbBirthday.Text;
-                            cmd.Parameters.Add("@gender", SqlDbType.VarChar).Value = gender;
-                            cmd.Parameters.Add("@notes", SqlDbType.VarChar).Value = richTBNotes.Text;
-                            cmd.Parameters.Add("@strength", SqlDbType.VarChar).Value = "";
-                            cmd.Parameters.Add("@grade", SqlDbType.VarChar).Value = cbGrade.Text;
-                            connection.Open();
-
-                            using (var reader = cmd.ExecuteReader())
+                            while (reader.Read())
                             {
-                                while (reader.Read())
-                                    athleteId = reader.GetInt32(0);
+                                AddToRosters(reader.GetInt32(0));
                             }
-                            if (athleteId > 0)
-                                AddToRosters();
                         }
                     }
-                    Clear();
-                }
-                catch (SqlException ex)
-                {
-                    MessageBox.Show(ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
             }
-            else
+            catch (SqlException ex)
             {
-                MessageBox.Show(errMsg, "Not Valid", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show(ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
 
-        private void AddToRosters()
+        private void AddToRosters(int aId)
         {
             List<String> rosterIn = new List<String>();
             try
@@ -383,7 +260,7 @@ namespace BBSports
                             {
                                 while (reader.Read())
                                 {
-                                    rosterIn.Add(@"insert into Roster values(" + reader.GetInt32(1) + ", " + athleteId +
+                                    rosterIn.Add(@"insert into Roster values(" + reader.GetInt32(1) + ", " + aId +
                                         ", '" + cbGrade.Text + "', 'Active', 0, 'N/A')");
                                 }
                             }
@@ -402,6 +279,56 @@ namespace BBSports
             catch (SqlException ex)
             {
                 MessageBox.Show(ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+        }
+
+        private void Directory_Click(object sender, EventArgs e)
+        {
+            Directory dir = new Directory();
+            dir.ItemHasBeenSelected += UC_AthleteSelected;
+
+            MakeUserControlPrimaryWindow(dir);
+        }
+
+        void UC_AthleteSelected(object sender, Directory.SelectedItemEventArgs e)
+        {
+            var value = e.SelectedChoice;
+            FoundAthlete(value);
+        }
+
+        private void MakeUserControlPrimaryWindow(UserControl uc)
+        {
+            this.Controls.Add(uc);
+        }
+
+        private void Email_Validating(object sender, CancelEventArgs e)
+        {
+            if (tbEmail.TextLength > 0)
+            {
+                if (tbEmail.TextLength < 6 || !tbEmail.Text.Contains("@") || !tbEmail.Text.Contains("."))
+                {
+                    e.Cancel = true;
+                    this.emailErrorProvider.SetError(tbEmail, "This E-mail is not valid");
+                }
+
+                string check = @"select 'x' from Users where Email = '" + tbEmail.Text + "'";
+
+                using (SqlConnection connection = new SqlConnection(cs))
+                {
+                    using (var cmd = new SqlCommand(check, connection))
+                    {
+                        connection.Open();
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.HasRows)
+                            {
+                                e.Cancel = true;
+                                tbEmail.Select(0, tbEmail.Text.Length);
+                                this.emailErrorProvider.SetError(tbEmail, "This E-mail has already been used for another account.");
+                            }
+                        }
+                    }
+                }
             }
         }
     }

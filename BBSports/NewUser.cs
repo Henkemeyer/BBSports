@@ -9,20 +9,22 @@ namespace BBSports
 {
     public partial class NewUser : Form
     {
-        String cs = "";
-        HomePage homebase = null;
-
+        private String cs = "";
+        private HomePage homebase = null;
+        private System.Windows.Forms.ErrorProvider emailErrorProvider;
 
         public NewUser(HomePage hp)
         {
             InitializeComponent();
             homebase = hp;
             cs = cs = ConfigurationManager.ConnectionStrings["BBSports.DB"].ConnectionString;
-        }
 
-        private void NewOrg_CheckedChanged(object sender, EventArgs e)
-        {
-            pNewOrg.Enabled = cxbNewOrg.Checked;
+            emailErrorProvider = new System.Windows.Forms.ErrorProvider();
+            emailErrorProvider.SetIconAlignment(this.tbEmail, ErrorIconAlignment.MiddleRight);
+            emailErrorProvider.SetIconPadding(this.tbEmail, 2);
+            emailErrorProvider.BlinkRate = 1000;
+            emailErrorProvider.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.AlwaysBlink;
+
         }
 
         private void Submit_Click(object sender, EventArgs e)
@@ -73,24 +75,17 @@ namespace BBSports
                         using (var reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
-                                userId = reader.GetInt32(0);
+                                homebase.AthleteId = reader.GetInt32(0);
                         }
                     }
                     if (cxbNewOrg.Checked)
                     {
-                        using (var cmd = new SqlCommand("UpdateOrg", connection))
-                        {
-                            cmd.CommandType = CommandType.StoredProcedure;
-
-                            cmd.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
-                            cmd.Parameters.Add("@name", SqlDbType.VarChar).Value = tbFirst.Text;
-                            cmd.Parameters.Add("@teams", SqlDbType.VarChar).Value = numericTeams.Value;
-                            cmd.Parameters.Add("@city", SqlDbType.VarChar).Value = tbOrgCity.Text;
-                            cmd.Parameters.Add("@state", SqlDbType.Char).Value = tbOrgState.Text;
-                            cmd.Parameters.Add("@classification", SqlDbType.VarChar).Value = cbClass.Text;
-
-                            cmd.ExecuteNonQuery();
-                        }
+                        NewOrg norg = new NewOrg(homebase);
+                        norg.MdiParent = homebase;
+                        norg.Show();
+                        norg.WindowState = FormWindowState.Maximized;
+                        this.Close();
+                        return;
                     }
                     homebase.LoadFirstPage();
                     this.Close();
@@ -174,6 +169,37 @@ namespace BBSports
                 tbPWCheck.Enabled = false;
                 tbEmail.Enabled = false;
                 tbTempPW.Enabled = false;
+            }
+        }
+
+        private void Email_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (tbEmail.TextLength > 0)
+            {
+                if (tbEmail.TextLength < 6 || !tbEmail.Text.Contains("@") || !tbEmail.Text.Contains("."))
+                {
+                    e.Cancel = true;  
+                    this.emailErrorProvider.SetError(tbEmail, "This E-mail is not valid");
+                }
+
+                string check = @"select 'x' from Users where Email = '" + tbEmail.Text + "'";
+
+                using (SqlConnection connection = new SqlConnection(cs))
+                {
+                    using (var cmd = new SqlCommand(check, connection))
+                    {
+                        connection.Open();
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.HasRows)
+                            {
+                                e.Cancel = true;
+                                tbEmail.Select(0, tbEmail.Text.Length);
+                                this.emailErrorProvider.SetError(tbEmail, "This E-mail has already been used for another account.");
+                            }
+                        }
+                    }
+                }
             }
         }
     }

@@ -51,7 +51,7 @@ namespace BBSports
                             gender = reader.GetString(0);
                     }
                 }
-
+                // If there is only a boys and girls team you can create a meet for both at the same time.
                 if (gender != "Co-ed")
                 {
                     string convienent = @"select count(1) from Teams where AdministrationId = " + homebase.AdminId +

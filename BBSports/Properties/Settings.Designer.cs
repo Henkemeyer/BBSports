@@ -33,5 +33,17 @@ namespace BBSports.Properties {
                 return ((string)(this["BBSportsConnectionString"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=crunchtime.database.windows.net;Initial Catalog=BBSports;Persist Secu" +
+            "rity Info=True;User ID=Henkemeyer;Password=RunCity2030;Connect Timeout=30;Connec" +
+            "tRetryInterval=2")]
+        public string BBSportsCS {
+            get {
+                return ((string)(this["BBSportsCS"]));
+            }
+        }
     }
 }

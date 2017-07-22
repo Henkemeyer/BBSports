@@ -112,15 +112,15 @@ namespace BBSports
             }
             catch (SqlException ex)
             {
-                MessageBox.Show(ex.Message, "GetAthletes", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show(ex.Message, "GetEvents", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
 
         private void GetAthletes()
         {
-            string getAthletes = String.Format(@"select a.AthleteId, a.FullName from Athletes a, Roster r where r.TeamId = {0} " +
+            string getAthletes = String.Format(@"select u.UserId, u.FullName from Users u, Roster r where r.TeamId = {0} " +
                                             "and r.Status = \'Active\' and r.Eligibility <> \'Alumni\' " +
-                                            "and r.AthleteId = a.AthleteId", homebase.TeamId);
+                                            "and r.AthleteId = u.UserId", homebase.TeamId);
 
             try
             {

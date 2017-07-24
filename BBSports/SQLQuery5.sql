@@ -5,11 +5,20 @@ truncate table Users
 EXEC sp_rename 'dbo.Teams.[Subevel]', 'SubLevel', 'COLUMN';  
 
 update	dbo.Administration
-set		SportsAllowed = 25
-where	AdministrationId = 2
+set		AdministrationId = 3
+where	AdministrationId = 7
+
+update	dbo.Director
+set		DirectorId = 3,
+		AdministrationId = 3
+where	DirectorId = 7
 
 drop table dbo.Coaches
 drop procedure dbo.NewUser
+
+delete top (1)
+from Coaches
+where TeamId = 12
 
 insert into dbo.Administration
 values('University of Wisconsin Stout', '1/1/2018', 100, 0)
@@ -22,7 +31,7 @@ values('Cross Country')
 
 select * from Administration
 select * from Director
-select * from Teams
+select * from Teams where AdministrationId = 7
 select * from Users
 select * from Roster
 select * from dbo.SupportedSports
@@ -45,12 +54,16 @@ declare @administrationId int,
 		@sportName varchar(50),
 		@gender char(6)
 
-select c.Grades from Classifications c, Administration a
-where a.AdministrationId = 1
-and a.Classification = c.Classification
-order by c.ClassId asc
+select distinct *
+from Teams t, 
+	Coaches c 
+where t.AdministrationId = 7
+and t.TeamId = c.TeamId
+and t.Active = 1 
+and Gender = 'Female' 
+and c.CoachId = 1
 
-insert into Classifications values('Alumni', 'Collegiate')
+insert into Classifications values('Alumni', 'High School')
 insert into RacingEvents values('1 Mile', 1609, 'Female', 2)
 select * from RacingEvents Order by SportId, Gender, Distance
 
@@ -58,12 +71,3 @@ select r.* from RacingEvents r, Teams t
 where t.TeamId = 4 and t.Gender = r.Gender and r.SportId = t.SportId
 order by distance desc
 
-select t.TeamId, t.TeamName 
-from Teams t, Coaches c
-where c.CoachId = 2
-and t.Active = 1
-and  (t.TeamId = c.TeamId
-or t.TeamId in (select r.TeamId
-				from Roster r
-				where r.AthleteId = 2
-				and Status not in ('Cut', 'Alumni')))

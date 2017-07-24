@@ -66,7 +66,7 @@ namespace BBSports
             DataTable teams = new DataTable();
             SqlDataAdapter adapter = new SqlDataAdapter();
             BindingSource requestedTeams = new BindingSource();
-            string gender = "";
+            string gender = "All";
             int active = 0;
 
             if (rbSMale.Checked)
@@ -75,8 +75,6 @@ namespace BBSports
                 gender = "Female";
             else if (rbSCoed.Checked)
                 gender = "Current";
-            else
-                gender = "All";
 
             if (cbSActivated.Checked)
                 active = 1;

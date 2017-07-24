@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,30 +10,24 @@ using System.Windows.Forms;
 
 namespace BBSports
 {
-    public partial class Directory : UserControl
+    public partial class Directory : Form
     {
-        public Directory()
+        private HomePage homebase = null;
+
+        public Directory(HomePage hp)
         {
             InitializeComponent();
+            homebase = hp;
         }
 
-        public class SelectedItemEventArgs : EventArgs
+        private void Search_Click(object sender, EventArgs e)
         {
-            public int SelectedChoice { get; set; }
-        }
 
-        public event EventHandler<SelectedItemEventArgs> ItemHasBeenSelected;
+        }
 
         private void Select_Click(object sender, EventArgs e)
         {
-            var handler = ItemHasBeenSelected;
-            if (handler != null)
-            {
-                handler(this, new SelectedItemEventArgs
-                { SelectedChoice = 1 });
-            }
-            Parent.Controls.Remove(this);
-        }
 
+        }
     }
 }

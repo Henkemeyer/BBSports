@@ -67,6 +67,7 @@
             this.bDirectory.TabIndex = 131;
             this.bDirectory.Text = "Directory";
             this.bDirectory.UseVisualStyleBackColor = true;
+            this.bDirectory.Click += new System.EventHandler(this.Directory_Click);
             // 
             // tbState
             // 
@@ -158,9 +159,9 @@
             // bRecruit
             // 
             this.bRecruit.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bRecruit.Location = new System.Drawing.Point(1201, 795);
+            this.bRecruit.Location = new System.Drawing.Point(1114, 795);
             this.bRecruit.Name = "bRecruit";
-            this.bRecruit.Size = new System.Drawing.Size(90, 40);
+            this.bRecruit.Size = new System.Drawing.Size(106, 40);
             this.bRecruit.TabIndex = 115;
             this.bRecruit.Text = "Recruit";
             this.bRecruit.UseVisualStyleBackColor = true;
@@ -170,18 +171,19 @@
             // 
             this.bClear.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.bClear.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bClear.Location = new System.Drawing.Point(991, 795);
+            this.bClear.Location = new System.Drawing.Point(769, 795);
             this.bClear.Name = "bClear";
-            this.bClear.Size = new System.Drawing.Size(90, 40);
+            this.bClear.Size = new System.Drawing.Size(113, 40);
             this.bClear.TabIndex = 117;
             this.bClear.Text = "Clear";
             this.bClear.UseVisualStyleBackColor = true;
+            this.bClear.Click += new System.EventHandler(this.Clear_Click);
             // 
             // lAssign
             // 
             this.lAssign.AutoSize = true;
             this.lAssign.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lAssign.Location = new System.Drawing.Point(46, 317);
+            this.lAssign.Location = new System.Drawing.Point(44, 348);
             this.lAssign.Name = "lAssign";
             this.lAssign.Size = new System.Drawing.Size(189, 26);
             this.lAssign.TabIndex = 119;
@@ -192,9 +194,9 @@
             this.clbTeams.CheckOnClick = true;
             this.clbTeams.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.clbTeams.FormattingEnabled = true;
-            this.clbTeams.Location = new System.Drawing.Point(49, 348);
+            this.clbTeams.Location = new System.Drawing.Point(47, 406);
             this.clbTeams.Name = "clbTeams";
-            this.clbTeams.Size = new System.Drawing.Size(369, 274);
+            this.clbTeams.Size = new System.Drawing.Size(535, 274);
             this.clbTeams.TabIndex = 114;
             // 
             // gbGender
@@ -202,7 +204,7 @@
             this.gbGender.Controls.Add(this.rbMale);
             this.gbGender.Controls.Add(this.rbFemale);
             this.gbGender.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbGender.Location = new System.Drawing.Point(519, 317);
+            this.gbGender.Location = new System.Drawing.Point(848, 406);
             this.gbGender.Name = "gbGender";
             this.gbGender.Size = new System.Drawing.Size(265, 136);
             this.gbGender.TabIndex = 112;
@@ -231,6 +233,7 @@
             this.rbFemale.TabStop = true;
             this.rbFemale.Text = "Female";
             this.rbFemale.UseVisualStyleBackColor = true;
+            this.rbFemale.CheckedChanged += new System.EventHandler(this.Gender_CheckedChanged);
             // 
             // tbMiddle
             // 
@@ -328,7 +331,7 @@
             // 
             this.lEmail.AutoSize = true;
             this.lEmail.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lEmail.Location = new System.Drawing.Point(526, 497);
+            this.lEmail.Location = new System.Drawing.Point(764, 597);
             this.lEmail.Name = "lEmail";
             this.lEmail.Size = new System.Drawing.Size(148, 26);
             this.lEmail.TabIndex = 132;
@@ -337,9 +340,9 @@
             // tbEmail
             // 
             this.tbEmail.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbEmail.Location = new System.Drawing.Point(531, 548);
+            this.tbEmail.Location = new System.Drawing.Point(769, 648);
             this.tbEmail.Name = "tbEmail";
-            this.tbEmail.Size = new System.Drawing.Size(391, 32);
+            this.tbEmail.Size = new System.Drawing.Size(451, 32);
             this.tbEmail.TabIndex = 133;
             this.tbEmail.Validating += new System.ComponentModel.CancelEventHandler(this.Email_Validating);
             // 

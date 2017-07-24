@@ -79,7 +79,7 @@
     <Compile Include="ComboBoxItem.cs" />
     <Compile Include="CommonQueries.cs" />
     <Compile Include="Directory.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Directory.Designer.cs">
       <DependentUpon>Directory.cs</DependentUpon>

@@ -24,15 +24,12 @@ namespace BBSports
             emailErrorProvider = new System.Windows.Forms.ErrorProvider();
             emailErrorProvider.SetIconAlignment(this.tbEmail, ErrorIconAlignment.MiddleRight);
             emailErrorProvider.SetIconPadding(this.tbEmail, 2);
-            emailErrorProvider.BlinkRate = 1000;
-            emailErrorProvider.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.AlwaysBlink;
+            emailErrorProvider.BlinkStyle = ErrorBlinkStyle.NeverBlink;
         }
 
         private void StartUp()
         {
             cs = ConfigurationManager.ConnectionStrings["BBSports.DB"].ConnectionString;
-            
-            //cbGrade.SelectedIndex = 0;
 
             GetGrades();
             GetTeams();
@@ -44,7 +41,7 @@ namespace BBSports
 
             string getGrades = @"select c.Grade from Classifications c, Administration a " +
                          "where a.AdministrationId = " + homebase.AdminId +
-                         "and a.Classification = c.ClassificationId " +
+                         " and a.Classification = c.Level " +
                          "order by c.ClassificationId asc";
 
             using (SqlConnection connection = new SqlConnection(cs))
@@ -60,7 +57,7 @@ namespace BBSports
                 }
             }
             cbGrade.DataSource = grades;
-            //cbGrade.SelectedIndex = 0;
+            cbGrade.SelectedIndex = 0;
         }
 
         //Clears the screan.
@@ -79,7 +76,10 @@ namespace BBSports
             tbLast.Text = "";
             tbNickname.Text = "";
             mtbBirthday.Text = "";
-            //cbGrade.SelectedIndex = 0;
+            tbCity.Text = "";
+            tbState.Text = "";
+            tbEmail.Text = "";
+            cbGrade.SelectedIndex = 0;
         }
 
         //Gets new team list to assign athlete to based on gender of athlete.
@@ -284,21 +284,7 @@ namespace BBSports
 
         private void Directory_Click(object sender, EventArgs e)
         {
-            Directory dir = new Directory();
-            dir.ItemHasBeenSelected += UC_AthleteSelected;
-
-            MakeUserControlPrimaryWindow(dir);
-        }
-
-        void UC_AthleteSelected(object sender, Directory.SelectedItemEventArgs e)
-        {
-            var value = e.SelectedChoice;
-            FoundAthlete(value);
-        }
-
-        private void MakeUserControlPrimaryWindow(UserControl uc)
-        {
-            this.Controls.Add(uc);
+            homebase.OpenDirectory();
         }
 
         private void Email_Validating(object sender, CancelEventArgs e)
@@ -310,6 +296,8 @@ namespace BBSports
                     e.Cancel = true;
                     this.emailErrorProvider.SetError(tbEmail, "This E-mail is not valid");
                 }
+                else
+                    this.emailErrorProvider.SetError(tbEmail, "");
 
                 string check = @"select 'x' from Users where Email = '" + tbEmail.Text + "'";
 
@@ -326,10 +314,14 @@ namespace BBSports
                                 tbEmail.Select(0, tbEmail.Text.Length);
                                 this.emailErrorProvider.SetError(tbEmail, "This E-mail has already been used for another account.");
                             }
+                            else
+                                this.emailErrorProvider.SetError(tbEmail, "");
                         }
                     }
                 }
             }
+            else
+                this.emailErrorProvider.SetError(tbEmail, "");
         }
     }
 }

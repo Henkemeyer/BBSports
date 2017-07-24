@@ -20,6 +20,7 @@ namespace BBSports
         public int athleteId = 0;
         public int teamId = 0;
         public int sportId = 0;
+        public int searchId = 0;
 
         public int AdminId
         {
@@ -49,6 +50,13 @@ namespace BBSports
             set { sportId = value; }
         }
 
+        public int SearchId
+        {
+            get { return searchId; }
+
+            set { searchId = value; }
+        }
+
         // Begin HomePage Logic
         //
         //
@@ -66,6 +74,12 @@ namespace BBSports
             login.ShowDialog(); 
         }
 
+        private void HomePage_Load(object sender, EventArgs e)
+        {
+            if (AdminId == 0)
+                this.Close();
+        }
+
         public void LoadFirstPage()
         {
             if (MdiChildren.Length > 0)
@@ -74,7 +88,6 @@ namespace BBSports
             menuHome.Visible = true;
 
             string isDirector = String.Format(@"select AdministrationId from Director where UserId = {0}", AthleteId);
-            AdminId = 1;
 
             using (SqlConnection connection = new SqlConnection(cs))
             {
@@ -151,6 +164,12 @@ namespace BBSports
                     }
                 }
             }
+        }
+
+        public void OpenDirectory()
+        {
+            Directory dir = new Directory(this);
+            dir.ShowDialog();
         }
 
         #region Menu Item On-Click Listeners
@@ -266,10 +285,5 @@ namespace BBSports
         }
         #endregion
 
-        private void HomePage_Load(object sender, EventArgs e)
-        {
-            if (AdminId == 0)
-                this.Close();
-        }
     }
 }

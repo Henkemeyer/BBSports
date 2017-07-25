@@ -231,7 +231,6 @@
             this.Name = "HomePage";
             this.Text = "Home Page";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.Load += new System.EventHandler(this.HomePage_Load);
             this.menuHome.ResumeLayout(false);
             this.menuHome.PerformLayout();
             this.ResumeLayout(false);

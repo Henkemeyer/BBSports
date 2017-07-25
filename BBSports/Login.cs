@@ -70,6 +70,7 @@ namespace BBSports
 
         private void NewUser_Click(object sender, EventArgs e)
         {
+            homebase.AthleteId = -1;
             homebase.NewUser();
             this.Close();
         }

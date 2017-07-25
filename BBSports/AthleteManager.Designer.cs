@@ -55,6 +55,9 @@
             this.lHeader = new System.Windows.Forms.Label();
             this.lEmail = new System.Windows.Forms.Label();
             this.tbEmail = new System.Windows.Forms.TextBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.lPhone = new System.Windows.Forms.Label();
+            this.maskedTextBox1 = new System.Windows.Forms.MaskedTextBox();
             this.gbGender.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -204,7 +207,7 @@
             this.gbGender.Controls.Add(this.rbMale);
             this.gbGender.Controls.Add(this.rbFemale);
             this.gbGender.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbGender.Location = new System.Drawing.Point(848, 406);
+            this.gbGender.Location = new System.Drawing.Point(683, 348);
             this.gbGender.Name = "gbGender";
             this.gbGender.Size = new System.Drawing.Size(265, 136);
             this.gbGender.TabIndex = 112;
@@ -331,7 +334,7 @@
             // 
             this.lEmail.AutoSize = true;
             this.lEmail.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lEmail.Location = new System.Drawing.Point(764, 597);
+            this.lEmail.Location = new System.Drawing.Point(678, 521);
             this.lEmail.Name = "lEmail";
             this.lEmail.Size = new System.Drawing.Size(148, 26);
             this.lEmail.TabIndex = 132;
@@ -340,11 +343,41 @@
             // tbEmail
             // 
             this.tbEmail.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbEmail.Location = new System.Drawing.Point(769, 648);
+            this.tbEmail.Location = new System.Drawing.Point(848, 518);
             this.tbEmail.Name = "tbEmail";
             this.tbEmail.Size = new System.Drawing.Size(451, 32);
             this.tbEmail.TabIndex = 133;
             this.tbEmail.Validating += new System.ComponentModel.CancelEventHandler(this.Email_Validating);
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox1.Location = new System.Drawing.Point(1130, 406);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(169, 30);
+            this.checkBox1.TabIndex = 134;
+            this.checkBox1.Text = "Make Director";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // lPhone
+            // 
+            this.lPhone.AutoSize = true;
+            this.lPhone.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lPhone.Location = new System.Drawing.Point(678, 619);
+            this.lPhone.Name = "lPhone";
+            this.lPhone.Size = new System.Drawing.Size(93, 26);
+            this.lPhone.TabIndex = 135;
+            this.lPhone.Text = "Phone #";
+            // 
+            // maskedTextBox1
+            // 
+            this.maskedTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.maskedTextBox1.Location = new System.Drawing.Point(848, 619);
+            this.maskedTextBox1.Mask = "(999) 000-0000";
+            this.maskedTextBox1.Name = "maskedTextBox1";
+            this.maskedTextBox1.Size = new System.Drawing.Size(338, 32);
+            this.maskedTextBox1.TabIndex = 136;
             // 
             // AthleteManager
             // 
@@ -352,6 +385,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1797, 882);
             this.ControlBox = false;
+            this.Controls.Add(this.maskedTextBox1);
+            this.Controls.Add(this.lPhone);
+            this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.tbEmail);
             this.Controls.Add(this.lEmail);
             this.Controls.Add(this.bDirectory);
@@ -414,5 +450,8 @@
         private System.Windows.Forms.Label lHeader;
         private System.Windows.Forms.Label lEmail;
         private System.Windows.Forms.TextBox tbEmail;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.Label lPhone;
+        private System.Windows.Forms.MaskedTextBox maskedTextBox1;
     }
 }

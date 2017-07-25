@@ -8,18 +8,15 @@ using System.Windows.Forms;
 
 namespace BBSports
 {
-    public partial class AthleteManager : Form
+    public partial class AthleteManager : SportsForm
     {
-        private string cs = "";
-        private HomePage homebase = null;
         private int athleteId = 0;
         private System.Windows.Forms.ErrorProvider emailErrorProvider;
 
         public AthleteManager(HomePage hp)
         {
             InitializeComponent();
-            homebase = hp;
-            StartUp();
+            Homebase = hp;
 
             emailErrorProvider = new System.Windows.Forms.ErrorProvider();
             emailErrorProvider.SetIconAlignment(this.tbEmail, ErrorIconAlignment.MiddleRight);
@@ -27,12 +24,19 @@ namespace BBSports
             emailErrorProvider.BlinkStyle = ErrorBlinkStyle.NeverBlink;
         }
 
-        private void StartUp()
+        public void StartUpAthlete()
         {
-            cs = ConfigurationManager.ConnectionStrings["BBSports.DB"].ConnectionString;
+            this.Text = "New Athlete";
+            lEmail.Text = "Athlete E-Mail";
 
             GetGrades();
             GetTeams();
+        }
+
+        public void StartUpCoach()
+        {
+            this.Text = "New Coach";
+            this.Text = "Coach's E-Mail";
         }
 
         private void GetGrades()
@@ -40,7 +44,7 @@ namespace BBSports
             List<string> grades = new List<string>();
 
             string getGrades = @"select c.Grade from Classifications c, Administration a " +
-                         "where a.AdministrationId = " + homebase.AdminId +
+                         "where a.AdministrationId = " + Homebase.AdminId +
                          " and a.Classification = c.Level " +
                          "order by c.ClassificationId asc";
 
@@ -99,7 +103,7 @@ namespace BBSports
 
             string sql = String.Format(@"select t.TeamName from Teams t, Coaches c where t.AdministrationId = {0} " +
                          "and t.Active = 1 and Gender = '{1}' and c.CoachId = {2} and c.TeamId = t.TeamId", 
-                         homebase.AdminId, gender, homebase.AthleteId);
+                         Homebase.AdminId, gender, Homebase.AthleteId);
 
             using (SqlConnection connection = new SqlConnection(cs))
             {
@@ -158,7 +162,7 @@ namespace BBSports
 
             string getTeams = @"select t.TeamName from Teams t, Roster r " +
                     "where r.AthleteId = " + aId + " and r.TeamId = t.TeamId " +
-                    "and t.AdministrationId = " + homebase.AdminId;
+                    "and t.AdministrationId = " + Homebase.AdminId;
 
             using (SqlConnection conn = new SqlConnection(cs))
             {
@@ -253,7 +257,7 @@ namespace BBSports
                         using (var command = new SqlCommand("SwitchTeams", connection))
                         {
                             command.CommandType = CommandType.StoredProcedure;
-                            command.Parameters.Add("@adminId", SqlDbType.Int).Value = homebase.AdminId;
+                            command.Parameters.Add("@adminId", SqlDbType.Int).Value = Homebase.AdminId;
                             command.Parameters.Add("@teamName", SqlDbType.VarChar).Value = team.ToString();
 
                             using (var reader = command.ExecuteReader())
@@ -284,7 +288,7 @@ namespace BBSports
 
         private void Directory_Click(object sender, EventArgs e)
         {
-            homebase.OpenDirectory();
+            Homebase.OpenDirectory();
         }
 
         private void Email_Validating(object sender, CancelEventArgs e)

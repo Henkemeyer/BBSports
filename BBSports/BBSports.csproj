@@ -14,19 +14,23 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>publish\</PublishUrl>
+    <HockeyAppResourceId>935599b90f2f485895770d092fbe77f4</HockeyAppResourceId>
+    <PublishUrl>C:\Users\Tyler\Desktop\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateEnabled>true</UpdateEnabled>
     <UpdateMode>Foreground</UpdateMode>
     <UpdateInterval>7</UpdateInterval>
     <UpdateIntervalUnits>Days</UpdateIntervalUnits>
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
+    <UpdateUrl>http://localhost/BBSports/</UpdateUrl>
+    <AutorunEnabled>true</AutorunEnabled>
+    <ApplicationRevision>1</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -47,6 +51,18 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>23D82D64DD64E9754BB7DBF23AF25B1D9D87E210</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>BBSports_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -76,6 +92,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Coaches.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Coaches.Designer.cs">
+      <DependentUpon>Coaches.cs</DependentUpon>
+    </Compile>
     <Compile Include="ComboBoxItem.cs" />
     <Compile Include="CommonQueries.cs" />
     <Compile Include="Directory.cs">
@@ -120,12 +142,6 @@
     <Compile Include="NewOrg.Designer.cs">
       <DependentUpon>NewOrg.cs</DependentUpon>
     </Compile>
-    <Compile Include="NewUser.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="NewUser.Designer.cs">
-      <DependentUpon>NewUser.cs</DependentUpon>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Racing.cs">
@@ -141,12 +157,21 @@
       <DependentUpon>Roster.cs</DependentUpon>
     </Compile>
     <Compile Include="SaltNPepper.cs" />
+    <Compile Include="SportsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SportsForm.Designer.cs">
+      <DependentUpon>SportsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="TeamManager.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="TeamManager.Designer.cs">
       <DependentUpon>TeamManager.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Coaches.resx">
+      <DependentUpon>Coaches.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Directory.resx">
       <DependentUpon>Directory.cs</DependentUpon>
     </EmbeddedResource>
@@ -168,9 +193,6 @@
     <EmbeddedResource Include="NewOrg.resx">
       <DependentUpon>NewOrg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="NewUser.resx">
-      <DependentUpon>NewUser.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -187,9 +209,13 @@
     <EmbeddedResource Include="Roster.resx">
       <DependentUpon>Roster.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="SportsForm.resx">
+      <DependentUpon>SportsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="TeamManager.resx">
       <DependentUpon>TeamManager.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="BBSports_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

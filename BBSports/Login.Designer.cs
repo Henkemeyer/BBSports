@@ -40,9 +40,10 @@
             // 
             // bNewUser
             // 
-            this.bNewUser.Location = new System.Drawing.Point(340, 281);
+            this.bNewUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bNewUser.Location = new System.Drawing.Point(336, 274);
             this.bNewUser.Name = "bNewUser";
-            this.bNewUser.Size = new System.Drawing.Size(109, 27);
+            this.bNewUser.Size = new System.Drawing.Size(113, 34);
             this.bNewUser.TabIndex = 5;
             this.bNewUser.Text = "New User";
             this.bNewUser.UseVisualStyleBackColor = true;
@@ -50,9 +51,10 @@
             // 
             // bLogin
             // 
-            this.bLogin.Location = new System.Drawing.Point(131, 281);
+            this.bLogin.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bLogin.Location = new System.Drawing.Point(131, 274);
             this.bLogin.Name = "bLogin";
-            this.bLogin.Size = new System.Drawing.Size(109, 27);
+            this.bLogin.Size = new System.Drawing.Size(105, 34);
             this.bLogin.TabIndex = 3;
             this.bLogin.Text = "Login";
             this.bLogin.UseVisualStyleBackColor = true;
@@ -60,16 +62,18 @@
             // 
             // tbEmail
             // 
+            this.tbEmail.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbEmail.Location = new System.Drawing.Point(110, 132);
             this.tbEmail.Name = "tbEmail";
-            this.tbEmail.Size = new System.Drawing.Size(357, 22);
+            this.tbEmail.Size = new System.Drawing.Size(357, 26);
             this.tbEmail.TabIndex = 1;
             // 
             // tbPassword
             // 
+            this.tbPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbPassword.Location = new System.Drawing.Point(110, 228);
             this.tbPassword.Name = "tbPassword";
-            this.tbPassword.Size = new System.Drawing.Size(357, 22);
+            this.tbPassword.Size = new System.Drawing.Size(357, 26);
             this.tbPassword.TabIndex = 2;
             this.tbPassword.UseSystemPasswordChar = true;
             // 

@@ -1,27 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace BBSports
 {
-    public partial class NewOrg : Form
+    public partial class NewOrg : SportsForm
     {
-        private HomePage homebase = null;
-        private String cs = "";
-
         public NewOrg(HomePage hp)
         {
             InitializeComponent();
-            homebase = hp;
-            cs = cs = ConfigurationManager.ConnectionStrings["BBSports.DB"].ConnectionString;
+            Homebase = hp;
         }
 
         private void Cancel_Click(object sender, EventArgs e)
@@ -38,7 +28,7 @@ namespace BBSports
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
 
-                    cmd.Parameters.Add("@userId", SqlDbType.Int).Value = homebase.AthleteId;
+                    cmd.Parameters.Add("@userId", SqlDbType.Int).Value = Homebase.AthleteId;
                     cmd.Parameters.Add("@name", SqlDbType.VarChar).Value = tbOrgName.Text;
                     cmd.Parameters.Add("@teams", SqlDbType.VarChar).Value = numericTeams.Value;
                     cmd.Parameters.Add("@city", SqlDbType.VarChar).Value = tbOrgCity.Text;
@@ -48,12 +38,12 @@ namespace BBSports
                     using (var reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
-                            homebase.AdminId = reader.GetInt32(0);
+                            Homebase.AdminId = reader.GetInt32(0);
                     }
                 }
             }
-            TeamManager teams = new TeamManager(homebase);
-            teams.MdiParent = homebase;
+            TeamManager teams = new TeamManager(Homebase);
+            teams.MdiParent = Homebase;
             teams.Show();
             teams.WindowState = FormWindowState.Maximized;
             this.Close();

@@ -179,7 +179,7 @@ namespace BBSports
             ToolStripMenuItem clickedItem = (ToolStripMenuItem)sender;
             if (clickedItem.Checked == false)
             {
-                int teamId = Convert.ToInt32(clickedItem.Tag);
+                TeamId = Convert.ToInt32(clickedItem.Tag);
                 string swap = @"select AdministrationId, SportId from Teams where TeamId = " + teamId.ToString();
 
                 using (SqlConnection connection = new SqlConnection(cs))

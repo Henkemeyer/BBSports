@@ -31,7 +31,7 @@ values('Cross Country')
 
 select * from Administration
 select * from Director
-select * from Teams where AdministrationId = 7
+select * from Teams 
 select * from Users
 select * from Roster
 select * from dbo.SupportedSports
@@ -71,3 +71,9 @@ select r.* from RacingEvents r, Teams t
 where t.TeamId = 4 and t.Gender = r.Gender and r.SportId = t.SportId
 order by distance desc
 
+select count(1) from Teams where AdministrationId = 1 and SportId = 3 and Gender <> 'Male'
+
+Select m.MeetName, m.Location, m.MeetDate, m.Temperature, m.WeatherNotes, m.MeetNotes,
+m.Alumni, mt.Score, mt.Place 
+from Meets m, MeetTeams mt
+where mt.MeetId = 3 and mt.TeamId = 1 and mt.MeetId = m.MeetId

@@ -67,7 +67,7 @@ namespace BBSports
                     }
                 }
             }
-            if (two == 1)
+            if (two != 1)
                 cxbGenders.Visible = false;
                 gbOtherScore.Visible = false;
         }
@@ -124,7 +124,7 @@ namespace BBSports
 
                 meetId = Convert.ToInt32(dgMeetsList.SelectedRows[0].Cells[0].Value);
                 string getMeet = String.Format(@"Select m.MeetName, m.Location, m.MeetDate, m.Temperature, m.WeatherNotes, m.MeetNotes, " +
-                                 "m.Alumni, mt.Score, mt.Place from Meets m and MeetTeams mt " +
+                                 "m.Alumni, mt.Score, mt.Place from Meets m, MeetTeams mt " +
                                  "where mt.MeetId = {0} and mt.TeamId = {1} and mt.MeetId = m.MeetId", meetId.ToString(), homebase.TeamId);
 
                 using (SqlConnection connection = new SqlConnection(cs))
@@ -143,8 +143,8 @@ namespace BBSports
                                 richTBWeatherNotes.Text = reader.GetString(4);
                                 richTBMeetNotes.Text = reader.GetString(5);
                                 cxbAlumni.Checked = reader.GetBoolean(6);
-                                numericScore.Value = Convert.ToDecimal(reader.GetSqlInt16(7).ToString());
-                                numericPlace.Value = Convert.ToDecimal(reader.GetSqlInt16(8).ToString());
+                                numericScore.Value = Convert.ToDecimal(reader.GetSqlInt32(7).ToString());
+                                numericPlace.Value = Convert.ToDecimal(reader.GetSqlInt32(8).ToString());
                             }
                         }
                     }
@@ -178,41 +178,47 @@ namespace BBSports
 
                 if (cxbAlumni.Checked)
                     alumni = 1;
-
-                using (SqlConnection connection = new SqlConnection(cs))
+                try
                 {
-                    using (var cmd = new SqlCommand("AddEditMeet", connection))
+                    using (SqlConnection connection = new SqlConnection(cs))
                     {
-                        cmd.CommandType = CommandType.StoredProcedure;
-
-                        cmd.Parameters.Add("@meetId", SqlDbType.Int).Value = meetId;
-                        cmd.Parameters.Add("@teamId", SqlDbType.Int).Value = homebase.TeamId;
-                        cmd.Parameters.Add("@meetName", SqlDbType.VarChar).Value = tbMeetName.Text;
-                        cmd.Parameters.Add("@location", SqlDbType.VarChar).Value = tbLocation.Text;
-                        cmd.Parameters.Add("@meetDate", SqlDbType.DateTime).Value = dateTP.Value;
-                        cmd.Parameters.Add("@temp", SqlDbType.Int).Value = Decimal.ToInt32(numericTemperature.Value);
-                        cmd.Parameters.Add("@weatherNotes", SqlDbType.VarChar).Value = richTBWeatherNotes.Text;
-                        cmd.Parameters.Add("@meetNotes", SqlDbType.VarChar).Value = richTBMeetNotes.Text;
-                        cmd.Parameters.Add("@bothGenders", SqlDbType.Bit).Value = gender;
-                        cmd.Parameters.Add("@score", SqlDbType.Int).Value = Decimal.ToInt32(numericScore.Value);
-                        cmd.Parameters.Add("@place", SqlDbType.Int).Value = Decimal.ToInt32(numericPlace.Value);
-                        if (gender.Equals(1))
+                        using (var cmd = new SqlCommand("AddEditMeet", connection))
                         {
-                            cmd.Parameters.Add("@otherScore", SqlDbType.Int).Value = Decimal.ToInt32(numericOtherScore.Value);
-                            cmd.Parameters.Add("@otherPlace", SqlDbType.Int).Value = Decimal.ToInt32(numericOtherPlace.Value);
-                        }
-                        else
-                        {
-                            cmd.Parameters.Add("@otherScore", SqlDbType.Int).Value = 0;
-                            cmd.Parameters.Add("@otherPlace", SqlDbType.Int).Value = 0;
-                        }
-                        cmd.Parameters.Add("@alumni", SqlDbType.Bit).Value = alumni;
+                            cmd.CommandType = CommandType.StoredProcedure;
 
-                        connection.Open();
-                        cmd.ExecuteNonQuery();
+                            cmd.Parameters.Add("@meetId", SqlDbType.Int).Value = meetId;
+                            cmd.Parameters.Add("@teamId", SqlDbType.Int).Value = homebase.TeamId;
+                            cmd.Parameters.Add("@meetName", SqlDbType.VarChar).Value = tbMeetName.Text;
+                            cmd.Parameters.Add("@location", SqlDbType.VarChar).Value = tbLocation.Text;
+                            cmd.Parameters.Add("@meetDate", SqlDbType.DateTime).Value = dateTP.Value;
+                            cmd.Parameters.Add("@temp", SqlDbType.Int).Value = Decimal.ToInt32(numericTemperature.Value);
+                            cmd.Parameters.Add("@weatherNotes", SqlDbType.VarChar).Value = richTBWeatherNotes.Text;
+                            cmd.Parameters.Add("@meetNotes", SqlDbType.VarChar).Value = richTBMeetNotes.Text;
+                            cmd.Parameters.Add("@bothGenders", SqlDbType.Bit).Value = gender;
+                            cmd.Parameters.Add("@score", SqlDbType.Int).Value = Decimal.ToInt32(numericScore.Value);
+                            cmd.Parameters.Add("@place", SqlDbType.Int).Value = Decimal.ToInt32(numericPlace.Value);
+                            if (gender.Equals(1))
+                            {
+                                cmd.Parameters.Add("@otherScore", SqlDbType.Int).Value = Decimal.ToInt32(numericOtherScore.Value);
+                                cmd.Parameters.Add("@otherPlace", SqlDbType.Int).Value = Decimal.ToInt32(numericOtherPlace.Value);
+                            }
+                            else
+                            {
+                                cmd.Parameters.Add("@otherScore", SqlDbType.Int).Value = 0;
+                                cmd.Parameters.Add("@otherPlace", SqlDbType.Int).Value = 0;
+                            }
+                            cmd.Parameters.Add("@alumni", SqlDbType.Bit).Value = alumni;
+
+                            connection.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                        ClearInfo();
+                        bSearch.PerformClick();
                     }
-                    ClearInfo();
-                    bSearch.PerformClick();
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show(ex.Message, "GetMeets", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
             }
         }

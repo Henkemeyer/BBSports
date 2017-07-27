@@ -30,7 +30,7 @@ namespace BBSports
 
             try
             {
-                using (SqlConnection connection = new SqlConnection(cs))
+                using (SqlConnection connection = new SqlConnection(Homebase.CS))
                 {
                     connection.Open();
                     using (var cmd = new SqlCommand(getGroups, connection))
@@ -124,7 +124,7 @@ namespace BBSports
 
             try
             {
-                using (SqlConnection connection = new SqlConnection(cs))
+                using (SqlConnection connection = new SqlConnection(Homebase.CS))
                 {
                     using (var cmd = new SqlCommand(getAthletes, connection))
                     {

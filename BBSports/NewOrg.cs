@@ -21,7 +21,7 @@ namespace BBSports
 
         private void Purchase_Click(object sender, EventArgs e)
         {
-            using (SqlConnection connection = new SqlConnection(cs))
+            using (SqlConnection connection = new SqlConnection(Homebase.CS))
             {
                 connection.Open();
                 using (var cmd = new SqlCommand("UpdateOrg", connection))

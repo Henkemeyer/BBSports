@@ -7,31 +7,27 @@ using System.Windows.Forms;
 
 namespace BBSports
 {
-    public partial class NewUser : Form
+    public partial class NewUser : SportsForm
     {
-        private String cs = "";
-        private HomePage homebase = null;
         private System.Windows.Forms.ErrorProvider emailErrorProvider;
 
         public NewUser(HomePage hp)
         {
             InitializeComponent();
-            homebase = hp;
-            cs = cs = ConfigurationManager.ConnectionStrings["BBSports.DB"].ConnectionString;
+            Homebase = hp;
 
             emailErrorProvider = new System.Windows.Forms.ErrorProvider();
             emailErrorProvider.SetIconAlignment(this.tbEmail, ErrorIconAlignment.MiddleRight);
             emailErrorProvider.SetIconPadding(this.tbEmail, 2);
             emailErrorProvider.BlinkRate = 1000;
             emailErrorProvider.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.AlwaysBlink;
-
         }
 
         private void Submit_Click(object sender, EventArgs e)
         {
             if (bSubmit.Text == "Reset")
             {
-                homebase.NewUser();
+                Homebase.NewUser();
                 this.Close();
                 return;
             }
@@ -51,7 +47,7 @@ namespace BBSports
 
             try
             {
-                using (SqlConnection connection = new SqlConnection(cs))
+                using (SqlConnection connection = new SqlConnection(Homebase.CS))
                 {
                     connection.Open();
                     using (var cmd = new SqlCommand("UpdateUser", connection))
@@ -75,19 +71,19 @@ namespace BBSports
                         using (var reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
-                                homebase.AthleteId = reader.GetInt32(0);
+                                Homebase.AthleteId = reader.GetInt32(0);
                         }
                     }
                     if (cxbNewOrg.Checked)
                     {
-                        NewOrg norg = new NewOrg(homebase);
-                        norg.MdiParent = homebase;
+                        NewOrg norg = new NewOrg(Homebase);
+                        norg.MdiParent = Homebase;
                         norg.Show();
                         norg.WindowState = FormWindowState.Maximized;
                         this.Close();
                         return;
                     }
-                    homebase.LoadFirstPage();
+                    Homebase.LoadFirstPage();
                     this.Close();
                 }
             }
@@ -100,7 +96,7 @@ namespace BBSports
         private void Cancel_Click(object sender, EventArgs e)
         {
             this.Close();
-            homebase.ChangeUser();
+            Homebase.ChangeUser();
         }
 
         private void ExitTMI_Click(object sender, EventArgs e)
@@ -110,7 +106,7 @@ namespace BBSports
 
         private void CancelTMI_Click(object sender, EventArgs e)
         {
-            homebase.ChangeUser();
+            Homebase.ChangeUser();
         }
 
         private void NumericAthleteId_Leave(object sender, EventArgs e)
@@ -121,7 +117,7 @@ namespace BBSports
             string gender = "";
             Boolean claimed = false;
 
-            using (SqlConnection connection = new SqlConnection(cs))
+            using (SqlConnection connection = new SqlConnection(Homebase.CS))
             {
                 using (var cmd = new SqlCommand(check, connection))
                 {
@@ -184,7 +180,7 @@ namespace BBSports
 
                 string check = @"select 'x' from Users where Email = '" + tbEmail.Text + "'";
 
-                using (SqlConnection connection = new SqlConnection(cs))
+                using (SqlConnection connection = new SqlConnection(Homebase.CS))
                 {
                     using (var cmd = new SqlCommand(check, connection))
                     {

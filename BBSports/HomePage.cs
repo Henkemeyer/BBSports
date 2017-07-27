@@ -9,18 +9,18 @@ namespace BBSports
 {
     public partial class HomePage : Form
     {
-        private string cs = "";
+        public string cs = ConfigurationManager.ConnectionStrings["BBSports.DB"].ConnectionString;
 
-        private void GetConString()
+        public string CS
         {
-            cs = ConfigurationManager.ConnectionStrings["BBSports.DB"].ConnectionString;
+            get => cs;
+            set => cs = value;
         }
 
         public int adminId = 0;
         public int athleteId = 0;
         public int teamId = 0;
         public int sportId = 0;
-        public int searchId = 0;
 
         public int AdminId
         {
@@ -50,21 +50,13 @@ namespace BBSports
             set { sportId = value; }
         }
 
-        public int SearchId
-        {
-            get { return searchId; }
-
-            set { searchId = value; }
-        }
-
         // Begin HomePage Logic
         //
         //
         public HomePage()
         {
             InitializeComponent();
-
-            GetConString();
+            
             ChangeUser();
         }
 
@@ -72,12 +64,6 @@ namespace BBSports
         {
             Login login = new Login(this);
             login.ShowDialog(); 
-        }
-
-        private void HomePage_Load(object sender, EventArgs e)
-        {
-            if (AdminId == 0)
-                this.Close();
         }
 
         public void LoadFirstPage()
@@ -166,10 +152,17 @@ namespace BBSports
             }
         }
 
-        public void OpenDirectory()
+        public void AddToTeam(string type)
         {
-            Directory dir = new Directory(this);
-            dir.ShowDialog();
+            ActiveMdiChild.Close();
+            AthleteManager athMan = new AthleteManager(this);
+            athMan.MdiParent = this;
+            athMan.Show();
+            athMan.WindowState = FormWindowState.Maximized;
+            if (type == "Athlete")
+                athMan.StartUpAthlete();
+            else
+                athMan.StartUpCoach();
         }
 
         #region Menu Item On-Click Listeners
@@ -180,7 +173,8 @@ namespace BBSports
             if (clickedItem.Checked == false)
             {
                 TeamId = Convert.ToInt32(clickedItem.Tag);
-                string swap = @"select AdministrationId, SportId from Teams where TeamId = " + teamId.ToString();
+                string swap = @"select a.AdministrationId, a.AdminName, t.SportId from Teams t, Administration a " +
+                                "where TeamId = " + teamId.ToString() + " and t.AdministrationId = a.AdministrationId";
 
                 using (SqlConnection connection = new SqlConnection(cs))
                 {
@@ -192,7 +186,8 @@ namespace BBSports
                             while (reader.Read())
                             {
                                 this.AdminId = reader.GetInt32(0);
-                                this.SportId = reader.GetInt32(1);
+                                this.Text = reader.GetString(1);
+                                this.SportId = reader.GetInt32(2);
                             }
                         }
                     }
@@ -226,6 +221,20 @@ namespace BBSports
             this.Close();
         }
         #endregion
+        #region Manage Menu
+        private void ManageAthletesTMI_Click(object sender, EventArgs e)
+        {
+            AddToTeam("Athlete");
+        }
+
+        private void ManageCoachesTMI_Click(object sender, EventArgs e)
+        {
+            ActiveMdiChild.Close();
+            Coaches coach = new Coaches(this);
+            coach.MdiParent = this;
+            coach.Show();
+            coach.WindowState = FormWindowState.Maximized;
+        }
 
         private void ManageMeetsTMI_Click(object sender, EventArgs e)
         {
@@ -244,15 +253,7 @@ namespace BBSports
             teams.Show();
             teams.WindowState = FormWindowState.Maximized;
         }
-
-        private void ManageAthletesTMI_Click(object sender, EventArgs e)
-        {
-            ActiveMdiChild.Close();
-            AthleteManager athMan = new AthleteManager(this);
-            athMan.MdiParent = this;
-            athMan.Show();
-            athMan.WindowState = FormWindowState.Maximized;
-        }
+        #endregion
 
         private void PerformancesTMI_Click(object sender, EventArgs e)
         {
@@ -284,6 +285,5 @@ namespace BBSports
             lift.WindowState = FormWindowState.Maximized;
         }
         #endregion
-
     }
 }

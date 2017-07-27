@@ -94,9 +94,9 @@
             this.lUsername.Font = new System.Drawing.Font("Book Antiqua", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lUsername.Location = new System.Drawing.Point(106, 94);
             this.lUsername.Name = "lUsername";
-            this.lUsername.Size = new System.Drawing.Size(82, 27);
+            this.lUsername.Size = new System.Drawing.Size(139, 27);
             this.lUsername.TabIndex = 10;
-            this.lUsername.Text = "E-Mail:";
+            this.lUsername.Text = "E-Mail or ID:";
             // 
             // lPassword
             // 

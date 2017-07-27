@@ -12,12 +12,12 @@ namespace BBSports
 {
     public partial class Directory : Form
     {
-        private HomePage homebase = null;
+        SportsForm padre = null;
 
-        public Directory(HomePage hp)
+        public Directory(SportsForm sf)
         {
             InitializeComponent();
-            homebase = hp;
+            padre = sf;
         }
 
         private void Search_Click(object sender, EventArgs e)
@@ -27,7 +27,8 @@ namespace BBSports
 
         private void Select_Click(object sender, EventArgs e)
         {
-
+            padre.SearchId = 1;
+            this.Close();
         }
     }
 }

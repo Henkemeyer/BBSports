@@ -12,16 +12,12 @@ using System.Windows.Forms;
 
 namespace BBSports
 {
-    public partial class Racing : Form
+    public partial class Racing : SportsForm
     {
-        private string cs = "";
-        private HomePage homebase = null;
-        private int sportId = 0;
-
         public Racing(HomePage hp)
         {
             InitializeComponent();
-            homebase = hp;
+            Homebase = hp;
             StartUp();
         }
 
@@ -29,9 +25,6 @@ namespace BBSports
         // Gets the connection string, gets list of recent meets and relevent events, and athletes.
         private void StartUp()
         {
-            sportId = homebase.SportId;
-            cs = ConfigurationManager.ConnectionStrings["BBSports.DB"].ConnectionString;
-
             dateTPStart.Value = System.DateTime.Now.AddMonths(-4).Date;
             dateTPEnd.Value = System.DateTime.Now.AddDays(3).Date;
 
@@ -39,17 +32,17 @@ namespace BBSports
             GetEvents();
             GetAthletes();
 
-            if (sportId == 1)
+            if (Homebase.SportId == 1)
             {
                 rbShort.Text = "1000m";
                 rbLong.Text = "1 Mile";
             }
-            else if (sportId == 2)
+            else if (Homebase.SportId == 2)
             {
                 rbShort.Text = "100m";
                 rbLong.Text = "200m";
             }
-            else if (sportId == 3)
+            else if (Homebase.SportId == 3)
             {
                 rbShort.Text = "200m";
                 rbLong.Text = "400m";
@@ -60,12 +53,12 @@ namespace BBSports
         {
             string getMeets = String.Format(@"select m.MeetId, m.MeetName from Meets m, MeetTeams mt where mt.TeamId = {0} " +
                                             "and mt.MeetId = m.MeetId and m.MeetDate >= '{1}' and m.MeetDate < '{2}' " +
-                                            "order by m.MeetDate desc", homebase.TeamId, dateTPStart.Value.Date,
+                                            "order by m.MeetDate desc", Homebase.TeamId, dateTPStart.Value.Date,
                                             dateTPEnd.Value.Date);
 
             try
             {
-                using (SqlConnection connection = new SqlConnection(cs))
+                using (SqlConnection connection = new SqlConnection(Homebase.CS))
                 {
                     using (var cmd = new SqlCommand(getMeets, connection))
                     {
@@ -91,11 +84,11 @@ namespace BBSports
         {
             string getEvents = String.Format(@"select r.RacingEventId, r.EventName from RacingEvents r, Teams t " +
                                              "where t.TeamId = {0} and t.Gender = r.Gender and r.SportId = t.SportId " +
-                                             "order by r.distance desc", homebase.TeamId);
+                                             "order by r.distance desc", Homebase.TeamId);
 
             try
             {
-                using (SqlConnection connection = new SqlConnection(cs))
+                using (SqlConnection connection = new SqlConnection(Homebase.CS))
                 {
                     using (var cmd = new SqlCommand(getEvents, connection))
                     {
@@ -120,11 +113,11 @@ namespace BBSports
         {
             string getAthletes = String.Format(@"select u.UserId, u.FullName from Users u, Roster r where r.TeamId = {0} " +
                                             "and r.Status = \'Active\' and r.Eligibility <> \'Alumni\' " +
-                                            "and r.AthleteId = u.UserId", homebase.TeamId);
+                                            "and r.AthleteId = u.UserId", Homebase.TeamId);
 
             try
             {
-                using (SqlConnection connection = new SqlConnection(cs))
+                using (SqlConnection connection = new SqlConnection(Homebase.CS))
                 {
                     using (var cmd = new SqlCommand(getAthletes, connection))
                     {
@@ -175,7 +168,7 @@ namespace BBSports
 
                 try
                 {
-                    using (SqlConnection connection = new SqlConnection(cs))
+                    using (SqlConnection connection = new SqlConnection(Homebase.CS))
                     {
                         using (var cmd = new SqlCommand(getInfo, connection))
                         {
@@ -201,20 +194,20 @@ namespace BBSports
                     lName.Text = cbAthlete.Text;
                     if (rbShort.Checked)
                     {
-                        if (sportId == 1)
+                        if (Homebase.SportId == 1)
                             splitDis = 1000;
-                        else if (sportId == 2)
+                        else if (Homebase.SportId == 2)
                             splitDis = 100;
-                        else if (sportId == 3)
+                        else if (Homebase.SportId == 3)
                             splitDis = 200;
                     }
                     else
                     {
-                        if (sportId == 1)
+                        if (Homebase.SportId == 1)
                             splitDis = 1609;
-                        else if (sportId == 2)
+                        else if (Homebase.SportId == 2)
                             splitDis = 200;
-                        else if (sportId == 3)
+                        else if (Homebase.SportId == 3)
                             splitDis = 400;
                     }
 

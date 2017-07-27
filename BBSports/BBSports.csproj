@@ -142,6 +142,12 @@
     <Compile Include="NewOrg.Designer.cs">
       <DependentUpon>NewOrg.cs</DependentUpon>
     </Compile>
+    <Compile Include="NewUser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewUser.Designer.cs">
+      <DependentUpon>NewUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Racing.cs">
@@ -192,6 +198,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="NewOrg.resx">
       <DependentUpon>NewOrg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewUser.resx">
+      <DependentUpon>NewUser.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

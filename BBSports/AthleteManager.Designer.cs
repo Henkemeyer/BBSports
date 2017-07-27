@@ -55,9 +55,12 @@
             this.lHeader = new System.Windows.Forms.Label();
             this.lEmail = new System.Windows.Forms.Label();
             this.tbEmail = new System.Windows.Forms.TextBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.cxbDirector = new System.Windows.Forms.CheckBox();
             this.lPhone = new System.Windows.Forms.Label();
-            this.maskedTextBox1 = new System.Windows.Forms.MaskedTextBox();
+            this.mtbPhone = new System.Windows.Forms.MaskedTextBox();
+            this.lReq = new System.Windows.Forms.Label();
+            this.lTitle = new System.Windows.Forms.Label();
+            this.tbTitle = new System.Windows.Forms.TextBox();
             this.gbGender.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -84,10 +87,10 @@
             // tbCity
             // 
             this.tbCity.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbCity.Location = new System.Drawing.Point(345, 260);
+            this.tbCity.Location = new System.Drawing.Point(254, 260);
             this.tbCity.MaxLength = 50;
             this.tbCity.Name = "tbCity";
-            this.tbCity.Size = new System.Drawing.Size(237, 32);
+            this.tbCity.Size = new System.Drawing.Size(361, 32);
             this.tbCity.TabIndex = 129;
             // 
             // lState
@@ -104,7 +107,7 @@
             // 
             this.lCity.AutoSize = true;
             this.lCity.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lCity.Location = new System.Drawing.Point(340, 218);
+            this.lCity.Location = new System.Drawing.Point(249, 218);
             this.lCity.Name = "lCity";
             this.lCity.Size = new System.Drawing.Size(50, 26);
             this.lCity.TabIndex = 127;
@@ -336,9 +339,9 @@
             this.lEmail.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lEmail.Location = new System.Drawing.Point(678, 521);
             this.lEmail.Name = "lEmail";
-            this.lEmail.Size = new System.Drawing.Size(148, 26);
+            this.lEmail.Size = new System.Drawing.Size(157, 26);
             this.lEmail.TabIndex = 132;
-            this.lEmail.Text = "Athlete E-Mail";
+            this.lEmail.Text = "Athlete E-Mail*";
             // 
             // tbEmail
             // 
@@ -349,35 +352,68 @@
             this.tbEmail.TabIndex = 133;
             this.tbEmail.Validating += new System.ComponentModel.CancelEventHandler(this.Email_Validating);
             // 
-            // checkBox1
+            // cxbDirector
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox1.Location = new System.Drawing.Point(1130, 406);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(169, 30);
-            this.checkBox1.TabIndex = 134;
-            this.checkBox1.Text = "Make Director";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.cxbDirector.AutoSize = true;
+            this.cxbDirector.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cxbDirector.Location = new System.Drawing.Point(1009, 406);
+            this.cxbDirector.Name = "cxbDirector";
+            this.cxbDirector.Size = new System.Drawing.Size(169, 30);
+            this.cxbDirector.TabIndex = 134;
+            this.cxbDirector.Text = "Make Director";
+            this.cxbDirector.UseVisualStyleBackColor = true;
+            this.cxbDirector.Visible = false;
+            this.cxbDirector.CheckedChanged += new System.EventHandler(this.Director_CheckedChanged);
             // 
             // lPhone
             // 
             this.lPhone.AutoSize = true;
             this.lPhone.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lPhone.Location = new System.Drawing.Point(678, 619);
+            this.lPhone.Location = new System.Drawing.Point(1225, 348);
             this.lPhone.Name = "lPhone";
             this.lPhone.Size = new System.Drawing.Size(93, 26);
             this.lPhone.TabIndex = 135;
             this.lPhone.Text = "Phone #";
             // 
-            // maskedTextBox1
+            // mtbPhone
             // 
-            this.maskedTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.maskedTextBox1.Location = new System.Drawing.Point(848, 619);
-            this.maskedTextBox1.Mask = "(999) 000-0000";
-            this.maskedTextBox1.Name = "maskedTextBox1";
-            this.maskedTextBox1.Size = new System.Drawing.Size(338, 32);
-            this.maskedTextBox1.TabIndex = 136;
+            this.mtbPhone.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mtbPhone.Location = new System.Drawing.Point(1230, 406);
+            this.mtbPhone.Mask = "(999) 000-0000";
+            this.mtbPhone.Name = "mtbPhone";
+            this.mtbPhone.Size = new System.Drawing.Size(267, 32);
+            this.mtbPhone.TabIndex = 136;
+            // 
+            // lReq
+            // 
+            this.lReq.AutoSize = true;
+            this.lReq.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lReq.ForeColor = System.Drawing.Color.Red;
+            this.lReq.Location = new System.Drawing.Point(95, 795);
+            this.lReq.Name = "lReq";
+            this.lReq.Size = new System.Drawing.Size(77, 19);
+            this.lReq.TabIndex = 138;
+            this.lReq.Text = "* Required";
+            // 
+            // lTitle
+            // 
+            this.lTitle.AutoSize = true;
+            this.lTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lTitle.Location = new System.Drawing.Point(688, 637);
+            this.lTitle.Name = "lTitle";
+            this.lTitle.Size = new System.Drawing.Size(61, 26);
+            this.lTitle.TabIndex = 140;
+            this.lTitle.Text = "Title*";
+            this.lTitle.Visible = false;
+            // 
+            // tbTitle
+            // 
+            this.tbTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbTitle.Location = new System.Drawing.Point(848, 634);
+            this.tbTitle.Name = "tbTitle";
+            this.tbTitle.Size = new System.Drawing.Size(451, 32);
+            this.tbTitle.TabIndex = 141;
+            this.tbTitle.Visible = false;
             // 
             // AthleteManager
             // 
@@ -385,9 +421,12 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1797, 882);
             this.ControlBox = false;
-            this.Controls.Add(this.maskedTextBox1);
+            this.Controls.Add(this.tbTitle);
+            this.Controls.Add(this.lTitle);
+            this.Controls.Add(this.lReq);
+            this.Controls.Add(this.mtbPhone);
             this.Controls.Add(this.lPhone);
-            this.Controls.Add(this.checkBox1);
+            this.Controls.Add(this.cxbDirector);
             this.Controls.Add(this.tbEmail);
             this.Controls.Add(this.lEmail);
             this.Controls.Add(this.bDirectory);
@@ -450,8 +489,11 @@
         private System.Windows.Forms.Label lHeader;
         private System.Windows.Forms.Label lEmail;
         private System.Windows.Forms.TextBox tbEmail;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox cxbDirector;
         private System.Windows.Forms.Label lPhone;
-        private System.Windows.Forms.MaskedTextBox maskedTextBox1;
+        private System.Windows.Forms.MaskedTextBox mtbPhone;
+        private System.Windows.Forms.Label lReq;
+        private System.Windows.Forms.Label lTitle;
+        private System.Windows.Forms.TextBox tbTitle;
     }
 }

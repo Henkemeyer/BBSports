@@ -21,51 +21,64 @@ namespace BBSports
 
         private void Login_Click(object sender, EventArgs e)
         {
-            if (tbEmail.TextLength < 6 || !tbEmail.Text.Contains("@") || !tbEmail.Text.Contains("."))
-                MessageBox.Show("Entered E-Mail is not valid", "Error");
-            else if (tbPassword.TextLength < 1)
-                MessageBox.Show("Please enter your password.", "Error");
+            string sql = "";
+            string password = "";
+            int userId = 0;
+            Boolean valid = false;
+
+            if (Int32.TryParse(tbEmail.Text, out int uId))
+            {
+                sql = String.Format(@"select UserId, Password from Users where UserId = '{0}'", uId);
+            }
             else
             {
-                string user = String.Format(@"select UserId, Password from Users where Email = '{0}'", tbEmail.Text);
-                string password = "";
-                int userId = 0;
-                Boolean valid = false;
-
-                using (SqlConnection connection = new SqlConnection(cs))
+                if (tbEmail.TextLength < 6 || !tbEmail.Text.Contains("@") || !tbEmail.Text.Contains("."))
                 {
-                    using (var cmd = new SqlCommand(user, connection))
+                    MessageBox.Show("Entered E-Mail is not valid", "Error");
+                    return;
+                }
+                else if (tbPassword.TextLength < 1)
+                {
+                    MessageBox.Show("Please enter your password.", "Error");
+                    return;
+                }
+                else
+                    sql = String.Format(@"select UserId, Password from Users where Email = '{0}'", tbEmail.Text);
+            }
+
+            using (SqlConnection connection = new SqlConnection(cs))
+            {
+                using (var cmd = new SqlCommand(sql, connection))
+                {
+                    connection.Open();
+                    using (var reader = cmd.ExecuteReader())
                     {
-                        connection.Open();
-                        using (var reader = cmd.ExecuteReader())
+                        if (reader.HasRows)
                         {
-                            if (reader.HasRows)
+                            while (reader.Read())
                             {
-                                while (reader.Read())
-                                {
-                                    userId = reader.GetInt32(0);
-                                    password = reader.GetString(1);
-                                }
+                                userId = reader.GetInt32(0);
+                                password = reader.GetString(1);
                             }
-                            else
-                            {
-                                MessageBox.Show("No account found with that E-Mail", "Error");
-                                return;
-                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("No account found with that Login", "Error");
+                            return;
                         }
                     }
                 }
-                valid = SaltNPepper.VerifyPassword(tbPassword.Text, password);
-
-                if (valid)
-                {
-                    homebase.AthleteId = userId;
-                    homebase.LoadFirstPage();
-                    this.Close();
-                }
-                else
-                    MessageBox.Show("Invalid username and password combination", "Error");
             }
+            valid = SaltNPepper.VerifyPassword(tbPassword.Text, password);
+
+            if (valid)
+            {
+                homebase.AthleteId = userId;
+                homebase.LoadFirstPage();
+                this.Close();
+            }
+            else
+                MessageBox.Show("Invalid username and password combination", "Error");
         }
 
         private void NewUser_Click(object sender, EventArgs e)

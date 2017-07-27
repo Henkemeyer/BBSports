@@ -12,21 +12,16 @@ using System.Windows.Forms;
 
 namespace BBSports
 {
-    public partial class Roster : Form
+    public partial class Roster : SportsForm
     {
-        private string cs = "";
-        private HomePage homebase = null;
-
         public Roster(HomePage hp)
         {
             InitializeComponent();
-            homebase = hp;
+            Homebase = hp;
         }
 
         private void Roster_Load(object sender, EventArgs e)
         {
-            cs = ConfigurationManager.ConnectionStrings["BBSports.DB"].ConnectionString;
-
             GetRoster();
         }
 
@@ -49,7 +44,7 @@ namespace BBSports
 
             try
             {
-                using (SqlConnection connection = new SqlConnection(cs))
+                using (SqlConnection connection = new SqlConnection(Homebase.CS))
                 {
                     using (var cmd = new SqlCommand(getStatus, connection))
                     {
@@ -66,7 +61,7 @@ namespace BBSports
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
 
-                        cmd.Parameters.Add("@teamId", SqlDbType.Int).Value = homebase.TeamId;
+                        cmd.Parameters.Add("@teamId", SqlDbType.Int).Value = Homebase.TeamId;
                         cmd.Parameters.Add("@alumni", SqlDbType.VarChar).Value = alumni;
                         cmd.Parameters.Add("@cut", SqlDbType.VarChar).Value = cut;
 

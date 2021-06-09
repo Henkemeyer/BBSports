@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 import LoginScreen from './src/screens/LoginScreen';
 import IndexScreen from './src/screens/IndexScreen';
+import TimerScreen from './src/screens/TimerScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
 
@@ -55,6 +56,28 @@ function HomeStackScreen() {
   );
 }
 
+const TestStack = createStackNavigator();
+
+function TestStackScreen() {
+  return (
+    <TestStack.Navigator>
+      <TestStack.Screen name="Test" component={IndexScreen} />
+      <TestStack.Screen name="Details" component={DetailsScreen} />
+    </TestStack.Navigator>
+  );
+}
+
+const TimerStack = createStackNavigator();
+
+function TimerStackScreen() {
+  return (
+    <TimerStack.Navigator>
+      <TimerStack.Screen name="Timer" component={TimerScreen} />
+      <TimerStack.Screen name="Details" component={DetailsScreen} />
+    </TimerStack.Navigator>
+  );
+}
+
 const SettingsStack = createStackNavigator();
 
 function SettingsStackScreen() {
@@ -78,6 +101,10 @@ export default function App() {
 
             if (route.name === 'Home') {
               iconName = focused ? 'home' : 'home-outline';
+            }  else if (route.name === 'Test') {
+              iconName = focused ? 'beer' : 'beer-outline';
+            } else if (route.name === 'Timer') {
+              iconName = focused ? 'stopwatch' : 'stopwatch-outline';
             } else if (route.name === 'Settings') {
               iconName = focused ? 'settings-sharp' : 'settings-outline';
             }
@@ -92,6 +119,8 @@ export default function App() {
         }}
       >
         <Tab.Screen name="Home" component={HomeStackScreen} />
+        <Tab.Screen name="Test" component={TestStackScreen} />
+        <Tab.Screen name="Timer" component={TimerStackScreen} />
         <Tab.Screen name="Settings" component={SettingsStackScreen} />
       </Tab.Navigator>
     </NavigationContainer>

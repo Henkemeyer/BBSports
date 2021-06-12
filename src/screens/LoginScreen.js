@@ -4,18 +4,11 @@ import { View, Text, StyleSheet } from 'react-native';
 const LoginScreen = () => {
     return (
         <View>
-            <Text>Profile</Text>
+            <Text>Login</Text>
         </View>
     );
 };
 
-const styles = StyleSheet.create({
-    viewStyle: {
-
-    },
-    textStyle: {
-        fontSize:11
-    }
-});
+const styles = StyleSheet.create({});
 
 export default LoginScreen;

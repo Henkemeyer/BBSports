@@ -1,97 +1,65 @@
-import React from 'react';
-import { Button, Text, View } from 'react-native';
+import React, { Component } from 'react';
 import { NavigationContainer, NavigationContext } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import LoginScreen from './src/screens/LoginScreen';
-import IndexScreen from './src/screens/IndexScreen';
-import TimerScreen from './src/screens/TimerScreen';
+import SignUpScreen from './src/screens/SignUpScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
+import TrainingLogScreen from './src/screens/TrainingLogScreen';
+import PracticeScreen from './src/screens/PracticeScreen';
+import LiftingScreen from './src/screens/LiftingScreen';
+import IndexScreen from './src/screens/IndexScreen';
+import TimerScreen from './src/screens/TimerScreen';
 
-import { UserProvider } from './src/context/UserContext';
+import { AuthProvider } from './src/context/AuthContext';
 
-function DetailsScreen() {
+/*
+const containerNavigator = NavigationContainer({
+  AuthStack: createStackNavigator({
+    SignUp: SignUpScreen,
+    Login: LoginScreen
+  }),
+  mainStack: createBottomTabNavigator({
+    trainingStack: createStackNavigator({
+      TrainingLog: TrainingLogScreen
+    }),
+    workoutStack: createStackNavigator({
+      Practice: PracticeScreen,
+      Lifting: LiftingScreen
+    }),
+    recordingStack: createStackNavigator({
+      Timing: TimerScreen
+    }),
+    settingsStack: createStackNavigator({
+      Settings: SettingsScreen,
+      Profile: ProfileScreen
+    })
+  })
+});
+*/
+const ContainerStack = createStackNavigator();
+const Authentication = createStackNavigator();
+
+function AuthStack() {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Details!</Text>
-    </View>
-  );
-}
-
-// function HomeScreen({ navigation }) {
-//   return (
-//     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-//       <Text>Home screen</Text>
-//       <Button
-//         title="Go to Details"
-//         onPress={() => navigation.navigate('Details')}
-//       />
-//     </View>
-//   );
-// }
-
-// function SettingsScreen({ navigation }) {
-//   return (
-//     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-//       <Text>Settings screen</Text>
-//       <Button
-//         title="Go to Details"
-//         onPress={() => navigation.navigate('Details')}
-//       />
-//     </View>
-//   );
-// }
-
-const HomeStack = createStackNavigator();
-
-function HomeStackScreen() {
-  return (
-    <HomeStack.Navigator>
-      <HomeStack.Screen name="Home" component={ProfileScreen} />
-      <HomeStack.Screen name="Details" component={DetailsScreen} />
-    </HomeStack.Navigator>
-  );
-}
-
-const TestStack = createStackNavigator();
-
-function TestStackScreen() {
-  return (
-    <TestStack.Navigator>
-      <TestStack.Screen name="Test" component={IndexScreen} />
-      <TestStack.Screen name="Details" component={DetailsScreen} />
-    </TestStack.Navigator>
-  );
-}
-
-const TimerStack = createStackNavigator();
-
-function TimerStackScreen() {
-  return (
-    <TimerStack.Navigator>
-      <TimerStack.Screen name="Timer" component={TimerScreen} />
-      <TimerStack.Screen name="Details" component={DetailsScreen} />
-    </TimerStack.Navigator>
-  );
-}
-
-const SettingsStack = createStackNavigator();
-
-function SettingsStackScreen() {
-  return (
-    <SettingsStack.Navigator>
-      <SettingsStack.Screen name="Settings" component={SettingsScreen} />
-      <SettingsStack.Screen name="Details" component={DetailsScreen} />
-    </SettingsStack.Navigator>
+  <Authentication.Navigator 
+      initialRouteName="Login"
+      screenOptions={{ animationEnabled: false }}
+      headerMode='none'
+    >
+      <Authentication.Screen name="Login" component={LoginScreen} />
+      <Authentication.Screen name="SignUp" component={SignUpScreen} />
+    </Authentication.Navigator>
   );
 }
 
 const Tab = createBottomTabNavigator();
 
-export default function App() {
+function TabStack() {
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -118,11 +86,61 @@ export default function App() {
           inactiveTintColor: 'black',
         }}
       >
-        <Tab.Screen name="Home" component={HomeStackScreen} />
-        <Tab.Screen name="Test" component={TestStackScreen} />
-        <Tab.Screen name="Timer" component={TimerStackScreen} />
-        <Tab.Screen name="Settings" component={SettingsStackScreen} />
+        <Tab.Screen name="Home" component={ProfileScreen} />
+        <Tab.Screen name="Test" component={TrainingLogScreen} />
+        <Tab.Screen name="Timer" component={TimerScreen} />
+        <Tab.Screen name="Settings" component={SettingsScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );
 }
+
+
+class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      // loading: true,
+      hasToken: false,
+    };
+  }
+ 
+  componentDidMount(){
+    AsyncStorage.getItem('jwtToken').then((token) => {
+      this.setState({ hasToken: token !== null//,loading:false
+      })
+    })
+  }
+
+  render() {
+    const {hasToken} = this.state;
+    
+  //   if (loading) {
+  //     return <WelcomeScreen/>
+  //   } 
+  //  else  {
+    return( 
+      <NavigationContainer>
+        <ContainerStack.Navigator headerMode="none">
+          { !hasToken 
+            ? <ContainerStack.Screen name='Auth' component={AuthStack}/>
+            : <ContainerStack.Screen name='App' component={TabStack}/>
+          }
+        </ContainerStack.Navigator>
+      </NavigationContainer>
+    );
+  }
+}
+
+export default App;
+
+/*
+const App = createAppContainer(containerNavigator);
+
+export default () => {
+  return (
+    <AuthProvider>
+      <App />
+    </AuthProvider>
+  )
+}; */

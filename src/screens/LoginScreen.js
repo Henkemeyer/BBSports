@@ -1,10 +1,16 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { View, Text, Button, StyleSheet } from 'react-native';
 
 const LoginScreen = () => {
     return (
         <View>
             <Text>Login</Text>
+            <Text>Username:</Text>
+            <Text>Password:</Text>
+            <Button
+                title="Login"
+                onPress={() => navigation.navigate('TabStack')}
+            />
         </View>
     );
 };

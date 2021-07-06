@@ -1,14 +1,24 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// import { AsyncStorage } from 'react-native';
 import CreateContext from "./CreateContext";
 import mongoApi from '../api/mongo';
 
-const authReducer = (state, action,) => {
+const initialState = {
+    token: null,
+    userId: null,
+    errorMessage: '',
+    loading: true
+  };
+
+const authReducer = (state, action) => {
     switch (action.type) {
         case 'add_error':
             return { ...state, errorMessage: action.payload };
         case 'signup':
             return { errorMessage: '', token: action.payload };
+        case 'signin':
+                return { errorMessage: '', token: action.payload, loading: false };
+        case 'signout':
+            return { ...initialState };
         default:
             return state;
     }
@@ -21,24 +31,54 @@ const signup = (dispatch) => async ({ email, password }) => {
         dispatch({ type: 'signup', payload: response.data.token });
     } 
     catch (err) {
-        dispatch({ type: 'add_error', payload: 'Something went wrong during signup' })
+        dispatch({ 
+            type: 'add_error', 
+            payload: 'Something went wrong during signup' 
+        });
     }
 };
 
-const signin = (dispatch) => {
-    return ({ email, password }) => {
-        
-    };
+const autologin = (dispatch) => async ({ token }) => {
+    try {
+        dispatch({ type: 'signin', payload: token });
+    } 
+    catch (err) {
+        dispatch({ 
+            type: 'add_error', 
+            payload: 'Something went wrong while signing in' 
+        });
+    }
 };
 
-const signout = (dispatch) => {
-    return () => {
-        
-    };
+const signin = (dispatch) => async ({ email, password }) => {
+    try {
+        const response = await mongoApi.post('/signin', { email, password });
+        await AsyncStorage.setItem('token', response.data.token);
+        dispatch({ type: 'signin', payload: response.data.token });
+    } 
+    catch (err) {
+        dispatch({ 
+            type: 'add_error', 
+            payload: 'Something went wrong while signing in' 
+        });
+    }
 };
 
-export const { AuthProvider, Context } = CreateContext(
+const signout = (dispatch) => async () => {
+    try {
+        await AsyncStorage.removeItem('token');
+        dispatch({ type: 'signout' });
+    } 
+    catch (err) {
+        dispatch({ 
+            type: 'add_error', 
+            payload: 'Something went wrong while signing out' 
+        });
+    }
+};
+
+export const { Provider, Context } = CreateContext(
     authReducer,
-    { signin, signup, signout},
-    { hasToken: false, errorMessage: '' }
+    { autologin, signin, signout, signup},
+    { ...initialState }
 );

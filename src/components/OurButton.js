@@ -2,16 +2,18 @@ import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import Colors from '../constants/ColorThemes';
 
-const OurButton = ( props ) => {
-    <TouchableOpacity 
-        style={styles.button}
-        onPress={}
+const OurButton = props => {
+    return (
+        <TouchableOpacity 
+            style={{...styles.button, ...props.style}}
+            onPress={() => props.buttonPressed()}
         >
-        <Text style={styles.buttonText}></Text>
-    </TouchableOpacity>
+            <Text style={styles.buttonText}>{props.buttonText}</Text>
+        </TouchableOpacity>
+    );
 };
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
     button: {
         borderWidth: 1,
         borderRadius: 5,

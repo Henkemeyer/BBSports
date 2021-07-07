@@ -7,7 +7,7 @@ import { Provider as AuthProvider } from './src/context/AuthContext';
 // import ReduxThunk from 'redux-thunk';
 
 //Testing Screen
-import LoginScreen from './src/screens/LoginScreen';
+import SignUpScreen from './src/screens/SignUpScreen';
 
 import NavigationWrap from './src/navigation/NavigationWrap';
 
@@ -41,7 +41,7 @@ export default function App() {
   // }
   return (
     <AuthProvider>
-      <LoginScreen/>
+      <SignUpScreen/>
       {/* <NavigationWrap /> */}
     </AuthProvider>
   );

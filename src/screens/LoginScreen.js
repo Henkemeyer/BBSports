@@ -1,64 +1,74 @@
 import React, { useState, useContext } from 'react';
-import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import UserInput from '../components/UserInput';
 import CheckBox from '../components/CheckBox';
 import ShadowBox from '../components/ShadowBox';
+import OurButton from '../components/OurButton';
 import Colors from '../constants/ColorThemes';
 // import { AuthContext } from '../context/AuthContext';
 // import { useNavigation } from '@react-navigation/native';
 
 const LoginScreen = ( navigation ) => {
     // const { state, signin } = useContext(AuthContext);
+    const [test, setTest] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [checked, setChecked] = useState(false);
 
     return (
-        <View style={styles.backgroundView}>
-            <ShadowBox style={styles.containerView}>
-                <Text style={styles.headerText}>Login to BB Sports</Text>
-                <View style={styles.inputView}>
-                    <Text style={styles.inputText}>E-mail or BBID:</Text>
-                    <TextInput 
-                        label="Email"
-                        value={email}
-                        onChangeText={setEmail}
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        style={styles.inputComp}
+        // This closes mobile keyboard when touching off components
+        <TouchableWithoutFeedback 
+            onPress={() =>{
+                Keyboard.dismiss();
+            }}
+        >
+            <View style={styles.backgroundView}>
+                <View style={styles.containerView}>  
+                {   // Shadow box is not working on Web but is on IOS and Android 
+                /* <ShadowBox style={styles.containerView}> */}
+                    <Text style={styles.headerText}>Login to BB Sports</Text>
+                    <View style={styles.inputView}>
+                        <UserInput
+                            label="Email"
+                            value={email}
+                            onChangeText={setEmail}
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            blurOnSubmit={true}
+                        />
+                    </View>
+                    <View style={styles.inputView}>
+                        <UserInput
+                            secureTextEntry
+                            label="Password"
+                            value={password}
+                            onChangeText={setPassword}
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            blurOnSubmit={true}
+                        />
+                    </View>
+                    <View style={styles.rowView}>
+                        <CheckBox
+                            toggle={() => setChecked(!checked)}
+                            checked={checked}
+                        />
+                        <Text style={{paddingRight: 28}}>Remember Me</Text>
+                        <TouchableOpacity>
+                            <Text style={styles.clickText}>Reset Password</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <OurButton 
+                        buttonPressed={() => setTest("Button Pushed")}
+                        buttonText="Login"
                     />
-                </View>
-                <View style={styles.inputView}>
-                <Text style={styles.inputText}>Password:</Text>
-                    <TextInput
-                        secureTextEntry
-                        label="Password"
-                        value={password}
-                        onChangeText={setPassword}
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        style={styles.inputComp}
-                    />
-                </View>
-                <View style={styles.rowView}>
-                    <CheckBox 
-                        toggle={() => setChecked(!checked)}
-                        checked={checked}
-                    />
-                    <Text style={{paddingRight: 28}}>Remember Me</Text>
-                    <TouchableOpacity>
-                        <Text style={styles.clickText}>Reset Password</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate('signup')} >
+                        <Text style={styles.clickText2}>Create Account?</Text>
                     </TouchableOpacity>
+                {/* </ShadowBox> */}
                 </View>
-                <TouchableOpacity 
-                    onPress={() => setEmail(email)}
-                    style={styles.loginButton}>
-                    <Text style={styles.buttonText}>Login</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => navigation.navigate('signup')} >
-                    <Text style={styles.clickText2}>Create Account?</Text>
-                </TouchableOpacity>
-            </ShadowBox>
-        </View>
+            </View>
+        </TouchableWithoutFeedback>
     );
 };
 // AsyncStorage.removeItem('token')
@@ -67,10 +77,19 @@ const styles = StyleSheet.create({
     backgroundView: {
         flex: 1,
         alignItems: 'center',
-        borderWidth: 1,
         backgroundColor: Colors.tertiary
     },
     containerView: {
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: 'gray',
+        backgroundColor: '#ffffff',
+        borderRadius: 10,
+        shadowColor: 'black',
+        shadowOpacity: 0.33,
+        shadowRadius: 8,
+        shadowOffset: { width: 0, height: 2 },
+        elevation: 15,
         marginVertical: 150
     },
     headerText: {
@@ -89,9 +108,8 @@ const styles = StyleSheet.create({
     },
     inputComp: {
         backgroundColor: 'white',
-        borderWidth: 1,
+        borderBottomWidth: 1,
         borderColor: 'black',
-        borderRadius: 5,
         fontSize: 20
     },
     rowView: {
@@ -99,20 +117,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: 47,
         paddingBottom: 25
-    },
-    loginButton: {
-        borderWidth: 1,
-        borderRadius: 5,
-        backgroundColor: '#268736',
-        height: 40,
-        maxWidth:300
-    },
-    buttonText: {
-        fontSize:27,
-        fontWeight: 'bold',
-        alignSelf:'center',
-        marginHorizontal: 5,
-        marginBottom: 25
     },
     clickText: {
         fontSize: 15,
@@ -126,15 +130,3 @@ const styles = StyleSheet.create({
 });
 
 export default LoginScreen;
-
-// class LoginScreen extends React.Component {
-//     render() {
-//         const { token } = this.props;
-//     }
-// }
-
-// export default function(props) {
-//     const token = useNavigationState(state => state.token);
-
-//     return <LoginScreen {...props} token={token} />;
-// }

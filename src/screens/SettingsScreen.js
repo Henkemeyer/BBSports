@@ -1,18 +1,30 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, Text, View, TouchableHighlight} from 'react-native';
 
-const SettingsScreen = () => {
+import { UserContext } from '../store/context/user-context';
+
+function SettingsScreen ({navigation}) {
+    const userCtx = useContext(UserContext);
+    const userId = userCtx.userId;
+
+    function logoutUserHandler() {
+        userCtx.logout();
+    }
+
     return (
         <View style={styles.buttonViewStyle}>
-            <TouchableHighlight style={styles.buttonStyle} /*onPress={logout}*/ >
+            <Text>User ID:{userId}</Text>
+            <TouchableHighlight style={styles.buttonStyle} /*onPress={}*/ >
                 <Text style={styles.textStyle}>Theme</Text>
             </TouchableHighlight>
-            <TouchableHighlight style={styles.buttonStyle} /*onPress={logout}*/ >
+            <TouchableHighlight 
+                style={styles.buttonStyle} 
+                onPress={logoutUserHandler} >
                 <Text style={styles.textStyle}>Logout</Text>
             </TouchableHighlight>
         </View>
     );
-};
+}
 
 const styles = StyleSheet.create({
     buttonViewStyle: {

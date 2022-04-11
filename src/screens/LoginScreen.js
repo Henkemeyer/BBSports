@@ -1,19 +1,22 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { UserContext } from '../store/context/user-context';
+
 import UserInput from '../components/UserInput';
 import CheckBox from '../components/CheckBox';
 import ShadowBox from '../components/ShadowBox';
 import OurButton from '../components/OurButton';
 import Colors from '../constants/ColorThemes';
-// import { AuthContext } from '../context/AuthContext';
-// import { useNavigation } from '@react-navigation/native';
 
-const LoginScreen = ( navigation ) => {
-    // const { state, signin } = useContext(AuthContext);
-    const [test, setTest] = useState('');
+function LoginScreen({ navigation }) {
+    const userCtx = useContext(UserContext);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [checked, setChecked] = useState(false);
+
+    function loginHandler() {
+        userCtx.login('34');
+    }
 
     return (
         // This closes mobile keyboard when touching off components
@@ -59,10 +62,10 @@ const LoginScreen = ( navigation ) => {
                         </TouchableOpacity>
                     </View>
                     <OurButton 
-                        buttonPressed={() => setTest("Button Pushed")}
+                        buttonPressed={() => loginHandler()}
                         buttonText="Login"
                     />
-                    <TouchableOpacity onPress={() => navigation.navigate('signup')} >
+                    <TouchableOpacity onPress={() => navigation.navigate('SignUp')} >
                         <Text style={styles.clickText2}>Create Account?</Text>
                     </TouchableOpacity>
                 {/* </ShadowBox> */}
@@ -70,12 +73,13 @@ const LoginScreen = ( navigation ) => {
             </View>
         </TouchableWithoutFeedback>
     );
-};
+}
 // AsyncStorage.removeItem('token')
 
 const styles = StyleSheet.create({
     backgroundView: {
         flex: 1,
+        borderWidth: 1,
         alignItems: 'center',
         backgroundColor: Colors.tertiary
     },
@@ -90,7 +94,8 @@ const styles = StyleSheet.create({
         shadowRadius: 8,
         shadowOffset: { width: 0, height: 2 },
         elevation: 15,
-        marginVertical: 150
+        marginVertical: 150,
+        width: '80%'
     },
     headerText: {
         fontSize: 30,

@@ -1,13 +1,10 @@
-import React, { useState, useContext } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import React, { useState } from 'react';
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import UserInput from '../components/UserInput';
 import ShadowBox from '../components/ShadowBox';
 import OurButton from '../components/OurButton';
-import Colors from '../constants/ColorThemes';
-// import { Context as AuthContext } from '../context/AuthContext';
 
-const SignUpScreen = ({ navigation }) => {
-    // const { state, signup } = useContext(AuthContext);
+function SignUpScreen({ navigation }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [firstName, setFirstName] = useState('');
@@ -67,7 +64,7 @@ const SignUpScreen = ({ navigation }) => {
 
                     <View style={styles.inputView}>
                         <UserInput
-                            label="FirstName"
+                            label="First Name"
                             value={firstName}
                             onChangeText={setFirstName}
                             autoCorrect={false}
@@ -77,7 +74,7 @@ const SignUpScreen = ({ navigation }) => {
 
                     <View style={styles.inputView}>
                         <UserInput
-                            label="LastName"
+                            label="Last Name"
                             value={lastName}
                             onChangeText={setLastName}
                             autoCorrect={false}
@@ -98,7 +95,7 @@ const SignUpScreen = ({ navigation }) => {
             </View>
         </TouchableWithoutFeedback>
     );
-};
+}
 
 const styles = StyleSheet.create({
     backgroundView: {
@@ -114,7 +111,8 @@ const styles = StyleSheet.create({
         borderColor: 'gray',
         backgroundColor: '#ffffff',
         borderRadius: 10,
-        marginVertical: 150
+        marginVertical: 100,
+        width: '80%'
     },
     headerText: {
         fontSize: 30,
@@ -126,7 +124,8 @@ const styles = StyleSheet.create({
         marginBottom: 20
     },
     loginButton: {
-        marginBottom: 15
+        marginBottom: 15,
+        width: '75%'
     },
     clickText: {
         fontSize: 15,

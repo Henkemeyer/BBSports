@@ -32,7 +32,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         alignSelf:'center',
         marginHorizontal: 5,
-        marginBottom: 25
     }
 });
 

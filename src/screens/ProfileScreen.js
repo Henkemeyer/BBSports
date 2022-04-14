@@ -1,7 +1,12 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import OurButton from '../components/OurButton';
 
 const ProfileScreen = () => {
+    function placeholder() {
+
+    }
+
     return (
         <View>
             <View>
@@ -14,7 +19,10 @@ const ProfileScreen = () => {
                 <Text>E-mail:</Text>
                 <Text>ZipCode:</Text>
             </View>
-            <Text>Edit/Save</Text>
+            <OurButton 
+                buttonPressed={() => placeholder()}
+                buttonText="Edit/Save"
+            />
         </View>
     );
 };

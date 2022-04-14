@@ -6,16 +6,18 @@ export const UserContext = createContext({
     isVIP: false,
     login: (userId) => {},
     logout: () => {},
-    // userType: 'Fan', // Athlete, Coach, Fan
-    // switchUserType: (occupation) => null,
+    userType: '', // Coach, Fan
+    switchUserType: (input) => null,
 });
 
 function UserContextProvider({children}) {
     const [getUserId, setUserId] = useState([]);
-    const [getToken, setToken] = useState();
+    const [getToken, setToken] = useState([]);
+    const [getUserType, setUserType] = useState([]);
 
     function login(userId) {
         setToken('69');
+        setUserType('Athlete');
         setUserId(userId);
     }
 
@@ -24,9 +26,9 @@ function UserContextProvider({children}) {
         setUserId('');
     }
 
-    // function switchUserType(input) {
-    //     setUserType((currentUserType) => input);
-    // }
+    function switchUserType(input) {
+        setUserType(input);
+    }
 
     const value = {
         userId: getUserId,
@@ -34,8 +36,8 @@ function UserContextProvider({children}) {
         isVIP: !!getToken,
         login: login,
         logout: logout,
-        // userType: getUserType,
-        // switchUserType: switchUserType
+        userType: getUserType,
+        switchUserType: switchUserType
     }
 
     return <UserContext.Provider value={value}>{children}</UserContext.Provider>

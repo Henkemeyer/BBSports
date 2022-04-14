@@ -36,7 +36,6 @@ function SignUpScreen({ navigation }) {
             }}
         >
             <View style={styles.backgroundView}>
-                {/* <View style={styles.containerView}> */}
                 <ShadowBox style={styles.containerView}>
                     <Text style={styles.headerText}>Sign Up for BB Sports</Text>
                         <View style={styles.inputView}>
@@ -90,7 +89,6 @@ function SignUpScreen({ navigation }) {
                     <TouchableOpacity onPress={() => navigation.navigate('Login')}>
                         <Text style={styles.clickText}>Already have an account?</Text>
                     </TouchableOpacity>
-                {/* </View> */}
                 </ShadowBox>
             </View>
         </TouchableWithoutFeedback>

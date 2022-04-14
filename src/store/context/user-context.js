@@ -15,10 +15,10 @@ function UserContextProvider({children}) {
     const [getToken, setToken] = useState([]);
     const [getUserType, setUserType] = useState([]);
 
-    function login(userId) {
-        setToken('69');
+    function login(token) {
+        setToken(token);
         setUserType('Athlete');
-        setUserId(userId);
+        setUserId('1');
     }
 
     function logout() {

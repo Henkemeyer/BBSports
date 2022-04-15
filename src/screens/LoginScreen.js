@@ -16,21 +16,8 @@ function LoginScreen({ navigation }) {
     const [password, setPassword] = useState('');
     const [checked, setChecked] = useState(false);
 
-    const loginHandler = () => async ({ email, password }) => {
-        try {
-            console.log({email, password});
-            const response = await mongoApi.post('/signin', { email, password });
-            // await AsyncStorage.setItem('token', response.data.token);
-            console.log({response});
-            userCtx.login(response.data.token);
-        } 
-        catch (err) {
-            console.log('Something went wrong while signing in');
-            // dispatch({ 
-            //     type: 'add_error', 
-            //     payload: 'Something went wrong while signing in' 
-            // });
-        }
+    function loginHandler() {
+        userCtx.login();
     }
 
     return (

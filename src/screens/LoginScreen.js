@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Keyboard, TouchableWithoutFeedback } from 'react-native';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
-import mongoApi from '../api/mongo';
+// import mongoApi from '../api/mongo';
 import { UserContext } from '../store/context/user-context';
 
 import UserInput from '../components/UserInput';

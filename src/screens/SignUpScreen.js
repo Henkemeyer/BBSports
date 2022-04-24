@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { Alert, View, Text, TouchableOpacity, StyleSheet, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import UserInput from '../components/UserInput';
 import ShadowBox from '../components/ShadowBox';
 import OurButton from '../components/OurButton';
+import { UserContext } from '../store/context/user-context';
+import { authenticate } from '../util/auth';
 
 function SignUpScreen({ navigation }) {
+    const userCtx = useContext(UserContext);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [firstName, setFirstName] = useState('');
@@ -13,21 +16,39 @@ function SignUpScreen({ navigation }) {
     const [passwordError, setPWError] = useState('');
     const [firstError, setFirstError] = useState('');
     const [lastError, setLastError] = useState('');
+    const [isValid, setIsValid] = useState(false);
 
     const confirmInputAgent = () => {
+        setIsValid(true);
         if(email.length < 4) {
             setEmailError('*You must enter a valid Email');
+            setIsValid(false);
         }
         if(password.length < 6) {
             setPWError('*You must enter a valid password');
+            setIsValid(false);
         }
-        if(firstName.length < 1) {
+        if(firstName.length < 0) {
             setFirstError('*You must enter a valid first name');
+            setIsValid(false);
         }
-        if(lastName.length < 1) {
+        if(lastName.length < 0) {
             setLastError('*You must enter a valid last name');
+            setIsValid(false);
+        }
+        if(isValid) {
+            signUpHandler();
         }
     };
+
+    async function signUpHandler() {
+        try {
+            const token = await authenticate('signUp', email, password);
+            userCtx.login(token);
+        } catch (error) {
+            Alert.alert('Login Failed!', 'Failed to login. Please check E-mail and Password.')
+        }
+    }
 
     return (
         <TouchableWithoutFeedback
@@ -41,7 +62,7 @@ function SignUpScreen({ navigation }) {
                         <View style={styles.inputView}>
                             <UserInput
                                 label="Email"
-                                value={email}
+                                value={email.trim()}
                                 onChangeText={setEmail}
                                 autoCapitalize="none"
                                 autoCorrect={false}

@@ -1,8 +1,9 @@
 import React, { useContext, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { Alert, View, Text, TouchableOpacity, StyleSheet, Keyboard, TouchableWithoutFeedback } from 'react-native';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 // import mongoApi from '../api/mongo';
 import { UserContext } from '../store/context/user-context';
+import { authenticate } from '../util/auth';
 
 import UserInput from '../components/UserInput';
 import CheckBox from '../components/CheckBox';
@@ -16,8 +17,13 @@ function LoginScreen({ navigation }) {
     const [password, setPassword] = useState('');
     const [checked, setChecked] = useState(false);
 
-    function loginHandler() {
-        userCtx.login();
+    async function loginHandler() {
+        try {
+            const token = await authenticate('signInWithPassword', email, password);
+            userCtx.login(token);
+        } catch (error) {
+            Alert.alert('Create User Failed!', 'Failed to authenticate. Please try again later.')
+        }
     }
 
     return (

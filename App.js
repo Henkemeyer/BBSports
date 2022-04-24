@@ -1,8 +1,10 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppLoading from 'expo-app-loading';
 import { StatusBar } from 'expo-status-bar';
 
 import UserContextProvider, { UserContext } from './src/store/context/user-context';
@@ -141,7 +143,26 @@ function CoachTab() {
 }
 
 function Navigation () {
+    const [isLoading, setIsLoading] = useState(true);
     const userCtx = useContext(UserContext);
+
+    useEffect(() => {
+      async function fetchLocalToken() {
+        const localToken = await AsyncStorage.getItem('authToken');
+
+        if (localToken) {
+          userCtx.login(localToken);
+        }
+
+        setIsLoading(false);
+      }
+      
+      fetchLocalToken();
+    }, []);
+
+    if (isLoading) {
+      return <AppLoading />
+    }
 
     return (
       <NavigationContainer>

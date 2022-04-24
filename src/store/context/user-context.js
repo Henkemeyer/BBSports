@@ -1,12 +1,13 @@
 import React, {createContext, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const UserContext = createContext({
-    userId: '',
-    token: '',
+    userId: 0,
+    token: null,
     isVIP: false,
     login: (userId) => {},
     logout: () => {},
-    userType: '', // Coach, Fan
+    userType: '', // Athlete, Coach, Fan?
     switchUserType: (input) => null,
 });
 
@@ -19,11 +20,13 @@ function UserContextProvider({children}) {
         setToken(token);
         setUserType('Athlete');
         setUserId('1');
+        AsyncStorage.setItem('authToken', token);
     }
 
     function logout() {
-        setToken('');
-        setUserId('');
+        setToken(null);
+        setUserId(0);
+        AsyncStorage.removeItem('authToken');
     }
 
     function switchUserType(input) {

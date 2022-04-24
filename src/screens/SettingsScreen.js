@@ -13,6 +13,10 @@ function SettingsScreen ({navigation}) {
         userCtx.logout();
     }
 
+    function equipmentScreenHandler() {
+        navigation.navigate("EquipmentStack");
+    }
+
     function switchTypeHandler() {
         if(userCtx.userType=='Athlete'){
             userCtx.switchUserType('Coach');
@@ -26,9 +30,15 @@ function SettingsScreen ({navigation}) {
         <View style={styles.buttonViewStyle}>
             <Text>User ID:{userId}</Text>
             <Text>Screens Visible:{userType}</Text>
+            <Text>Fair Weather Mode: OFF</Text>
             <OurButton 
                 buttonPressed={() => placeholder()}
                 buttonText="Theme"
+            />
+            <OurButton 
+                buttonPressed={() => equipmentScreenHandler()}
+                buttonText="Manage Equipment"
+                style={styles.buttonStyle}
             />
             <OurButton 
                 buttonPressed={() => switchTypeHandler()}
@@ -49,12 +59,8 @@ const styles = StyleSheet.create({
         flex: 1
     },
     buttonStyle: {
-        width: '33%',
-        height: 35,
-        borderWidth: 1,
-        borderColor: 'black',
-        borderRadius: 7,
-        backgroundColor: 'green'
+        height: 75,
+        fontSize: 25
     },
     textStyle: {
         fontSize: 25,

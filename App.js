@@ -18,19 +18,33 @@ import CoachLiftingScreen from './src/screens/CoachLiftingScreen';
 
 import LoginScreen from './src/screens/LoginScreen';
 import SignUpScreen from './src/screens/SignUpScreen';
+import EquipmentScreen from './src/screens/EquipmentScreen';
+import AddEquipmentScreen from './src/screens/AddEquipment';
 
 const TabNav = createBottomTabNavigator();
-const LoginNav = createStackNavigator();
+const StackNav = createStackNavigator();
 
 function LoginStack() {
   return (
-    <LoginNav.Navigator
+    <StackNav.Navigator
       screenOptions={{
         headerTintColor: 'green',
       }}>
-      <LoginNav.Screen name="Login" component={LoginScreen} />
-      <LoginNav.Screen name="SignUp" component={SignUpScreen} />
-    </LoginNav.Navigator>
+      <StackNav.Screen name="Login" component={LoginScreen} />
+      <StackNav.Screen name="SignUp" component={SignUpScreen} />
+    </StackNav.Navigator>
+  );
+}
+
+function EquipmentStack() {
+  return (
+    <StackNav.Navigator
+      screenOptions={{
+        headerTintColor: 'green',
+      }}>
+      <StackNav.Screen name="Equip" component={EquipmentScreen} />
+      <StackNav.Screen name="AddEquip" component={AddEquipmentScreen} />
+    </StackNav.Navigator>
   );
 }
 
@@ -67,6 +81,26 @@ function AthleteTab() {
       <TabNav.Screen name="Lifting" component={AthleteLiftingScreen} />
       <TabNav.Screen name="Settings" component={SettingsScreen} />
     </TabNav.Navigator>
+  );
+}
+
+function AthleteContainerStack() {
+  return (
+    <StackNav.Navigator
+      screenOptions={{
+        headerTintColor: 'green',
+      }}>
+      <StackNav.Screen 
+        name="AthleteTab" 
+        component={AthleteTab}
+        options={{ headerShown: false }} 
+      />
+      <StackNav.Screen 
+        name="EquipmentStack" 
+        component={EquipmentStack}
+        options={{ headerShown: false }} 
+      />
+    </StackNav.Navigator>
   );
 }
 
@@ -115,7 +149,7 @@ function Navigation () {
           <LoginStack />
         ) :
         userCtx.userType=='Athlete' ?  (
-          <AthleteTab />
+          <AthleteContainerStack />
         ) : (
           <CoachTab />
         )}

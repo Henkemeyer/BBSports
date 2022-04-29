@@ -1,20 +1,21 @@
-import { Pressable, View } from 'react-native';
+import { TouchableOpacity, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-function HeadButton({iconName}, size, pressHandler) {
+function HeaderButton({ iconName, size, pressHandler }) {
+// 
+// This shit doesn't work. Added manually
+// 
     return (
-        <Pressable 
-            onPress={pressHandler} 
+        <TouchableOpacity 
+            onPress={() => {pressHandler}}
             style={({ pressed }) => pressed && styles.onPressed}
         >
-            <View style={styles.button}>
-                <Ionicons name={iconName} />
-            </View>
-        </Pressable>
+            <Ionicons name={iconName} size={size} color="green" />
+        </TouchableOpacity>
     );
 }
 
-export default HeadButton;
+export default HeaderButton;
 
 const styles = StyleSheet.create({
     button: {

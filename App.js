@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppLoading from 'expo-app-loading';
 import { StatusBar } from 'expo-status-bar';
+import { TouchableOpacity, View } from 'react-native';
 
 import UserContextProvider, { UserContext } from './src/store/context/user-context';
 
@@ -21,7 +22,7 @@ import CoachLiftingScreen from './src/screens/CoachLiftingScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import SignUpScreen from './src/screens/SignUpScreen';
 import EquipmentScreen from './src/screens/EquipmentScreen';
-import AddEquipmentScreen from './src/screens/AddEquipment';
+import AddEquipmentScreen from './src/screens/AddEquipmentScreen';
 
 const TabNav = createBottomTabNavigator();
 const StackNav = createStackNavigator();
@@ -44,8 +45,28 @@ function EquipmentStack() {
       screenOptions={{
         headerTintColor: 'green',
       }}>
-      <StackNav.Screen name="Equip" component={EquipmentScreen} />
-      <StackNav.Screen name="AddEquip" component={AddEquipmentScreen} />
+      <StackNav.Screen 
+        name="Equip" 
+        component={EquipmentScreen} 
+        options={({ navigation }) => ({
+          title: 'Equipment',
+          // headerRight: () => (
+          // <TouchableOpacity 
+          //   onPress={() => {navigation.navigate("AddEquip")}}
+          //   style={({ pressed }) => pressed && {opacity: 0.7}}
+          // >
+          //   <View style={{padding: 5, marginHorizontal: 10}}>
+          //     <Ionicons name="add-circle-sharp" size={24} color="green" />
+          //   </View>
+          // </TouchableOpacity>
+          // ),
+        })}
+      />
+      <StackNav.Screen 
+        name="AddEquip" 
+        component={AddEquipmentScreen} 
+        options={{title: "Add Equipment" }}
+      />
     </StackNav.Navigator>
   );
 }
@@ -149,9 +170,11 @@ function Navigation () {
     useEffect(() => {
       async function fetchLocalToken() {
         const localToken = await AsyncStorage.getItem('authToken');
+        const userId = await AsyncStorage.getItem('userID');
 
         if (localToken) {
-          userCtx.login(localToken);
+          const authData = { idToken: localToken, localId: userId }
+          userCtx.login(authData);
         }
 
         setIsLoading(false);

@@ -11,17 +11,7 @@ export async function authenticate(action, email, password) {
         returnSecureToken: true
     });
 
-    const token = response.data.idToken;
+    const data = response.data;
 
-    return token;
+    return data;
 }
-
-// export async function signUp(email, password) {
-//     const response = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + API_KEY,
-//         {
-//             email: email,
-//             password: password,
-//             returnSecureToken: true
-//         }
-//     );
-// }

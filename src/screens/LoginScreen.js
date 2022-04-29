@@ -19,8 +19,8 @@ function LoginScreen({ navigation }) {
 
     async function loginHandler() {
         try {
-            const token = await authenticate('signInWithPassword', email, password);
-            userCtx.login(token);
+            const authData = await authenticate('signInWithPassword', email, password);
+            userCtx.login(authData);
         } catch (error) {
             Alert.alert('Create User Failed!', 'Failed to authenticate. Please try again later.')
         }

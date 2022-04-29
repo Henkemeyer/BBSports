@@ -4,8 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export const UserContext = createContext({
     userId: 0,
     token: null,
-    isVIP: false,
-    login: (userId) => {},
+    login: (authData) => {},
     logout: () => {},
     userType: '', // Athlete, Coach, Fan?
     switchUserType: (input) => null,
@@ -16,11 +15,12 @@ function UserContextProvider({children}) {
     const [getToken, setToken] = useState([]);
     const [getUserType, setUserType] = useState([]);
 
-    function login(token) {
-        setToken(token);
+    function login(authData) {
+        setToken(authData.idToken);
         setUserType('Athlete');
-        setUserId('1');
-        AsyncStorage.setItem('authToken', token);
+        setUserId(authData.localId);
+        AsyncStorage.setItem('authToken', authData.idToken);
+        AsyncStorage.setItem('userID', authData.localId);
     }
 
     function logout() {
@@ -36,7 +36,6 @@ function UserContextProvider({children}) {
     const value = {
         userId: getUserId,
         token: getToken,
-        isVIP: !!getToken,
         login: login,
         logout: logout,
         userType: getUserType,

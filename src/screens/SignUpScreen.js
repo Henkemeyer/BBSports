@@ -5,6 +5,7 @@ import ShadowBox from '../components/ShadowBox';
 import OurButton from '../components/OurButton';
 import { UserContext } from '../store/context/user-context';
 import { authenticate } from '../util/auth';
+import { postUser } from '../util/http';
 
 function SignUpScreen({ navigation }) {
     const userCtx = useContext(UserContext);
@@ -43,8 +44,17 @@ function SignUpScreen({ navigation }) {
 
     async function signUpHandler() {
         try {
-            const token = await authenticate('signUp', email, password);
-            userCtx.login(token);
+            const authData = await authenticate('signUp', email, password);
+            const userData = 
+                {
+                    uid: authData.localId,
+                    firstName: firstName,
+                    lastName: lastName,
+                    nickname: '',
+                }
+
+            postUser(userData, authData.idToken)
+            userCtx.login(authData);
         } catch (error) {
             Alert.alert('Login Failed!', 'Failed to login. Please check E-mail and Password.')
         }

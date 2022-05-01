@@ -14,10 +14,9 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: 'white',
         borderBottomWidth: 1,
-        borderColor: 'black',
+        borderColor: 'darkgreen',
         margin:10,
         padding:5,
-        height:60,
         borderRadius:8
     },
     inputHeader: {

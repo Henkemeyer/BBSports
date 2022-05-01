@@ -4,24 +4,9 @@ import OurButton from '../components/OurButton';
 import UserInput from '../components/UserInput';
 import ShadowBox from '../components/ShadowBox';
 import EquipmentList from '../components/EquipmentList';
-import { fetchEquipment } from '../util/http';
-import { postEquipment } from '../util/http';
+import { postEquipment, fetchEquipment, deleteEquipment } from '../util/http';
 import { UserContext } from '../store/context/user-context';
 import { Ionicons } from '@expo/vector-icons';
-
-const Item = ({ name, distance}) => (
-    // <ShadowBox>
-        <View style={styles.viewRow}>
-            <View style={styles.equipmentDetails}>
-                <Text style={styles.text}>Name: {name}</Text>
-                <Text style={styles.text}>Use: {distance}</Text>
-            </View>
-            <TouchableOpacity>
-                <Ionicons name="close-sharp" size={30} color="green" />
-            </TouchableOpacity>
-        </View>
-    // </ShadowBox>
-  );
 
 const EquipmentScreen = () => {
     const userCtx = useContext(UserContext);
@@ -38,11 +23,38 @@ const EquipmentScreen = () => {
         getEquipment();
     }, [token]);
 
-    const renderEquipmentItem = ({ item }) => (
-        <Item name={item.name} distance={item.distance} />
-    );
+    const Item = ({ item }) => (
+        // <ShadowBox>
+            <View style={styles.viewRow}>
+                <View style={styles.equipmentDetails}>
+                    <Text style={styles.text}>Name: {item.name}</Text>
+                    <Text style={styles.text}>Use: {item.distance}</Text>
+                </View>
+                <TouchableOpacity onPress={() => retireHandler(item)}>
+                    <Ionicons name="close-sharp" size={30} color="green" />
+                </TouchableOpacity>
+            </View>
+        // </ShadowBox>
+      );
+    
+    function retireHandler(equip) {
+        try {
+            deleteEquipment(equip.id, token);
+            console.log(equip.id);
 
-    function submitHandler() {
+            const tempEquip = equipment;
+            const index = tempEquip.indexOf(equip);
+            if (index !== -1) {
+                tempEquip.splice(index, 1);
+                setEquipment(() => [...tempEquip]);
+            }
+        } catch (error) {
+            console.log(error);
+            Alert.alert('Retire Failed', 'Failed to retire equipment. Please try again later.')
+        }
+    }
+
+    async function submitHandler() {
         try {
             const equipData = 
                 {
@@ -52,8 +64,8 @@ const EquipmentScreen = () => {
                     description: '',
                 }
 
-            postEquipment(equipData, token);
-            const newEquip = [{id:newEquipName, name:newEquipName, distance:0}];
+            const id = await postEquipment(equipData, token);
+            const newEquip = [{id:id, name:newEquipName, distance:0}];
             setEquipment((prevState) => [...prevState, ...newEquip]);
             setNewEquipName("");
         } catch (error) {
@@ -61,6 +73,10 @@ const EquipmentScreen = () => {
             Alert.alert('Addition Failed', 'Failed to add equipment. Please try again later.')
         }
     }
+    
+    const renderEquipmentItem = ({ item }) => (
+        <Item item={item} />
+    );
 
     return (
         <View style={styles.container}>

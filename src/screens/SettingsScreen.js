@@ -17,6 +17,10 @@ function SettingsScreen ({navigation}) {
         navigation.navigate("EquipmentStack");
     }
 
+    function orgHandler() {
+        navigation.navigate("OrganizationStack");
+    }
+
     function switchTypeHandler() {
         if(userCtx.userType=='Athlete'){
             userCtx.switchUserType('Coach');
@@ -35,11 +39,17 @@ function SettingsScreen ({navigation}) {
                 buttonPressed={() => placeholder()}
                 buttonText="Theme"
             />
-            <OurButton 
-                buttonPressed={() => equipmentScreenHandler()}
-                buttonText="Manage Equipment"
-                style={styles.buttonStyle}
-            />
+            {userCtx.userType=='Athlete' ? (
+                <OurButton 
+                    buttonPressed={() => equipmentScreenHandler()}
+                    buttonText="Manage Equipment"
+                    style={styles.buttonStyle} />
+            ) : (
+                <OurButton 
+                    buttonPressed={() => orgHandler()}
+                    buttonText="Your Orgs"
+                    style={styles.buttonStyle} />
+            )}
             <OurButton 
                 buttonPressed={() => switchTypeHandler()}
                 buttonText="Swap User"

@@ -72,7 +72,7 @@ export async function postCardio(cardio, token) {
   });
 }
 
-export async function fetchCardio(cardio, token) {
+export async function fetchCardio(uid, token) {
   const response = await axios.get(DB_URL + 'trainingLog.json?orderBy="uid"&equalTo="'+uid+'"');
 
   const trainingLog = [];
@@ -89,4 +89,98 @@ export async function fetchCardio(cardio, token) {
   }
 
   return trainingLog;
+}
+
+export async function postOrganization(org, token) {
+  await axios.post(DB_URL + 'organization.json', org)
+  .then(function (response) {
+    const id = response.data.name;
+    return id;
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+}
+
+export async function fetchOrganization(tbd, token) {
+  const response = await axios.get(DB_URL + 'organization.json');
+
+  const organizations = [];
+
+  for (const key in response.data) {
+      const orgObj = {
+          id: key,
+          name: response.data[key].name,
+          desc: response.data[key].description,
+          // Possible Editions:
+          // Level: Child, high school, college, club, adult
+          // Rating: 5 *'s... Rating and Review seperate file
+          // Members: # of
+          // Location: If they have meetups
+          // Public, Private
+          // Closed, Open, Fee?
+      };
+      organizations.push(orgObj);
+  }
+
+  return organizations;
+}
+
+export async function postCoach(coach, token) {
+  await axios.post(DB_URL + 'coach.json', coach)
+  .then(function (response) {
+    const id = response.data.name;
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+}
+
+export async function fetchCoaches(tbd, token) {
+  const response = await axios.get(DB_URL + 'coach.json'); // Probably need to filter by active, or organization
+
+  const coaches = [];
+
+  for (const key in response.data) {
+      const coachObj = {
+          id: key,
+          firstName: response.data[key].firstName,
+          lastName: response.data[key].lastName,
+          nickname: response.data[key].nickname,
+          organizationId: response.data[key].organizationId // 1 = Freelance Coach
+          // Organizations?
+      };
+      coaches.push(coachObj);
+  }
+
+  return coaches;
+}
+
+export async function postAthlete(athlete, token) {
+  await axios.post(DB_URL + 'athlete.json', athlete)
+  .then(function (response) {
+    const id = response.data.name;
+    return id;
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+}
+
+export async function fetchAthlete(tbd, token) {
+  const response = await axios.get(DB_URL + 'equipment.json?orderBy="uid"&equalTo="'+uid+'"');
+
+  const athletes = [];
+
+  for (const key in response.data) {
+      const athleteObj = {
+          id: key,
+          name: response.data[key].equipName,
+          distance: response.data[key].distance,
+          // date: new Date(response.data[key].date)
+      };
+      athletes.push(athleteObj);
+  }
+
+  return athletes;
 }

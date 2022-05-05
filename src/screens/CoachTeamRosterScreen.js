@@ -1,17 +1,39 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { UserContext } from '../store/context/user-context';
+import { fetchRoster } from '../util/http';
 
 const CoachTeamRosterScreen = () => {
+    const userCtx = useContext(UserContext);
+    const [getAthletes, setAthletes] = useState([]);
+    const [modalVisible, setModalVisible] = useState(false);
+
+    useEffect(() => {
+        async function getAthletes() {
+            const dbAthletes = await fetchRoster(userCtx.userId, token);
+            setAthletes(dbAthletes);
+        }
+    
+        getAthletes();
+    }, [token]);
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Coach's Roster</Text>
-            <View style={styles.header}>
-                <Text>Organization</Text>
-                <Text>Team</Text>
-                <Text>Name</Text>
-                <Text>Group</Text>
-            </View>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    setModalVisible(!modalVisible);
+                }}
+            />
+            <Text style={styles.orgTitle}>{userCtx.organization ? userCtx.organization.name : 'No Org Selected'}</Text>
+            <Text style={styles.rosterHeader}>Athletes</Text>
+            <FlatList 
+                data={getAthletes}
+                renderItem={renderItem}
+                keyExtractor={(item) => item.id }
+            />
         </View>
     );
 };
@@ -22,14 +44,27 @@ const styles = StyleSheet.create({
         margin: 20,
         paddingTop: 10
     },
-    title: {
+    orgTitle: {
+        borderTopWidth: 5,
+        borderColor: 'darkgreen',
+        width: '80%',
         fontSize: 30,
-        textAlign: 'center',
-        textAlignVertical: 'center'
+        fontWeight: 'bold',
+        margin: 15,
+        paddingTop: 10,
+        color: 'darkgreen',
+        textAlign: 'center'
     },
-    header: {
-        flexDirection: 'row',
-        justifyContent: 'space-around'
+    rosterHeader: {
+        borderTopWidth: 3,
+        borderColor: 'darkgreen',
+        width: '80%',
+        fontSize: 20,
+        fontWeight: 'bold',
+        margin: 5,
+        paddingTop: 10,
+        color: 'darkgreen',
+        textAlign: 'center'
     },
     rosterRow: {
         flexDirection: 'row',

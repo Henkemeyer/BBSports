@@ -22,7 +22,8 @@ import CoachLiftingScreen from './src/screens/CoachLiftingScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import SignUpScreen from './src/screens/SignUpScreen';
 import EquipmentScreen from './src/screens/EquipmentScreen';
-import AddEquipmentScreen from './src/screens/AddEquipmentScreen';
+import OrganizationScreen from './src/screens/OrganizationScreen';
+import CreateOrganizationScreen from './src/screens/CreateOrganizationScreen';
 
 const TabNav = createBottomTabNavigator();
 const StackNav = createStackNavigator();
@@ -62,10 +63,30 @@ function EquipmentStack() {
           // ),
         })}
       />
-      <StackNav.Screen 
+      {/* <StackNav.Screen 
         name="AddEquip" 
         component={AddEquipmentScreen} 
         options={{title: "Add Equipment" }}
+      /> */}
+    </StackNav.Navigator>
+  );
+}
+
+function OrganizationStack() {
+  return (
+    <StackNav.Navigator
+      screenOptions={{
+        headerTintColor: 'green',
+      }}>
+      <StackNav.Screen 
+        name="Organization" 
+        component={OrganizationScreen} 
+        options={{ title: 'Organizations' }}
+      />
+      <StackNav.Screen 
+        name="CreateOrg" 
+        component={CreateOrganizationScreen} 
+        options={{title: "Create Organization" }}
       />
     </StackNav.Navigator>
   );
@@ -121,6 +142,26 @@ function AthleteContainerStack() {
       <StackNav.Screen 
         name="EquipmentStack" 
         component={EquipmentStack}
+        options={{ headerShown: false }} 
+      />
+    </StackNav.Navigator>
+  );
+}
+
+function CoachContainerStack() {
+  return (
+    <StackNav.Navigator
+      screenOptions={{
+        headerTintColor: 'green',
+      }}>
+      <StackNav.Screen 
+        name="CoachTab" 
+        component={CoachTab}
+        options={{ headerShown: false }} 
+      />
+      <StackNav.Screen 
+        name="OrganizationStack" 
+        component={OrganizationStack}
         options={{ headerShown: false }} 
       />
     </StackNav.Navigator>
@@ -195,7 +236,7 @@ function Navigation () {
         userCtx.userType=='Athlete' ?  (
           <AthleteContainerStack />
         ) : (
-          <CoachTab />
+          <CoachContainerStack />
         )}
       </NavigationContainer>
     );

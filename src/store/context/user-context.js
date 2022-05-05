@@ -8,12 +8,14 @@ export const UserContext = createContext({
     logout: () => {},
     userType: '', // Athlete, Coach, Fan?
     switchUserType: (input) => null,
+    switchOrganization: (orgData) => null
 });
 
 function UserContextProvider({children}) {
     const [getUserId, setUserId] = useState([]);
     const [getToken, setToken] = useState([]);
     const [getUserType, setUserType] = useState([]);
+    const [getOrganization, setOrganization] = useState([]);
 
     function login(authData) {
         setToken(authData.idToken);
@@ -33,13 +35,19 @@ function UserContextProvider({children}) {
         setUserType(input);
     }
 
+    function switchOrganization(orgData) {
+        setOrganization(orgData);
+    }
+
     const value = {
         userId: getUserId,
         token: getToken,
+        userType: getUserType,
+        organization: getOrganization,
         login: login,
         logout: logout,
-        userType: getUserType,
-        switchUserType: switchUserType
+        switchUserType: switchUserType,
+        switchOrganization: switchOrganization
     }
 
     return <UserContext.Provider value={value}>{children}</UserContext.Provider>

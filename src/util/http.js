@@ -184,3 +184,20 @@ export async function fetchAthlete(tbd, token) {
 
   return athletes;
 }
+
+export async function fetchGroups(tbd, token) {
+  const response = await axios.get(DB_URL + 'groups.json?orderBy="uid"&equalTo="'+uid+'"');
+
+  const groups = [];
+
+  for (const key in response.data) {
+      const groupObj = {
+          id: key,
+          name: response.data[key].groupName,
+          // athletes: [List of Athletes to push the workout too]
+      };
+      groups.push(groupObj);
+  }
+
+  return groups;
+}

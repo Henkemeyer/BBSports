@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Alert, View, Text, TouchableOpacity, StyleSheet, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { Alert, Keyboard, ScrollView, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import UserInput from '../components/UserInput';
 import ShadowBox from '../components/ShadowBox';
 import OurButton from '../components/OurButton';
@@ -12,6 +12,7 @@ function SignUpScreen({ navigation }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [firstName, setFirstName] = useState('');
+    const [nickName, setNickName] = useState('');
     const [lastName, setLastName] = useState('');
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPWError] = useState('');
@@ -49,6 +50,7 @@ function SignUpScreen({ navigation }) {
                 {
                     uid: authData.localId,
                     firstName: firstName,
+                    nickName: nickName,
                     lastName: lastName,
                     nickname: '',
                 }
@@ -66,62 +68,73 @@ function SignUpScreen({ navigation }) {
                 Keyboard.dismiss();
             }}
         >
-            <View style={styles.backgroundView}>
-                <ShadowBox style={styles.containerView}>
-                    <Text style={styles.headerText}>Sign Up for BB Sports</Text>
+            <ScrollView>
+                <View style={styles.backgroundView}>
+                    <ShadowBox style={styles.containerView}>
+                        <Text style={styles.headerText}>Sign Up for BB Sports</Text>
+                            <View style={styles.inputView}>
+                                <UserInput
+                                    label="Email"
+                                    value={email.trim()}
+                                    onChangeText={setEmail}
+                                    autoCapitalize="none"
+                                    autoCorrect={false}
+                                />
+                        </View>
+                        { emailError ? <Text style={styles.errorText}>{emailError}</Text> : null }
+
                         <View style={styles.inputView}>
                             <UserInput
-                                label="Email"
-                                value={email.trim()}
-                                onChangeText={setEmail}
+                                secureTextEntry
+                                label="Password"
+                                value={password}
+                                onChangeText={setPassword}
                                 autoCapitalize="none"
                                 autoCorrect={false}
                             />
-                    </View>
-                    { emailError ? <Text style={styles.errorText}>{emailError}</Text> : null }
+                        </View>
+                        { passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null }
 
-                    <View style={styles.inputView}>
-                        <UserInput
-                            secureTextEntry
-                            label="Password"
-                            value={password}
-                            onChangeText={setPassword}
-                            autoCapitalize="none"
-                            autoCorrect={false}
+                        <View style={styles.inputView}>
+                            <UserInput
+                                label="First Name"
+                                value={firstName}
+                                onChangeText={setFirstName}
+                                autoCorrect={false}
+                            />
+                        </View>
+                        { firstError ? <Text style={styles.errorText}>{firstError}</Text> : null }
+
+                        <View style={styles.inputView}>
+                            <UserInput
+                                label="Nickname"
+                                value={nickName}
+                                onChangeText={setNickName}
+                                autoCorrect={false}
+                            />
+                        </View>
+
+                        <View style={styles.inputView}>
+                            <UserInput
+                                label="Last Name"
+                                value={lastName}
+                                onChangeText={setLastName}
+                                autoCorrect={false}
+                            />
+                        </View>
+                        { lastError ? <Text style={styles.errorText}>{lastError}</Text> : null }
+
+                        <OurButton
+                            buttonPressed={confirmInputAgent}
+                            buttonText="Create Account"
+                            style={styles.loginButton}
                         />
-                    </View>
-                    { passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null }
-
-                    <View style={styles.inputView}>
-                        <UserInput
-                            label="First Name"
-                            value={firstName}
-                            onChangeText={setFirstName}
-                            autoCorrect={false}
-                        />
-                    </View>
-                    { firstError ? <Text style={styles.errorText}>{firstError}</Text> : null }
-
-                    <View style={styles.inputView}>
-                        <UserInput
-                            label="Last Name"
-                            value={lastName}
-                            onChangeText={setLastName}
-                            autoCorrect={false}
-                        />
-                    </View>
-                    { lastError ? <Text style={styles.errorText}>{lastError}</Text> : null }
-
-                    <OurButton
-                        buttonPressed={confirmInputAgent}
-                        buttonText="Create Account"
-                        style={styles.loginButton}
-                    />
-                    <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                        <Text style={styles.clickText}>Already have an account?</Text>
-                    </TouchableOpacity>
-                </ShadowBox>
-            </View>
+                        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                            <Text style={styles.clickText}>Already have an account?</Text>
+                        </TouchableOpacity>
+                    </ShadowBox>
+                </View>
+            </ScrollView>
         </TouchableWithoutFeedback>
     );
 }
@@ -140,7 +153,7 @@ const styles = StyleSheet.create({
         borderColor: 'gray',
         backgroundColor: '#ffffff',
         borderRadius: 10,
-        marginVertical: 100,
+        marginVertical: 40,
         width: '80%'
     },
     headerText: {

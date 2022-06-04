@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { StyleSheet, Text, View, TouchableHighlight} from 'react-native';
+import { ScrollView, StyleSheet, Text, View, TouchableHighlight} from 'react-native';
 import OurButton from '../components/OurButton';
 
 import { UserContext } from '../store/context/user-context';
@@ -31,51 +31,61 @@ function SettingsScreen ({navigation}) {
     }
 
     return (
-        <View style={styles.buttonViewStyle}>
-            <Text>User ID:{userId}</Text>
-            <Text>Screens Visible:{userType}</Text>
-            <Text>Fair Weather Mode: OFF</Text>
-            <OurButton 
-                buttonPressed={() => placeholder()}
-                buttonText="Theme"
-            />
-            {userCtx.userType=='Athlete' ? (
+        <ScrollView>
+            <View style={styles.buttonViewStyle}>
+                <Text style={styles.textStyle}>User ID:{userId}</Text>
+                <Text style={styles.textStyle}>Screens Visible:{userType}</Text>
+                <Text style={styles.textStyle}>Fair Weather Mode: OFF</Text>
                 <OurButton 
-                    buttonPressed={() => equipmentScreenHandler()}
-                    buttonText="Manage Equipment"
-                    style={styles.buttonStyle} />
-            ) : (
+                    buttonPressed={() => placeholder()}
+                    buttonText="Theme"
+                    style={styles.buttonStyle}
+                />
+                {userCtx.userType=='Athlete' ? (
+                    <OurButton 
+                        buttonPressed={() => equipmentScreenHandler()}
+                        buttonText="Manage Equipment"
+                        style={styles.thiccButtonStyle} />
+                ) : (
+                    <OurButton 
+                        buttonPressed={() => orgHandler()}
+                        buttonText="Your Orgs"
+                        style={styles.buttonStyle} />
+                )}
                 <OurButton 
-                    buttonPressed={() => orgHandler()}
-                    buttonText="Your Orgs"
-                    style={styles.buttonStyle} />
-            )}
-            <OurButton 
-                buttonPressed={() => switchTypeHandler()}
-                buttonText="Swap User"
-            />
-            <OurButton 
-                buttonPressed={() => logoutUserHandler()}
-                buttonText="Logout"
-            />
-        </View>
+                    buttonPressed={() => switchTypeHandler()}
+                    buttonText="Swap User"
+                    style={styles.buttonStyle}
+                />
+                <OurButton 
+                    buttonPressed={() => logoutUserHandler()}
+                    buttonText="Logout"
+                    style={styles.buttonStyle}
+                />
+            </View>
+        </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
     buttonViewStyle: {
         alignItems: 'center',
-        justifyContent: 'space-around',
         flex: 1
     },
-    buttonStyle: {
+    thiccButtonStyle: {
         height: 75,
-        fontSize: 25
+        fontSize: 25,
+        margin: 20
+    },
+    buttonStyle: {
+        fontSize: 25,
+        margin: 20
     },
     textStyle: {
-        fontSize: 25,
+        fontSize: 16,
         textAlign: 'center',
-        textAlignVertical: 'center'
+        textAlignVertical: 'center',
+        margin: 20
     }
 });
 

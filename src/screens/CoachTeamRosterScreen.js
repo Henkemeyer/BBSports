@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { UserContext } from '../store/context/user-context';
 import { fetchRoster } from '../util/http';
 
 const CoachTeamRosterScreen = () => {
     const userCtx = useContext(UserContext);
+    const token = userCtx.token;                  // User Auth Token
     const [getAthletes, setAthletes] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
 

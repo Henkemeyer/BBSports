@@ -16,8 +16,10 @@ const ProfileScreen = () => {
                 <Text>User ID:</Text>
                 <Text>Profile Picture:</Text>
                 <Text>Name:</Text>
+                <Text>Alias:</Text>
                 <Text>E-mail:</Text>
-                <Text>ZipCode:</Text>
+                <Text>State:</Text>
+                <Text>Zip Code:</Text>
             </View>
             <OurButton 
                 buttonPressed={() => placeholder()}

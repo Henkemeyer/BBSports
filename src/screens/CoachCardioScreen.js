@@ -22,9 +22,12 @@ const CoachCardioScreen = ( ) => {
     const [group, setGroup] = useState('');         // Group used for workout
   
     const onChange = (event, selectedDate) => {
-      const currentDate = selectedDate;
-      setShow(false);
-      setDate(currentDate);
+        if(event.type != 'dismissed')
+        {
+            const currentDate = selectedDate;
+            setDate(currentDate);
+        }
+        setShow(false);
     };
   
     const showMode = (currentMode) => {

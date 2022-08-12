@@ -13,9 +13,12 @@ const CoachLiftingScreen = () => {
     const [show, setShow] = useState(false);      // Show or Hide Date Picker
 
     const onChange = (event, selectedDate) => {
-        const currentDate = selectedDate;
+        if(event.type != 'dismissed')
+        {
+            const currentDate = selectedDate;
+            setDate(currentDate);
+        }
         setShow(false);
-        setDate(currentDate);
       };
     
       const showMode = (currentMode) => {

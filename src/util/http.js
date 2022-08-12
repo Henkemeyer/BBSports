@@ -91,15 +91,27 @@ export async function fetchCardio(uid, token) {
   return trainingLog;
 }
 
-export async function postOrganization(org, token) {
+export async function postOrganization(org, coach, token) {
+  const organizationId = '';
   await axios.post(DB_URL + 'organization.json', org)
   .then(function (response) {
-    const id = response.data.name;
-    return id;
+    organizationId = response.data.name;
   })
   .catch(function (error) {
     console.log(error);
   });
+
+  coach.organizationId = organizationId;
+
+  await axios.post(DB_URL + 'coaches.json', coach)
+  .then(function (response) {
+    const placeholder = "Keep track of coach id?";
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+
+  return organizationId;
 }
 
 export async function fetchOrganization(tbd, token) {
@@ -146,7 +158,7 @@ export async function fetchCoaches(tbd, token) {
           id: key,
           firstName: response.data[key].firstName,
           lastName: response.data[key].lastName,
-          nickname: response.data[key].nickname,
+          nickName: response.data[key].nickName,
           organizationId: response.data[key].organizationId // 1 = Freelance Coach
           // Organizations?
       };

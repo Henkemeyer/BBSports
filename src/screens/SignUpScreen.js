@@ -52,7 +52,7 @@ function SignUpScreen({ navigation }) {
                     firstName: firstName,
                     nickName: nickName,
                     lastName: lastName,
-                    nickname: '',
+                    email: email
                 }
 
             postUser(userData, authData.idToken)

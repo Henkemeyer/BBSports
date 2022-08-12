@@ -196,7 +196,7 @@ function CoachTab() {
         inactiveTintColor: 'black',
       }}
     >
-      <TabNav.Screen name="Home" component={AthleteCalendarScreen} />
+      <TabNav.Screen name="Home" component={CoachTeamRosterScreen} />
       <TabNav.Screen name="Cardio" component={CoachCardioScreen} />
       <TabNav.Screen name="Lifting" component={CoachLiftingScreen} />
       <TabNav.Screen name="Settings" component={SettingsScreen} />

@@ -17,7 +17,7 @@ function SettingsScreen ({navigation}) {
         navigation.navigate("EquipmentStack");
     }
 
-    function orgHandler() {
+    function teamHandler() {
         navigation.navigate("OrganizationStack");
     }
 
@@ -41,15 +41,15 @@ function SettingsScreen ({navigation}) {
                     buttonText="Theme"
                     style={styles.buttonStyle}
                 />
-                {userCtx.userType=='Athlete' ? (
+                {userCtx.userType=='Athlete' || userCtx.userType=='Athlete' ? (
                     <OurButton 
                         buttonPressed={() => equipmentScreenHandler()}
                         buttonText="Manage Equipment"
                         style={styles.thiccButtonStyle} />
                 ) : (
                     <OurButton 
-                        buttonPressed={() => orgHandler()}
-                        buttonText="Your Orgs"
+                        buttonPressed={() => teamHandler()}
+                        buttonText="Your Teams"
                         style={styles.buttonStyle} />
                 )}
                 <OurButton 

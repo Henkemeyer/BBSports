@@ -30,11 +30,11 @@ const CoachTeamRosterScreen = () => {
             />
             <Text style={styles.orgTitle}>{userCtx.organization ? userCtx.organization.name : 'No Org Selected'}</Text>
             <Text style={styles.rosterHeader}>Athletes</Text>
-            <FlatList 
+            {/* <FlatList 
                 data={getAthletes}
                 renderItem={renderItem}
                 keyExtractor={(item) => item.id }
-            />
+            /> */}
         </View>
     );
 };

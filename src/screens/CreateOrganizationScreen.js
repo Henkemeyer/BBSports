@@ -1,103 +1,120 @@
 import React, { useContext, useState } from 'react';
-import { Alert, View, Text, StyleSheet, Keyboard, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react-native';
+import { Alert, ScrollView, StyleSheet, Text, Keyboard, KeyboardAvoidingView, TouchableWithoutFeedback, View } from 'react-native';
 import UserInput from '../components/UserInput';
 import ShadowBox from '../components/ShadowBox';
 import OurButton from '../components/OurButton';
 import { UserContext } from '../store/context/user-context';
-import { postCoach, postOrganization } from '../util/http';
+import { postOrganization } from '../util/http';
 
 function CreateOrganizationScreen({ navigation }) {
     const userCtx = useContext(UserContext);
     const token = userCtx.token;
     const [orgName, setOrgName] = useState('');
+    const [organizationId, setOrgId] = useState('');
     const [level, setLevel] = useState('');
     const [location, setLocation] = useState('');
     const [description, setDescription] = useState('');
+    const [title, setTitle] = useState('');
     const [nameError, setNameError] = useState('');
     const [isValid, setIsValid] = useState(false);
 
     const confirmInputAgent = () => {
         setIsValid(true);
+        setNameError('');
         if(orgName.length < 2) {
             setNameError('*You must enter an Org Name');
             setIsValid(false);
         }
         if(isValid) {
-            signUpHandler();
+            createOrgHandler();
         }
     };
 
-    async function signUpHandler() {
+    function createOrgHandler() {
         try {
-            const orgData = 
-                {
-                    name: orgName,
-                    level: level,
-                    location: location,
-                    description: description,
-                    coach: {
-                        coachId: userCtx.userId,
-                        admin: 'Y',
-                        title: ''
-                    }
-                }
-
-            const orgId = await postOrganization(orgData, token);
-            navigation.goBack();
+            const orgData = {
+                name: orgName,
+                level: level,
+                location: location,
+                description: description
+            }
+            
+            const coachData = {
+                admin: 'Y',
+                organizationId: '',
+                title: title,
+                uid: userCtx.userId
+            }
+            
+            postOrganization(orgData, coachData, token)
         } catch (error) {
-            Alert.alert('Login Failed!', 'Failed to login. Please try again later.')
+            Alert.alert('Org Creation Failed!', 'Failed to create organization. Please try again later')
         }
+        navigation.goBack();
     }
 
     return (
-        <TouchableWithoutFeedback onPress={() =>{ Keyboard.dismiss(); }}>
-            <View style={styles.backgroundView}>
-                <ShadowBox style={styles.containerView}>
-                    <Text style={styles.headerText}>Sign up a new Organization</Text>
-                    <View style={styles.inputView}>
-                        <UserInput
-                            label="Name"
-                            value={orgName}
-                            onChangeText={setOrgName}
-                            autoCorrect={false}
-                        />
-                    </View>
-                    { nameError ? <Text style={styles.errorText}>{nameError}</Text> : null }
+        <TouchableWithoutFeedback
+            onPress={() =>{
+                Keyboard.dismiss();
+            }}
+        >
+            <ScrollView>
+                <View style={styles.backgroundView}>
+                    <ShadowBox style={styles.containerView}>
+                        <Text style={styles.headerText}>Sign up a new Organization</Text>
+                        <View style={styles.inputView}>
+                            <UserInput
+                                label="Name"
+                                value={orgName}
+                                onChangeText={setOrgName}
+                                autoCorrect={false}
+                            />
+                        </View>
+                        { nameError ? <Text style={styles.errorText}>{nameError}</Text> : null }
 
-                    <View style={styles.inputView}>
-                        <UserInput
-                            label="Org Level"
-                            value={level}
-                            onChangeText={setLevel}
-                            autoCorrect={false}
-                        />
-                    </View>
-                    <View style={styles.inputView}>
-                        <UserInput
-                            label="Location"
-                            value={location}
-                            onChangeText={setLocation}
-                            autoCorrect={false}
-                        />
-                    </View>
+                        <View style={styles.inputView}>
+                            <UserInput
+                                label="Org Level"
+                                value={level}
+                                onChangeText={setLevel}
+                                autoCorrect={false}
+                            />
+                        </View>
+                        <View style={styles.inputView}>
+                            <UserInput
+                                label="Location"
+                                value={location}
+                                onChangeText={setLocation}
+                                autoCorrect={false}
+                            />
+                        </View>
+                        <View style={styles.inputView}>
+                            <UserInput
+                                label="Your Title"
+                                value={title}
+                                onChangeText={setTitle}
+                            />
+                        </View>
 
-                    <View style={styles.inputView}>
-                        <UserInput
-                            label="Description"
-                            value={description}
-                            onChangeText={setDescription}
-                            multiline
-                            numberOfLines={6}
-                        />
-                    </View>
+                        <View style={styles.inputView}>
+                            <UserInput
+                                label="Description"
+                                value={description}
+                                onChangeText={setDescription}
+                                multiline
+                                numberOfLines={6}
+                            />
+                        </View>
 
-                    <OurButton
-                        buttonPressed={confirmInputAgent}
-                        buttonText="Create Org"
-                        style={styles.confirmButton}
-                    />
-                </ShadowBox>
-            </View>
+                        <OurButton
+                            buttonPressed={confirmInputAgent}
+                            buttonText="Create Org"
+                            style={styles.confirmButton}
+                        />
+                    </ShadowBox>
+                </View>
+            </ScrollView>
         </TouchableWithoutFeedback>
     );
 }
@@ -116,7 +133,7 @@ const styles = StyleSheet.create({
         borderColor: 'gray',
         backgroundColor: '#ffffff',
         borderRadius: 10,
-        marginVertical: 100,
+        marginVertical: 65,
         width: '80%'
     },
     headerText: {

@@ -8,7 +8,8 @@ export const UserContext = createContext({
     logout: () => {},
     userType: '', // Athlete, Coach, Fan?
     switchUserType: (input) => null,
-    switchOrganization: (orgData) => null
+    organization: [],
+    switchOrganization: (orgId, admin) => null
 });
 
 function UserContextProvider({children}) {
@@ -19,7 +20,7 @@ function UserContextProvider({children}) {
 
     function login(authData) {
         setToken(authData.idToken);
-        setUserType('Athlete');
+        setUserType('Coach');
         setUserId(authData.localId);
         AsyncStorage.setItem('authToken', authData.idToken);
         AsyncStorage.setItem('userID', authData.localId);

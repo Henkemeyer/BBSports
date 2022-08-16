@@ -9,14 +9,14 @@ const CoachTeamRosterScreen = () => {
     const [getAthletes, setAthletes] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
 
-    useEffect(() => {
-        async function getAthletes() {
-            const dbAthletes = await fetchRoster(userCtx.userId, token);
-            setAthletes(dbAthletes);
-        }
+    // useEffect(() => {
+    //     async function getAthletes() {
+    //         const dbAthletes = await fetchRoster(userCtx.userId, token);
+    //         setAthletes(dbAthletes);
+    //     }
     
-        getAthletes();
-    }, [token]);
+    //     getAthletes();
+    // }, [token]);
 
     return (
         <View style={styles.container}>

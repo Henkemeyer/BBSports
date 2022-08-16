@@ -92,26 +92,16 @@ export async function fetchCardio(uid, token) {
 }
 
 export async function postOrganization(org, coach, token) {
-  const organizationId = '';
   await axios.post(DB_URL + 'organization.json', org)
   .then(function (response) {
-    organizationId = response.data.name;
+    console.log('Organization ID: ' + response.data.name)
+    coach.organizationId = response.data.name;
+    postCoach(coach, token);
+    return response;
   })
   .catch(function (error) {
     console.log(error);
   });
-
-  coach.organizationId = organizationId;
-
-  await axios.post(DB_URL + 'coaches.json', coach)
-  .then(function (response) {
-    const placeholder = "Keep track of coach id?";
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
-
-  return organizationId;
 }
 
 export async function fetchOrganization(tbd, token) {
@@ -141,7 +131,7 @@ export async function fetchOrganization(tbd, token) {
 export async function postCoach(coach, token) {
   await axios.post(DB_URL + 'coach.json', coach)
   .then(function (response) {
-    const id = response.data.name;
+    console.log('Coach ID: ' + response.data.name)
   })
   .catch(function (error) {
     console.log(error);

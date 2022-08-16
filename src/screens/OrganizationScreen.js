@@ -66,58 +66,50 @@ function OrganizationScreen({ navigation }) {
     );
 
     return (
-        <>
-            {!hasOrgs ? (
-                <TouchableWithoutFeedback onPress={() =>{ Keyboard.dismiss(); }}>
-                    <View>
-                        <Text>You're not a part of any Orgs. Create or Join one.</Text>
-                        <OurButton 
-                            buttonPressed={() => navigation.navigate('CreateOrg')}
-                            buttonText="Create Org?"/>
-                        <OurButton 
-                            buttonPressed={() => joinOrgHandler()}
-                            buttonText="Join Org?"/>
-                    </View>
-                </TouchableWithoutFeedback>
-            ) : (
-                <View style={styles.containerView}>
-                    <Text style={styles.headerText}>Switch Organization?</Text>
-                    <SelectDropdown 
-                        data={organizations}
-                        onSelect={(selectedItem, index) => {
-                            const orgData = {
-                                name: selectedItem.name,
-                                id: selectedItem.id
-                            }
-                            userCtx.switchOrganization(orgData);
-                            console.log(userCtx.organization);
-                        }}
-                        buttonTextAfterSelection={(selectedItem, index) => {
-                            return selectedItem.name
-                        }}
-                        rowTextForSelection={(item, index) => {
-                            return item.name
-                        }}
-                        buttonStyle={styles.selectDropDownButton}
-                        buttonTextStyle={styles.selectDropDownText}
-                        renderDropdownIcon={isOpened => {
-                            return <Ionicons name={isOpened ? 'chevron-up-circle-sharp' : 'chevron-down-circle-outline'} color={'#FFF'} size={18} />;
-                        }}
-                        dropdownIconPosition={'right'}
-                        dropdownStyle={styles.selectDropDown}
-                        rowStyle={styles.selectDropDownRow}
-                        rowTextStyle={styles.selectDropDownText}
-                    />
-                    <Text style={styles.orgTitle}>{userCtx.organization ? userCtx.organization.name : 'No Org Selected'}</Text>
-                    <Text style={styles.rosterHeader}>Coaches</Text>
-                    {/* <FlatList 
-                        data={coaches}
-                        renderItem={renderCoachItem}
-                        keyExtractor={(item) => item.id }
-                    /> */}
-                </View>
-            )}
-        </>
+        <View style={styles.containerView}>
+            <Text style={styles.headerText}>Switch Organization?</Text>
+            <SelectDropdown 
+                data={organizations}
+                onSelect={(selectedItem, index) => {
+                    const orgData = {
+                        name: selectedItem.name,
+                        id: selectedItem.id
+                    }
+                    userCtx.switchOrganization(orgData);
+                    console.log(userCtx.organization);
+                }}
+                buttonTextAfterSelection={(selectedItem, index) => {
+                    return selectedItem.name
+                }}
+                rowTextForSelection={(item, index) => {
+                    return item.name
+                }}
+                buttonStyle={styles.selectDropDownButton}
+                buttonTextStyle={styles.selectDropDownText}
+                renderDropdownIcon={isOpened => {
+                    return <Ionicons name={isOpened ? 'chevron-up-circle-sharp' : 'chevron-down-circle-outline'} color={'#FFF'} size={18} />;
+                }}
+                dropdownIconPosition={'right'}
+                dropdownStyle={styles.selectDropDown}
+                rowStyle={styles.selectDropDownRow}
+                rowTextStyle={styles.selectDropDownText}
+            />
+            <Text style={styles.orgTitle}>{userCtx.organization ? userCtx.organization.name : 'No Org Selected'}</Text>
+            <Text style={styles.rosterHeader}>Coaches</Text>
+            {/* <FlatList 
+                data={coaches}
+                renderItem={renderCoachItem}
+                keyExtractor={(item) => item.id }
+            /> */}
+            <OurButton 
+                    buttonPressed={() => navigation.navigate('CreateOrg')}
+                    buttonText="Create Org?"/>
+            {/*
+            <OurButton 
+                    buttonPressed={() => joinOrgHandler()}
+                    buttonText="Join Org?"/>
+            */}
+        </View>
     );
 }
 

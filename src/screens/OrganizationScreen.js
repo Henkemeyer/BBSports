@@ -1,46 +1,50 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Alert, View, Text, TouchableOpacity, StyleSheet, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
-import UserInput from '../components/UserInput';
-import ShadowBox from '../components/ShadowBox';
 import OurButton from '../components/OurButton';
 import { UserContext } from '../store/context/user-context';
-import { fetchOrganization } from '../util/http';
+import { fetchOrganizations, fetchTeams } from '../util/http';
 import { Ionicons } from '@expo/vector-icons';
 
 function OrganizationScreen({ navigation }) {
     const userCtx = useContext(UserContext);
     const token = userCtx.token;
     const [organizations, setOrganizations] = useState('');
-    const [hasOrgs, setHasOrgs] = useState(false);
+    const [teams, setTeams] = useState('');
+    const [coaches, setCoaches] = useState('');
 
     const Item = ({ item }) => (
-            <View style={styles.viewRow}>
-                <View style={styles.equipmentDetails}>
-                    <Text style={styles.text}>Name: {item.name}</Text>
-                    <Text style={styles.text}>Position: {item.title}</Text>
-                </View>
-                <View style={styles.equipmentDetails}>
-                    <Text style={styles.text}>Admin: {item.admin}</Text>
-                    <TouchableOpacity onPress={() => retireHandler(item)}>
-                        <Ionicons name="close-sharp" size={30} color="green" />
-                 </TouchableOpacity>
-                </View>
+        <View style={styles.viewRow}>
+            <View style={styles.equipmentDetails}>
+                <Text style={styles.text}>Name: {item.name}</Text>
+                <Text style={styles.text}>Position: {item.title}</Text>
             </View>
+            <View style={styles.equipmentDetails}>
+                <Text style={styles.text}>Admin: {item.admin}</Text>
+                <TouchableOpacity onPress={() => retireHandler(item)}>
+                    <Ionicons name="close-sharp" size={30} color="green" />
+                </TouchableOpacity>
+            </View>
+        </View>
       );
 
     useEffect(() => {
         async function getOrganizations() {
-            const dbOrganizations = await fetchOrganization(userCtx.userId, token);
+            const dbOrganizations = await fetchOrganizations(userCtx.userId, token);
             setOrganizations(dbOrganizations);
-            if(Object.keys(dbOrganizations).length > 0) { setHasOrgs(true); }
         }
     
         getOrganizations();
     }, [token]);
 
-    function joinOrgHandler() {
-        const placeholder = 1;
+    function selectOrgHandler(orgId) {
+        // We should grab all and then filter so it doesn't pull from DB over and over if they keep flipping between them
+        async function getTeams() {
+            const dbTeams = await fetchTeams(orgId, token);
+            setTeams(dbTeams);
+        }
+    
+        getTeams();
     }
 
     function retireHandler(coach) {
@@ -61,7 +65,7 @@ function OrganizationScreen({ navigation }) {
         // }
     }
 
-    const renderEquipmentItem = ({ item }) => (
+    const renderCoachItem = ({ item }) => (
         <Item item={item} />
     );
 
@@ -74,10 +78,12 @@ function OrganizationScreen({ navigation }) {
                     const orgData = {
                         name: selectedItem.name,
                         id: selectedItem.id
-                    }
+                    };
                     userCtx.switchOrganization(orgData);
-                    console.log(userCtx.organization);
+                    selectOrgHandler(selectedItem.id);
                 }}
+                defaultButtonText="Organizations"
+                defaultValue={userCtx.organization.id}
                 buttonTextAfterSelection={(selectedItem, index) => {
                     return selectedItem.name
                 }}
@@ -94,16 +100,55 @@ function OrganizationScreen({ navigation }) {
                 rowStyle={styles.selectDropDownRow}
                 rowTextStyle={styles.selectDropDownText}
             />
-            <Text style={styles.orgTitle}>{userCtx.organization ? userCtx.organization.name : 'No Org Selected'}</Text>
-            <Text style={styles.rosterHeader}>Coaches</Text>
-            {/* <FlatList 
-                data={coaches}
-                renderItem={renderCoachItem}
-                keyExtractor={(item) => item.id }
-            /> */}
             <OurButton 
-                    buttonPressed={() => navigation.navigate('CreateOrg')}
-                    buttonText="Create Org?"/>
+                buttonPressed={() => navigation.navigate('CreateOrg')}
+                buttonText="Create?"
+                style={styles.createButton}/>
+            { userCtx.organization.id ? <>
+                <Text style={styles.headerText}>Switch Team?</Text>
+                <SelectDropdown
+                    data={teams}
+                    onSelect={(selectedItem, index) => {
+                        const teamData = {
+                            name: selectedItem.name,
+                            id: selectedItem.id
+                        }
+                        // userCtx.switchOrganization(orgData);
+                        // console.log(userCtx.organization);
+                    }}
+                    defaultButtonText="Teams"
+                    buttonTextAfterSelection={(selectedItem, index) => {
+                        return selectedItem.name
+                    }}
+                    rowTextForSelection={(item, index) => {
+                        return item.name
+                    }}
+                    buttonStyle={styles.selectDropDownButton}
+                    buttonTextStyle={styles.selectDropDownText}
+                    renderDropdownIcon={isOpened => {
+                        return <Ionicons name={isOpened ? 'chevron-up-circle-sharp' : 'chevron-down-circle-outline'} color={'#FFF'} size={18} />;
+                    }}
+                    dropdownIconPosition={'right'}
+                    dropdownStyle={styles.selectDropDown}
+                    rowStyle={styles.selectDropDownRow}
+                    rowTextStyle={styles.selectDropDownText}
+                />
+                <OurButton 
+                    buttonPressed={() => navigation.navigate('CreateTeam')}
+                    buttonText="Create?"
+                    style={styles.createButton}/>
+                <Text style={styles.rosterHeader}>Coaches</Text>
+                <FlatList 
+                    data={coaches}
+                    renderItem={renderCoachItem}
+                    keyExtractor={(item) => item.id }
+                />
+                <OurButton 
+                    buttonPressed={() => navigation.navigate('HireCoach')}
+                    buttonText="Hire?"
+                    style={styles.createButton}/>
+                </>    : null 
+            }
             {/*
             <OurButton 
                     buttonPressed={() => joinOrgHandler()}
@@ -130,28 +175,20 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         margin: 10,
     },
+    createButton: {
+       marginVertical: 20
+    },
     headerText: {
         fontSize: 30,
         fontWeight: 'bold',
         margin: 15,
         color: 'darkgreen'
     },
-    orgTitle: {
-        borderTopWidth: 5,
-        borderColor: 'darkgreen',
-        width: '80%',
-        fontSize: 30,
-        fontWeight: 'bold',
-        margin: 15,
-        paddingTop: 10,
-        color: 'darkgreen',
-        textAlign: 'center'
-    },
     rosterHeader: {
         borderTopWidth: 3,
         borderColor: 'darkgreen',
         width: '80%',
-        fontSize: 20,
+        fontSize: 27,
         fontWeight: 'bold',
         margin: 5,
         paddingTop: 10,

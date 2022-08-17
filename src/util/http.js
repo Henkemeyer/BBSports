@@ -104,7 +104,7 @@ export async function postOrganization(org, coach, token) {
   });
 }
 
-export async function fetchOrganization(tbd, token) {
+export async function fetchOrganizations(tbd, token) {
   const response = await axios.get(DB_URL + 'organization.json');
 
   const organizations = [];
@@ -113,7 +113,7 @@ export async function fetchOrganization(tbd, token) {
       const orgObj = {
           id: key,
           name: response.data[key].name,
-          desc: response.data[key].description,
+          description: response.data[key].description,
           // Possible Editions:
           // Level: Child, high school, college, club, adult
           // Rating: 5 *'s... Rating and Review seperate file
@@ -126,6 +126,34 @@ export async function fetchOrganization(tbd, token) {
   }
 
   return organizations;
+}
+
+export async function postTeam(team, token) {
+  await axios.post(DB_URL + 'team.json', team)
+  .then(function (response) {
+    console.log('Team ID: ' + response.data.name)
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+}
+
+export async function fetchTeams(tbd, token) {
+  const response = await axios.get(DB_URL + 'team.json');
+
+  const teams = [];
+
+  for (const key in response.data) {
+      const teamObj = {
+          id: key,
+          name: response.data[key].name,
+          description: response.data[key].description,
+          organizationId: response.data[key].organizationId
+      };
+      teams.push(teamObj);
+  }
+
+  return teams;
 }
 
 export async function postCoach(coach, token) {

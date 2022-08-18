@@ -10,7 +10,6 @@ function CreateOrganizationScreen({ navigation }) {
     const userCtx = useContext(UserContext);
     const token = userCtx.token;
     const [orgName, setOrgName] = useState('');
-    const [organizationId, setOrgId] = useState('');
     const [level, setLevel] = useState('');
     const [location, setLocation] = useState('');
     const [description, setDescription] = useState('');
@@ -36,17 +35,14 @@ function CreateOrganizationScreen({ navigation }) {
                 name: orgName,
                 level: level,
                 location: location,
-                description: description
+                description: description,
+                admin: {
+                    uid: userCtx.userId,
+                    title: title
+                }
             }
             
-            const coachData = {
-                admin: 'Y',
-                organizationId: '',
-                title: title,
-                uid: userCtx.userId
-            }
-            
-            postOrganization(orgData, coachData, token)
+            postOrganization(orgData, token)
         } catch (error) {
             Alert.alert('Org Creation Failed!', 'Failed to create organization. Please try again later')
         }

@@ -25,6 +25,7 @@ import EquipmentScreen from './src/screens/EquipmentScreen';
 import OrganizationScreen from './src/screens/OrganizationScreen';
 import CreateOrganizationScreen from './src/screens/CreateOrganizationScreen';
 import CreateTeamScreen from './src/screens/CreateTeamScreen';
+import AddCoachScreen from './src/screens/AddCoachScreen';
 
 const TabNav = createBottomTabNavigator();
 const StackNav = createStackNavigator();
@@ -93,6 +94,11 @@ function OrganizationStack() {
         name="CreateTeam" 
         component={CreateTeamScreen} 
         options={{title: "Create Team" }}
+      />
+      <StackNav.Screen 
+        name="AddCoach" 
+        component={AddCoachScreen} 
+        options={{title: "Add Coach" }}
       />
     </StackNav.Navigator>
   );

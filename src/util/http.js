@@ -13,6 +13,10 @@ export function postUser(user, token) {
       });
 }
 
+export async function fetchUser(uid, token) {
+  return await axios.get(DB_URL + 'user.json?orderBy="uid"&equalTo="'+uid+'"');
+}
+
 export async function postEquipment(equipment, token) {
   await axios.post(DB_URL + 'equipment.json', equipment)
   .then(function (response) {
@@ -174,10 +178,12 @@ export async function fetchCoaches(tbd, token) {
   for (const key in response.data) {
       const coachObj = {
           id: key,
-          firstName: response.data[key].firstName,
-          lastName: response.data[key].lastName,
-          nickName: response.data[key].nickName,
-          organizationId: response.data[key].organizationId // 1 = Freelance Coach
+          title: response.data[key].title,
+          //firstName: response.data[key].firstName,
+          //lastName: response.data[key].lastName,
+          //nickName: response.data[key].nickName,
+          organizationId: response.data[key].organizationId, // 1 = Freelance Coach
+          userId: response.data[key].uid
           // Organizations?
       };
       coaches.push(coachObj);

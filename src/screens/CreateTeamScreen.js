@@ -14,6 +14,7 @@ function CreateTeamScreen({ navigation }) {
     const [teamName, setTeamName] = useState('');
     const [level, setLevel] = useState('');
     const [description, setDescription] = useState('');
+    const [sex, setSex] = useState('');
     const [sport, setSport] = useState('');
     const [nameError, setNameError] = useState('');
     const [isValid, setIsValid] = useState(false);
@@ -100,20 +101,11 @@ function CreateTeamScreen({ navigation }) {
                         </View>
                         <View style={styles.inputView}>
                             <UserInput
-                                label="Location"
-                                value={location}
-                                onChangeText={setLocation}
-                                autoCorrect={false}
+                                label="Sex"
+                                value={sex}
+                                onChangeText={setSex}
                             />
                         </View>
-                        <View style={styles.inputView}>
-                            <UserInput
-                                label="Your Title"
-                                value={title}
-                                onChangeText={setTitle}
-                            />
-                        </View>
-
                         <View style={styles.inputView}>
                             <UserInput
                                 label="Description"
@@ -123,7 +115,6 @@ function CreateTeamScreen({ navigation }) {
                                 numberOfLines={6}
                             />
                         </View>
-
                         <OurButton
                             buttonPressed={confirmInputAgent}
                             buttonText="Create Team"

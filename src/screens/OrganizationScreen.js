@@ -15,12 +15,12 @@ function OrganizationScreen({ navigation }) {
 
     const Item = ({ item }) => (
         <View style={styles.viewRow}>
-            <View style={styles.equipmentDetails}>
-                <Text style={styles.text}>Name: {item.name}</Text>
-                <Text style={styles.text}>Position: {item.title}</Text>
+            <View style={styles.coachDetails}>
+                <Text style={styles.clickText}>Name: {item.name}</Text>
+                <Text style={styles.clickText}>Position: {item.title}</Text>
             </View>
-            <View style={styles.equipmentDetails}>
-                <Text style={styles.text}>Admin: {item.admin}</Text>
+            <View style={styles.coachDetails}>
+                <Text style={styles.clickText}>Admin: {item.admin}</Text>
                 <TouchableOpacity onPress={() => retireHandler(item)}>
                     <Ionicons name="close-sharp" size={30} color="green" />
                 </TouchableOpacity>
@@ -144,7 +144,7 @@ function OrganizationScreen({ navigation }) {
                     keyExtractor={(item) => item.id }
                 />
                 <OurButton 
-                    buttonPressed={() => navigation.navigate('HireCoach')}
+                    buttonPressed={() => navigation.navigate('AddCoach')}
                     buttonText="Hire?"
                     style={styles.createButton}/>
                 </>    : null 
@@ -228,6 +228,19 @@ const styles = StyleSheet.create({
         color: 'red',
         fontSize: 15,
         marginBottom: 15
+    },
+    viewRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: 8,
+        padding: 5,
+        borderColor: 'darkgreen',
+        borderWidth: 1,
+        borderRadius: 6
+    },
+    coachDetails: {
+        maxWidth: '80%'
     }
 });
 

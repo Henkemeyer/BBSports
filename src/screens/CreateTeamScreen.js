@@ -38,7 +38,7 @@ function CreateTeamScreen({ navigation }) {
                 description: description,
                 level: level,
                 name: teamName,
-                organizationId: userCtx.organization.organizationId,
+                organizationId: userCtx.organization.id,
                 sex: 'X',
                 sport: sport
             }

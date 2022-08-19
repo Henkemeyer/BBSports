@@ -11,7 +11,9 @@ export const UserContext = createContext({
     userType: '', // Athlete, Coach, Fan?
     switchUserType: (input) => null,
     organization: null,
-    switchOrganization: (orgData) => {}
+    switchOrganization: (orgData) => {},
+    team: null,
+    switchTeam: (teamData) => {}
 });
 
 function UserContextProvider({children}) {
@@ -21,6 +23,7 @@ function UserContextProvider({children}) {
     const [getName, setName] = useState([]);
     const [getFullName, setFullName] = useState([]);
     const [getOrganization, setOrganization] = useState([]);
+    const [getTeam, setTeam] = useState([]);
 
     function login(authData) {
         setToken(authData.idToken);
@@ -51,6 +54,12 @@ function UserContextProvider({children}) {
         AsyncStorage.setItem('lastOrg', orgData.id);
     }
 
+    function switchTeam(teamData) {
+        console.log(teamData.id);
+        setTeam(teamData);
+        AsyncStorage.setItem('lastTeam', teamData.id);
+    }
+
     const value = {
         userId: getUserId,
         token: getToken,
@@ -58,10 +67,12 @@ function UserContextProvider({children}) {
         fullName: getFullName,
         userType: getUserType,
         organization: getOrganization,
+        team: getTeam,
         login: login,
         logout: logout,
         switchUserType: switchUserType,
-        switchOrganization: switchOrganization
+        switchOrganization: switchOrganization,
+        switchTeam: switchTeam
     }
 
     return <UserContext.Provider value={value}>{children}</UserContext.Provider>

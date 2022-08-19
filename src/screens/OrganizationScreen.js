@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
 import OurButton from '../components/OurButton';
 import { UserContext } from '../store/context/user-context';
-import { fetchOrganizations, fetchTeams } from '../util/http';
+import { fetchCoaches, fetchOrganizations, fetchTeams } from '../util/http';
 import { Ionicons } from '@expo/vector-icons';
 
 function OrganizationScreen({ navigation }) {
@@ -12,15 +12,14 @@ function OrganizationScreen({ navigation }) {
     const [organizations, setOrganizations] = useState('');
     const [teams, setTeams] = useState('');
     const [coaches, setCoaches] = useState('');
+    const [noTeamsAlert, setNoTeamsAlert] = useState('');
 
     const Item = ({ item }) => (
         <View style={styles.viewRow}>
-            <View style={styles.coachDetails}>
-                <Text style={styles.clickText}>Name: {item.name}</Text>
-                <Text style={styles.clickText}>Position: {item.title}</Text>
-            </View>
-            <View style={styles.coachDetails}>
-                <Text style={styles.clickText}>Admin: {item.admin}</Text>
+            <Text style={styles.rosterTextWide}>{item.fullName}</Text>
+            <Text style={styles.rosterTextWide}>{item.title}</Text>
+            <Text style={styles.rosterTextShort}>{item.status}</Text>
+            <View>
                 <TouchableOpacity onPress={() => retireHandler(item)}>
                     <Ionicons name="close-sharp" size={30} color="green" />
                 </TouchableOpacity>
@@ -40,11 +39,22 @@ function OrganizationScreen({ navigation }) {
     function selectOrgHandler(orgId) {
         // We should grab all and then filter so it doesn't pull from DB over and over if they keep flipping between them
         async function getTeams() {
-            const dbTeams = await fetchTeams(orgId, token);
+            const dbTeams = await fetchTeams(orgId, token)
             setTeams(dbTeams);
         }
     
         getTeams();
+    }
+
+    function selectTeamHandler(teamId) {
+        // We should grab all and then filter so it doesn't pull from DB over and over if they keep flipping between them
+        async function getCoaches() {
+            const dbCoaches = await fetchCoaches(teamId, token);
+
+            setCoaches(dbCoaches);
+        }
+    
+        getCoaches();
     }
 
     function retireHandler(coach) {
@@ -71,7 +81,7 @@ function OrganizationScreen({ navigation }) {
 
     return (
         <View style={styles.containerView}>
-            <Text style={styles.headerText}>Switch Organization?</Text>
+            <Text style={styles.titleText}>Switch Organization?</Text>
             <SelectDropdown 
                 data={organizations}
                 onSelect={(selectedItem, index) => {
@@ -105,16 +115,16 @@ function OrganizationScreen({ navigation }) {
                 buttonText="Create?"
                 style={styles.createButton}/>
             { userCtx.organization.id ? <>
-                <Text style={styles.headerText}>Switch Team?</Text>
+                <Text style={styles.titleText}>Switch Team?</Text>
                 <SelectDropdown
                     data={teams}
                     onSelect={(selectedItem, index) => {
                         const teamData = {
                             name: selectedItem.name,
                             id: selectedItem.id
-                        }
-                        // userCtx.switchOrganization(orgData);
-                        // console.log(userCtx.organization);
+                        };
+                        userCtx.switchTeam(teamData);
+                        selectTeamHandler(selectedItem.id);
                     }}
                     defaultButtonText="Teams"
                     buttonTextAfterSelection={(selectedItem, index) => {
@@ -133,15 +143,25 @@ function OrganizationScreen({ navigation }) {
                     rowStyle={styles.selectDropDownRow}
                     rowTextStyle={styles.selectDropDownText}
                 />
+                { noTeamsAlert  ? <Text style={styles.errorText}>{noTeamsAlert}</Text>: null }
                 <OurButton 
                     buttonPressed={() => navigation.navigate('CreateTeam')}
                     buttonText="Create?"
                     style={styles.createButton}/>
-                <Text style={styles.rosterHeader}>Coaches</Text>
+                </>    : null 
+            }{ userCtx.team.id ? <>
+                <Text style={styles.rosterTitle}>Coaches</Text>
+                <View style={styles.rosterHeader}>
+                    <Text style={styles.headerTextWide}>Name</Text>
+                    <Text style={styles.headerTextWide}>Position</Text>
+                    <Text style={styles.headerTextShort}>Status</Text>
+                    <Text style={styles.headerTextShort}>Remove</Text>
+                </View>
                 <FlatList 
                     data={coaches}
                     renderItem={renderCoachItem}
                     keyExtractor={(item) => item.id }
+                    style={styles.flatList}
                 />
                 <OurButton 
                     buttonPressed={() => navigation.navigate('AddCoach')}
@@ -178,13 +198,13 @@ const styles = StyleSheet.create({
     createButton: {
        marginVertical: 20
     },
-    headerText: {
+    titleText: {
         fontSize: 30,
         fontWeight: 'bold',
         margin: 15,
         color: 'darkgreen'
     },
-    rosterHeader: {
+    rosterTitle: {
         borderTopWidth: 3,
         borderColor: 'darkgreen',
         width: '80%',
@@ -193,7 +213,48 @@ const styles = StyleSheet.create({
         margin: 5,
         paddingTop: 10,
         color: 'darkgreen',
-        textAlign: 'center'
+        textAlign: 'center',
+    },
+    rosterHeader: {
+        flexDirection: 'row',
+        width: '100%',
+        justifyContent: 'space-between',
+        borderBottomColor: 'darkgreen',
+        borderBottomWidth: 3,
+        paddingHorizontal: 10
+    },
+    headerTextWide: {
+        fontSize: 17,
+        fontWeight: 'bold',
+        paddingLeft: 5,
+        color: 'darkgreen',
+        width: '33%'
+    },
+    headerTextShort: {
+        fontSize: 17,
+        fontWeight: 'bold',
+        color: 'darkgreen',
+        width: '17%'
+    },
+    viewRow: {
+        flexDirection: 'row',
+        flex: 1,
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        marginTop: 5,
+        padding: 5,
+        borderColor: 'darkgreen',
+        borderBottomWidth: 1,
+    },
+    rosterTextWide: {
+        fontSize:16,
+        flexWrap: 'wrap',
+        width: '33%'
+    },
+    rosterTextShort: {
+        fontSize:16,
+        width: '17%',
+        // paddingLeft: 10
     },
     inputView: {
         width: 250,
@@ -219,28 +280,13 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontWeight: 'bold'
     },
-    clickText: {
-        fontSize: 15,
-        color: 'orange',
-        marginBottom: 30
-    },
     errorText: {
         color: 'red',
         fontSize: 15,
         marginBottom: 15
     },
-    viewRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginTop: 8,
-        padding: 5,
-        borderColor: 'darkgreen',
-        borderWidth: 1,
-        borderRadius: 6
-    },
-    coachDetails: {
-        maxWidth: '80%'
+    flatList: {
+        width: '100%'
     }
 });
 

@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableWithoutFeedback } from 'react-native';
 import OurButton from '../components/OurButton';
 import UserInput from '../components/UserInput';
 import ShadowBox from '../components/ShadowBox';
@@ -33,32 +33,36 @@ const AddAthlete = ({ navigation }) => {
     }
 
     return (
-        // <View style={styles.container}>
-        <ShadowBox style={styles.container}>
-            <UserInput
-                label="User ID"
-                value={uid}
-                onChangeText={setUid}
-            />
-            <OurButton
-                buttonPressed={() => searchHandler()}
-                buttonText="Search"
-            />
-            { uid ? <>
-                <Text style={styles.text}>Name: {athlete.fullName}</Text>
-                <Text style={styles.text}>Location: {athlete.location}</Text>
+        <TouchableWithoutFeedback
+            onPress={() =>{
+                Keyboard.dismiss();
+            }}
+        >
+            <ShadowBox style={styles.container}>
                 <UserInput
-                    label="Title"
-                    value={title}
-                    onChangeText={setTitle}
+                    label="User ID"
+                    value={uid}
+                    onChangeText={setUid}
                 />
                 <OurButton
-                    buttonPressed={() => submitHandler()}
-                    buttonText="Recruit"
+                    buttonPressed={() => searchHandler()}
+                    buttonText="Search"
                 />
-            </> : null}
-        </ShadowBox>
-        // </View>
+                { uid ? <>
+                    <Text style={styles.text}>Name: {athlete.fullName}</Text>
+                    <Text style={styles.text}>Location: {athlete.location}</Text>
+                    <UserInput
+                        label="Title"
+                        value={title}
+                        onChangeText={setTitle}
+                    />
+                    <OurButton
+                        buttonPressed={() => submitHandler()}
+                        buttonText="Recruit"
+                    />
+                </> : null}
+            </ShadowBox>
+        </TouchableWithoutFeedback>
     );
 };
 

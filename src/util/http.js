@@ -14,7 +14,7 @@ export function postUser(user, token) {
 }
 
 export async function fetchUser(uid, token) {
-  return await axios.get(DB_URL + 'user.json?orderBy="uid"&equalTo="'+uid+'"');
+  return await axios.get(DB_URL + 'user.json?orderBy="uid"&equalTo="'+uid+'"&print=pretty');
 }
 
 export async function postEquipment(equipment, token) {
@@ -95,17 +95,8 @@ export async function fetchCardio(uid, token) {
   return trainingLog;
 }
 
-export async function postOrganization(org, coach, token) {
-  await axios.post(DB_URL + 'organization.json', org)
-  .then(function (response) {
-    console.log('Organization ID: ' + response.data.name)
-    coach.organizationId = response.data.name;
-    postCoach(coach, token);
-    return response;
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
+export async function postOrganization(org, token) {
+  return await axios.post(DB_URL + 'organization.json', org);
 }
 
 export async function fetchOrganizations(tbd, token) {
@@ -142,8 +133,8 @@ export async function postTeam(team, token) {
   });
 }
 
-export async function fetchTeams(tbd, token) {
-  const response = await axios.get(DB_URL + 'team.json');
+export async function fetchTeams(orgId, token) {
+  const response = await axios.get(DB_URL + 'team.json?orderBy="organizationId"&equalTo="'+orgId+'"');
 
   const teams = [];
 
@@ -179,11 +170,10 @@ export async function fetchCoaches(tbd, token) {
       const coachObj = {
           id: key,
           title: response.data[key].title,
-          //firstName: response.data[key].firstName,
-          //lastName: response.data[key].lastName,
-          //nickName: response.data[key].nickName,
+          fullName: response.data[key].fullName,
           organizationId: response.data[key].organizationId, // 1 = Freelance Coach
-          userId: response.data[key].uid
+          userId: response.data[key].uid,
+          status: response.data[key].status
           // Organizations?
       };
       coaches.push(coachObj);

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Alert, Keyboard, KeyboardAvoidingView, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { fetchGroup, postCardio } from '../util/http';
+import { fetchAthleteGroup, postCardio } from '../util/http';
 import { formatDate } from '../util/date';
 import { UserContext } from '../store/context/user-context';
 import UserInput from '../components/UserInput';
@@ -41,7 +41,7 @@ const CoachCardioScreen = ( ) => {
 
     useEffect(() => {
         async function getGroup() {
-            const dbGroup = await fetchGroup(userCtx.userId, token);
+            const dbGroup = 'placeholder'; //await fetchAthleteGroup(userCtx.userId, token);
             setgroupList(dbGroup);
         }
     

@@ -12,6 +12,7 @@ const UserInput = props => {
 
 const styles = StyleSheet.create({
     container: {
+        width: '80%',
         backgroundColor: 'white',
         borderBottomWidth: 1,
         borderColor: 'darkgreen',

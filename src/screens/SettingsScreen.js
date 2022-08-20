@@ -18,7 +18,7 @@ function SettingsScreen ({navigation}) {
         navigation.navigate("EquipmentStack");
     }
 
-    function teamHandler() {
+    function orgHandler() {
         navigation.navigate("OrganizationStack");
     }
 
@@ -50,8 +50,8 @@ function SettingsScreen ({navigation}) {
                             style={styles.thiccButtonStyle} />
                     ) : (
                         <OurButton 
-                            buttonPressed={() => teamHandler()}
-                            buttonText="Your Teams"
+                            buttonPressed={() => orgHandler()}
+                            buttonText="Your Orgs"
                             style={styles.buttonStyle} />
                     )}
                     <OurButton 

@@ -6,7 +6,7 @@ import ShadowBox from '../components/ShadowBox';
 import { UserContext } from '../store/context/user-context';
 import { fetchUser, postAthlete } from '../util/http';
 
-const AddAthlete = ({ navigation }) => {
+const AddAthleteScreen = ({ navigation }) => {
     const userCtx = useContext(UserContext);
     const [uid, setUid] = useState('');
     const [athlete, addAthlete] = useState([]);

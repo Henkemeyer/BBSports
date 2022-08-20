@@ -183,32 +183,33 @@ export async function fetchCoaches(tbd, token) {
 }
 
 export async function postAthlete(athlete, token) {
-  await axios.post(DB_URL + 'athlete.json', athlete)
-  .then(function (response) {
-    const id = response.data.name;
-    return id;
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
+  return await axios.post(DB_URL + 'athlete.json', athlete);
 }
 
-export async function fetchAthlete(tbd, token) {
-  const response = await axios.get(DB_URL + 'equipment.json?orderBy="uid"&equalTo="'+uid+'"');
+export async function patchAthlete(athleteId, data, token) {
+  console.log(DB_URL + 'athlete/'+athleteId+'.json');
+  console.log(data);
+  await axios.patch(DB_URL + 'athlete/' + athleteId +'.json', data);
+}
 
-  const athletes = [];
+export async function fetchRoster(teamId, token) {
+  return await axios.get(DB_URL + 'athlete.json?orderBy="teamId"&equalTo="'+teamId+'"');
+}
+
+export async function fetchAthleteGroup(tbd, token) {
+  const response = await axios.get(DB_URL + 'groups.json?orderBy="uid"&equalTo="'+uid+'"');
+
+  const groups = [];
 
   for (const key in response.data) {
-      const athleteObj = {
+      const groupObj = {
           id: key,
-          name: response.data[key].equipName,
-          distance: response.data[key].distance,
-          // date: new Date(response.data[key].date)
+          name: response.data[key].groupName,
+          // athletes: [List of Athletes to push the workout too]
       };
-      athletes.push(athleteObj);
+      groups.push(groupObj);
   }
-
-  return athletes;
+  return groups;
 }
 
 export async function fetchGroups(tbd, token) {

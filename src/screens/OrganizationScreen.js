@@ -3,7 +3,7 @@ import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from '
 import SelectDropdown from 'react-native-select-dropdown';
 import OurButton from '../components/OurButton';
 import { UserContext } from '../store/context/user-context';
-import { fetchCoaches, fetchOrganizations, fetchTeams } from '../util/http';
+import { fetchCoaches, fetchOrganizations, fetchOrgTeams } from '../util/http';
 import { Ionicons } from '@expo/vector-icons';
 
 function OrganizationScreen({ navigation }) {
@@ -39,7 +39,7 @@ function OrganizationScreen({ navigation }) {
     function selectOrgHandler(orgId) {
         // We should grab all and then filter so it doesn't pull from DB over and over if they keep flipping between them
         async function getTeams() {
-            const dbTeams = await fetchTeams(orgId, token)
+            const dbTeams = await fetchOrgTeams(orgId, token)
             setTeams(dbTeams);
         }
     

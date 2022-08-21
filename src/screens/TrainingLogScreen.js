@@ -2,8 +2,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Alert, Keyboard, KeyboardAvoidingView, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { format } from 'date-fns';
 import { fetchEquipment, postCardio } from '../util/http';
-import { formatDate } from '../util/date';
 import { UserContext } from '../store/context/user-context';
 import UserInput from '../components/UserInput';
 import OurButton from '../components/OurButton';
@@ -76,7 +76,7 @@ const TrainingLogScreen = ( ) => {
             <Text style={styles.headerText}>Training Log</Text>
             <View style={styles.lengthRow}>
                 <TouchableOpacity onPress={showDatepicker}>
-                    <Text style={styles.headerText}>Date: {formatDate(date)}</Text>
+                    <Text style={styles.headerText}>Date: {format(time, "MMMM do, yyyy")}</Text>
                 </TouchableOpacity>
                 {show && (
                     <DateTimePicker

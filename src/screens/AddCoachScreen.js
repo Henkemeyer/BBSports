@@ -33,9 +33,11 @@ const AddCoachScreen = ({ navigation }) => {
         const coachData = {
             uid: coach.uid,
             fullName: coach.fullName,
-            status: 'P',
-            team: userCtx.team.id,
-            title: title // (P)ending, (A)ctive, (T)erminated
+            status: 'P', // (P)ending, (A)ctive, (R)etired
+            organizationId: userCtx.organization.id,
+            teamId: userCtx.team.id,
+            teamName: userCtx.team.name,
+            title: title
             //role: 'Head' // Head, Assist, Circuit
         }
         postCoach(coachData, userCtx.token);

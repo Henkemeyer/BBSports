@@ -133,7 +133,7 @@ export async function postTeam(team, token) {
   });
 }
 
-export async function fetchTeams(orgId, token) {
+export async function fetchOrgTeams(orgId, token) {
   const response = await axios.get(DB_URL + 'team.json?orderBy="organizationId"&equalTo="'+orgId+'"');
 
   const teams = [];
@@ -144,6 +144,24 @@ export async function fetchTeams(orgId, token) {
           name: response.data[key].name,
           description: response.data[key].description,
           organizationId: response.data[key].organizationId
+      };
+      teams.push(teamObj);
+  }
+
+  return teams;
+}
+
+export async function fetchCoachTeams(uid, token) {
+  const response = await axios.get(DB_URL + 'coach.json?orderBy="uid"&equalTo="'+uid+'"');
+
+  const teams = [];
+
+  for (const key in response.data) {
+      const teamObj = {
+          id: response.data[key].teamId,
+          name: response.data[key].teamName,
+          status: response.data[key].status,
+          title: response.data[key].title
       };
       teams.push(teamObj);
   }
@@ -212,8 +230,8 @@ export async function fetchAthleteGroup(tbd, token) {
   return groups;
 }
 
-export async function fetchGroups(tbd, token) {
-  const response = await axios.get(DB_URL + 'groups.json?orderBy="uid"&equalTo="'+uid+'"');
+export async function fetchGroups(teamId, token) {
+  const response = await axios.get(DB_URL + 'groups.json?orderBy="teamId"&equalTo="'+teamId+'"');
 
   const groups = [];
 

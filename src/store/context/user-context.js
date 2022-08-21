@@ -55,7 +55,6 @@ function UserContextProvider({children}) {
     }
 
     function switchTeam(teamData) {
-        console.log(teamData.id);
         setTeam(teamData);
         AsyncStorage.setItem('lastTeam', teamData.id);
     }

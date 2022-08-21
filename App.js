@@ -26,7 +26,6 @@ import OrganizationScreen from './src/screens/OrganizationScreen';
 import CreateOrganizationScreen from './src/screens/CreateOrganizationScreen';
 import CreateTeamScreen from './src/screens/CreateTeamScreen';
 import AddCoachScreen from './src/screens/AddCoachScreen';
-import AddAthleteScreen from './src/screens/AddAthleteScreen';
 
 const TabNav = createBottomTabNavigator();
 const StackNav = createStackNavigator();
@@ -105,26 +104,6 @@ function OrganizationStack() {
   );
 }
 
-function TeamStack() {
-  return (
-    <StackNav.Navigator
-      screenOptions={{
-        headerTintColor: 'green',
-      }}>
-      <StackNav.Screen 
-        name="TeamRoster" 
-        component={CoachTeamRosterScreen} 
-        options={{ title: 'Team Roster' }}
-      />
-      <StackNav.Screen 
-        name="AddAthlete" 
-        component={AddAthleteScreen} 
-        options={{title: "Add Athlete" }}
-      />
-    </StackNav.Navigator>
-  );
-}
-
 function AthleteTab() {
   return (
     <TabNav.Navigator
@@ -195,11 +174,6 @@ function CoachContainerStack() {
       <StackNav.Screen 
         name="OrganizationStack" 
         component={OrganizationStack}
-        options={{ headerShown: false }} 
-      />
-      <StackNav.Screen 
-        name="TeamStack" 
-        component={TeamStack}
         options={{ headerShown: false }} 
       />
     </StackNav.Navigator>

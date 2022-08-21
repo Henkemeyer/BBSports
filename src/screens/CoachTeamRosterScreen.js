@@ -181,7 +181,7 @@ const CoachTeamRosterScreen = ( {navigation} ) => {
                                             key={cellIndex} 
                                             style={{width: header.widthArr[cellIndex]}}
                                             data={cellIndex === 4 ? cutElement(cellData, index) : cellData}
-                                            textStyle={{textAlign: 'center', fontWeight: '200' }}
+                                            textStyle={[{textAlign: 'center', fontWeight: '200' }]}
                                         />
                                 ))}
                                 </TableWrapper>

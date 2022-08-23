@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Alert, Keyboard, KeyboardAvoidingView, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { UserContext } from '../store/context/user-context';
 import SelectDropdown from 'react-native-select-dropdown';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { Ionicons } from '@expo/vector-icons';
 import { format } from 'date-fns';
-import { UserContext } from '../store/context/user-context';
 
 const CoachLiftingScreen = () => {
     const userCtx = useContext(UserContext);      // App User Info
@@ -11,42 +12,73 @@ const CoachLiftingScreen = () => {
     const [date, setDate] = useState(new Date()); // Date of workout
     const [mode, setMode] = useState('date');     // Date picker mode
     const [show, setShow] = useState(false);      // Show or Hide Date Picker
+    const [time, setTime] = useState(new Date()); // Time of workout
 
-    const onChange = (event, selectedDate) => {
+    const onDateChange = (event, selectedDate) => {
         if(event.type != 'dismissed')
         {
             const currentDate = selectedDate;
             setDate(currentDate);
         }
         setShow(false);
-      };
-    
-      const showMode = (currentMode) => {
-        setShow(true);
-        setMode(currentMode);
-      };
-    
-      const showDatepicker = () => {
-        showMode('date');
-      };
+    };
+
+    const onTimeChange = (event, selectedTime) => {
+        if(event.type != 'dismissed')
+        {
+            const currentTime = selectedTime;
+            setTime(currentTime);
+        }
+        setShow(false);
+    };
+  
+    const showMode = (currentMode) => {
+      setShow(true);
+      setMode(currentMode);
+    };
+  
+    const showDatepicker = () => {
+      showMode('date');
+    };
+
+    const showTimepicker = () => {
+        showMode('time');
+    };
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Weight Training</Text>
-            <View style={styles.lengthRow}>
-                <TouchableOpacity onPress={showDatepicker}>
-                    <Text style={styles.headerText}>Date: {format(time, "MMMM do, yyyy")}</Text>
-                </TouchableOpacity>
-                {show && (
-                    <DateTimePicker
-                        testID="dateTimePicker"
-                        value={date}
-                        mode={mode}
-                        is24Hour={true}
-                        onChange={onChange}
-                    />
-                )}
-            </View>
+            <View style={styles.lengthRow}></View>
+            <TouchableOpacity onPress={showDatepicker}>
+                <View style={styles.lengthRow}>
+                    <Text style={styles.formText}>Date: {format(time, "MMMM do, yyyy")}</Text>
+                    <Ionicons name="calendar-outline" size={24} color="darkgreen" style={styles.iconStyle} />
+                </View>
+            </TouchableOpacity>
+            {show && (
+                <DateTimePicker
+                    testID="datePicker"
+                    value={date}
+                    mode={mode}
+                    is24Hour={true}
+                    onChange={onDateChange}
+                />
+            )}
+            <TouchableOpacity onPress={showTimepicker}>
+                <View style={styles.lengthRow}>
+                    <Text style={styles.formText}>Time: {format(time, "H:mm a")}</Text>
+                    <Ionicons name="time-outline" size={24} color="darkgreen" style={styles.iconStyle} />
+                </View>
+            </TouchableOpacity>
+            {show && (
+                <DateTimePicker
+                    testID="timePicker"
+                    value={time}
+                    mode={mode}
+                    is24Hour={false}
+                    onChange={onTimeChange}
+                />
+            )}
             <Text>Custom list Comp:</Text>
             <View style={styles.header}>
                 <Text style={styles.headerText}>Set</Text>

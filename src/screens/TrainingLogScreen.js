@@ -3,7 +3,7 @@ import { Alert, Keyboard, KeyboardAvoidingView, StyleSheet, Text, TouchableOpaci
 import SelectDropdown from 'react-native-select-dropdown';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { format } from 'date-fns';
-import { fetchEquipment, postCardio } from '../util/http';
+import { fetchEquipment, postCardioLog } from '../util/http';
 import { UserContext } from '../store/context/user-context';
 import UserInput from '../components/UserInput';
 import OurButton from '../components/OurButton';
@@ -57,7 +57,7 @@ const TrainingLogScreen = ( ) => {
                     duration: time
                 }
 
-            postCardio(cardioData, token);
+            postCardioLog(cardioData, token);
             clearScreen();
         } catch (error) {
             console.log(error);

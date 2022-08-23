@@ -93,7 +93,7 @@ function OrganizationScreen({ navigation }) {
                     selectOrgHandler(selectedItem.id);
                 }}
                 defaultButtonText="Organizations"
-                defaultValue={userCtx.organization.id}
+                defaultValue={userCtx.organizationId}
                 buttonTextAfterSelection={(selectedItem, index) => {
                     return selectedItem.name
                 }}
@@ -114,7 +114,7 @@ function OrganizationScreen({ navigation }) {
                 buttonPressed={() => navigation.navigate('CreateOrg')}
                 buttonText="Create?"
                 style={styles.createButton}/>
-            { userCtx.organization.id ? <>
+            { userCtx.organizationId ? <>
                 <Text style={styles.titleText}>Switch Team?</Text>
                 <SelectDropdown
                     data={teams}
@@ -149,7 +149,7 @@ function OrganizationScreen({ navigation }) {
                     buttonText="Create?"
                     style={styles.createButton}/>
                 </>    : null 
-            }{ userCtx.team.id ? <>
+            }{ userCtx.teamId ? <>
                 <Text style={styles.rosterTitle}>Coaches</Text>
                 <View style={styles.rosterHeader}>
                     <Text style={styles.headerTextWide}>Name</Text>

@@ -25,7 +25,7 @@ const CoachTeamRosterScreen = ( {navigation} ) => {
 
     useEffect(() => {
         async function getDBAthletes() {
-            const dbAthletes = await fetchRoster(userCtx.team.id, token);
+            const dbAthletes = await fetchRoster(userCtx.teamId, token);
             const rosterArr = [];
             const holdAthletesObj = [];
 
@@ -55,7 +55,7 @@ const CoachTeamRosterScreen = ( {navigation} ) => {
         }
     
         getDBAthletes();
-    }, [userCtx.team.id]);
+    }, [userCtx.teamId]);
 
     const cutElement = (data, index) => (
         <View style={styles.cutButton}>
@@ -71,7 +71,6 @@ const CoachTeamRosterScreen = ( {navigation} ) => {
         const tempRoster = roster;
         tempRoster.splice(index,1)
         setRoster(tempRoster);
-        console.log(roster);
         // setAthletesObj(current =>
         //     current.filter(athlete => {
         //       return athlete.id !== data;
@@ -110,7 +109,7 @@ const CoachTeamRosterScreen = ( {navigation} ) => {
                 uid: recruitUid,
                 fullName: recruit.fullName,
                 status: 'P', // (P)ending, (A)ctive, (T)erminated
-                teamId: userCtx.team.id,
+                teamId: userCtx.teamId,
                 age: 29
             }
             console.log(athleteData);
@@ -166,7 +165,7 @@ const CoachTeamRosterScreen = ( {navigation} ) => {
                 </View>
             </Modal>
 
-            <Text style={styles.rosterHeader}>{userCtx.team.name} Team Roster</Text>
+            <Text style={styles.rosterHeader}>{userCtx.teamName} Team Roster</Text>
             <ScrollView horizontal={true}>
                 <View>
                     <Table borderStyle={{borderColor: '#C1C0B9'}}>

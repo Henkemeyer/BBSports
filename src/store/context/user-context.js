@@ -10,9 +10,11 @@ export const UserContext = createContext({
     logout: () => {},
     userType: '', // Athlete, Coach, Fan?
     switchUserType: (input) => null,
-    organization: null,
+    organizationId: null,
+    organizationName: '',
     switchOrganization: (orgData) => {},
-    team: null,
+    teamId: null,
+    teamName: '',
     switchTeam: (teamData) => {}
 });
 
@@ -22,8 +24,10 @@ function UserContextProvider({children}) {
     const [getUserType, setUserType] = useState([]);
     const [getName, setName] = useState([]);
     const [getFullName, setFullName] = useState([]);
-    const [getOrganization, setOrganization] = useState([]);
-    const [getTeam, setTeam] = useState([]);
+    const [getOrganizationId, setOrganizationId] = useState([]);
+    const [getTeamId, setTeamId] = useState([]);
+    const [getOrganizationName, setOrganizationName] = useState([]);
+    const [getTeamName, setTeamName] = useState([]);
 
     function login(authData) {
         setToken(authData.idToken);
@@ -36,11 +40,9 @@ function UserContextProvider({children}) {
     function logout() {
         setToken(null);
         setUserId(0);
-        AsyncStorage.removeItem('authToken');
-        AsyncStorage.removeItem('userID');
-        AsyncStorage.removeItem('lastOrg');
-        AsyncStorage.removeItem('lastTeam');
-        AsyncStorage.removeItem('lastUserType');
+        AsyncStorage.getAllKeys()
+        .then(keys => AsyncStorage.multiRemove(keys))
+        .then(() => alert('Logout Success'));
     }
 
     function switchUserType(input) {
@@ -49,14 +51,17 @@ function UserContextProvider({children}) {
     }
 
     function switchOrganization(orgData) {
-        console.log(orgData.id);
-        setOrganization(orgData);
-        AsyncStorage.setItem('lastOrg', orgData.id);
+        setOrganizationId(orgData.id);
+        setOrganizationName(orgData.name);
+        // AsyncStorage.setItem('lastOrgId', orgData.id);
+        // AsyncStorage.setItem('lastOrgName', orgData.name);
     }
 
     function switchTeam(teamData) {
-        setTeam(teamData);
-        AsyncStorage.setItem('lastTeam', teamData.id);
+        setTeamId(teamData.id);
+        setTeamName(teamData.name);
+        // AsyncStorage.setItem('lastTeam', teamData.id);
+        // AsyncStorage.setItem('lastTeam', teamData.name);
     }
 
     const value = {
@@ -65,8 +70,10 @@ function UserContextProvider({children}) {
         name: getName,
         fullName: getFullName,
         userType: getUserType,
-        organization: getOrganization,
-        team: getTeam,
+        organizationId: getOrganizationId,
+        organizationName: getOrganizationName,
+        teamId: getTeamId,
+        teamName: getTeamName,
         login: login,
         logout: logout,
         switchUserType: switchUserType,

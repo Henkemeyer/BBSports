@@ -132,7 +132,7 @@ function AthleteTab() {
         inactiveTintColor: 'black',
       }}
     >
-      <TabNav.Screen name="Home" component={TrainingLogScreen} />
+      <TabNav.Screen name="Home" component={AthleteCalendarScreen} />
       <TabNav.Screen name="Cardio" component={AthleteCardioScreen} />
       <TabNav.Screen name="Lifting" component={AthleteLiftingScreen} />
       <TabNav.Screen name="Settings" component={SettingsScreen} />
@@ -224,10 +224,20 @@ function Navigation () {
       async function fetchLocalToken() {
         const localToken = await AsyncStorage.getItem('authToken');
         const userId = await AsyncStorage.getItem('userID');
+        const organization = {
+          id: await AsyncStorage.getItem('lastOrgId'),
+          name: await AsyncStorage.getItem('lastOrgName')
+        };
+        const team = {
+          id: await AsyncStorage.getItem('lastTeamId'),
+          name: await AsyncStorage.getItem('lastTeamName')
+        };
 
         if (localToken) {
           const authData = { idToken: localToken, localId: userId }
           userCtx.login(authData);
+          userCtx.switchOrganization(organization);
+          userCtx.switchTeam(team);
         }
 
         setIsLoading(false);

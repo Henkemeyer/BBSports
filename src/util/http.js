@@ -67,13 +67,7 @@ useEffect(() => {
 */
 
 export async function postCardio(cardio, token) {
-  await axios.post(DB_URL + 'trainingLog.json', cardio)
-  .then(function (response) {
-    const id = response.data.name;
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
+  await axios.post(DB_URL + 'cardio.json', cardio);
 }
 
 export async function fetchCardio(uid, token) {
@@ -93,6 +87,10 @@ export async function fetchCardio(uid, token) {
   }
 
   return trainingLog;
+}
+
+export async function postCardioLog(cardio, token) {
+  await axios.post(DB_URL + 'cardio.json', cardio);
 }
 
 export async function postOrganization(org, token) {

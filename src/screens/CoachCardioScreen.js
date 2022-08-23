@@ -3,7 +3,7 @@ import { Alert, Keyboard, KeyboardAvoidingView, StyleSheet, Text, TouchableOpaci
 import SelectDropdown from 'react-native-select-dropdown';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { format } from 'date-fns';
-import { fetchAthleteGroup, fetchCoachTeams, postCardio } from '../util/http';
+import { fetchAthleteGroup, fetchCoachTeams, fetchRoster, postCardio } from '../util/http';
 import { UserContext } from '../store/context/user-context';
 import UserInput from '../components/UserInput';
 import OurButton from '../components/OurButton';
@@ -17,10 +17,11 @@ const CoachCardioScreen = ( ) => {
     const [date, setDate] = useState(new Date()); // Date of workout
     const [mode, setMode] = useState('date');     // Date picker mode
     const [show, setShow] = useState(false);      // Show or Hide Date Picker
-    const [time, setTime] = useState(new Date());          // Time workout took
+    const [time, setTime] = useState(new Date()); // Time of workout
     const [getDist, setDist] = useState(0);       // Distance travelled during workout
     const [getNotes, setNotes] = useState('');    // Workout notes
-    const [groupList, setgroupList] = useState([]); // List of users groups
+    const [athletes, setAthletes] = useState([]); // List of users groups
+    const [testID, setTestID] = useState('');
     const [group, setGroup] = useState('');         // Group used for workout
   
     const onDateChange = (event, selectedDate) => {
@@ -64,28 +65,38 @@ const CoachCardioScreen = ( ) => {
     }, [token]);
 
     useEffect(() => {
-        async function getGroup() {
-            const dbGroup = 'placeholder'; //await fetchAthleteGroup(userCtx.userId, token);
-            setgroupList(dbGroup);
+        async function getAthletes() {
+            const dbAthletes = await fetchRoster(userCtx.teamId, token);
+            const holdAthletesObj = [];
+
+            for (const key in dbAthletes.data) {
+                const athObj = {
+                    id: key,
+                    name: dbAthletes.data[key].fullName,
+                    group: dbAthletes.data[key].groupName,
+                    uid: dbAthletes.data[key].uid
+                };
+                holdAthletesObj.push(athObj);
+            }
+            setAthletes(holdAthletesObj);
         }
     
-        getGroup();
-    }, [userCtx.team.id]);
+        getAthletes();
+    }, [userCtx.teamId]);
 
     function submitHandler() {
         try {
             const cardioData = 
                 {
-                    uid: userCtx.userId,
-                    group: group,
-                    distance: getDist,
+                    uid: testID,
+                    teamId: userCtx.teamId,
+                    // distance: getDist,
                     notes: getNotes,
-                    date: date,
-                    duration: time
+                    date: time,
+                    // duration: time
                 }
 
             postCardio(cardioData, token);
-            clearScreen();
         } catch (error) {
             console.log(error);
             Alert.alert('Addition Failed', 'Failed to add workout. Please try again later.')
@@ -113,7 +124,7 @@ const CoachCardioScreen = ( ) => {
                     userCtx.switchTeam(teamData);
                     // selectTeamHandler(selectedItem.id);
                 }}
-                defaultButtonText={userCtx.team.name}
+                defaultButtonText={userCtx.teamName}
                 buttonTextAfterSelection={(selectedItem, index) => {
                     return selectedItem.name
                 }}
@@ -200,10 +211,38 @@ const CoachCardioScreen = ( ) => {
             <UserInput
                 label="Workout:"
                 onChangeText={setNotes}
-                multiline
+                multiline   // ios starts top left
+                textAlignVertical='top'  // Android starts top left
                 numberOfLines={6}
                 style={styles.notesInput}
             />
+            <SelectDropdown
+                data={athletes}
+                onSelect={(selectedItem, index) => {
+                    setTestID(selectedItem.id);
+                }}
+                // defaultButtonText={userCtx.teamName}
+                buttonTextAfterSelection={(selectedItem, index) => {
+                    return selectedItem.name
+                }}
+                rowTextForSelection={(item, index) => {
+                    return item.name
+                }}
+                buttonStyle={styles.selectDropDownButton}
+                buttonTextStyle={styles.selectDropDownText}
+                renderDropdownIcon={isOpened => {
+                    return <Ionicons name={isOpened ? 'chevron-up-circle-sharp' : 'chevron-down-circle-outline'} color={'#FFF'} size={18} />;
+                }}
+                dropdownIconPosition={'right'}
+                dropdownStyle={styles.selectDropDown}
+                rowStyle={styles.selectDropDownRow}
+                rowTextStyle={styles.selectDropDownText}
+            />
+        </View>
+        <View style={styles.buttonRow}>
+            <TouchableOpacity onPress={clearScreen}>
+                <Ionicons name="trash-outline" size={28} color="red" style={styles.iconStyle} />
+            </TouchableOpacity>
             <OurButton 
                 buttonPressed={() => submitHandler()}
                 buttonText="Submit"
@@ -259,15 +298,17 @@ const styles = StyleSheet.create({
     },
     notesInput: {
         height: 150,
-        borderRadius: 8,
-        elevation: 4,
-        shadowColor: 'darkgreen',
-        shadowOpacity: 0.25,
-        shadowOffset: {width: 0, height: 2 },
-        shadowRadius: 8
+        borderRadius: 8
     },
     iconStyle: {
         paddingHorizontal: 15
+    },
+    buttonRow: {
+        flexDirection: 'row',
+        paddingVertical: 10,
+        paddingHorizontal: 40,
+        justifyContent: 'space-between',
+        alignItems: 'center'
     }
 });
 

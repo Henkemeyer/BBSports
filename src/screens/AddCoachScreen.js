@@ -34,9 +34,9 @@ const AddCoachScreen = ({ navigation }) => {
             uid: coach.uid,
             fullName: coach.fullName,
             status: 'P', // (P)ending, (A)ctive, (R)etired
-            organizationId: userCtx.organization.id,
-            teamId: userCtx.team.id,
-            teamName: userCtx.team.name,
+            organizationId: userCtx.organizationId,
+            teamId: userCtx.teamId,
+            teamName: userCtx.teamName,
             title: title
             //role: 'Head' // Head, Assist, Circuit
         }

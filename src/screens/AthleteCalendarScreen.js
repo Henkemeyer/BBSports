@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Agenda } from 'react-native-calendars';
+import { UserContext } from '../store/context/user-context';
+import { fetchEvents } from '../util/http';
 
 const timeToString = (time) => {
     const date = new Date(time);
@@ -8,8 +10,67 @@ const timeToString = (time) => {
 }
 
 const AthleteCalendarScreen = () => {
-    const [items, setItems] = React.useState({});
-    const workout = {key: 'workout', color: 'green'};
+    const userCtx = useContext(UserContext);
+    const token = userCtx.token;
+    const [items, setItems] = React.useState({});   // populates everyday
+    const [events, setEvents] = React.useState({}); // card data
+    const [marked, setMarked] = React.useState({}); // makes calendar dates
+    // const events = {
+    //     '2022-08-23': {dots: [workout]},
+    //     '2022-08-23': {dots: [workout]}
+    // };
+
+    useEffect(() => {
+        async function getEvents() {
+            const dbEvents = await fetchEvents(userCtx.userId, token);
+            const eventsObj = [];
+            const markedObj = [];
+
+            for (const key in dbEvents.data) {
+                const time = '';
+                if(dbEvents.data[key].startTime) {
+                    time = dbEvents.data[key].startTime;
+                    if(dbEvents.data[key].endTime) {
+                        time = time +" - "+ dbEvents.data[key].endTime;
+                    }
+                }
+                else {
+                    time = 'On Own';
+                }
+
+                console.log(dbEvents.data[key]);
+                const tmp = {dots: [workout]};
+                const tmpDate = dbEvents.data[key].date;
+                
+                    // id: key,
+                    // day: dbEvents.data[key].date,
+                    // time: time,
+                    // teamName: dbEvents.data[key].teamName,
+                    // location: dbEvents.data[key].location,
+                    // type: dbEvents.data[key].type
+                // eventsObj.push(eventArr);
+
+                // const temp = {
+                //     dots: [dbEvents.data[key].type] 
+                // };
+                // console.log(temp);
+                // console.log(eventsObj);
+                // markedObj[dbEvents.data[key].date] = [];
+                markedObj[tmpDate] = [1];
+                markedObj[tmpDate].push(tmp);
+            }
+            console.log(markedObj);
+            setEvents(eventsObj);
+            setMarked(markedObj);
+        }
+    
+        getEvents();
+    }, [userCtx.getUserId]);
+
+
+    const workout = {key: 'workout', color: 'green'}; // Cardio, lifting, scrimmage?
+    const competition = {key: 'workout', color: 'green'};  // Meet, game
+    const activity = {key: 'workout', color: 'green'};   // Pictures, miscellaneous
 
     const loadItems = (day) => {
 
@@ -18,10 +79,10 @@ const AthleteCalendarScreen = () => {
                 const time = day.timestamp + i * 24 * 60 * 60 * 1000;
                 const strTime = timeToString(time);
 
-                if (!items[strTime]) {
+                if (!events[strTime]) {
                     items[strTime] = [];
 
-                    items[strTime].push({ name: 'Item for ' + strTime, day: strTime, });
+                    items[strTime].push({ name: 'Nothing Scheduled yet for ' + strTime, day: strTime, });
                 }
             }
             const newItems = {};
@@ -48,10 +109,7 @@ const AthleteCalendarScreen = () => {
                 items={items}
                 loadItemsForMonth={loadItems}
                 markingType={'multi-dot'}
-                markedDates={{
-                    '2022-08-23': {dots: [workout]},
-                    '2022-08-26': {dots: [workout]}
-                  }}
+                markedDates={marked}
                 selected={new Date()}
                 todayTextColor= 'darkgreen'
                 refreshControl={null}

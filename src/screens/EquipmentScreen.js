@@ -1,101 +1,166 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Table, TableWrapper, Row, Cell } from 'react-native-table-component';
 import OurButton from '../components/OurButton';
 import UserInput from '../components/UserInput';
-import ShadowBox from '../components/ShadowBox';
-import EquipmentList from '../components/EquipmentList';
-import { postEquipment, fetchEquipment, deleteEquipment } from '../util/http';
+import { postEquipment, fetchEquipment, patchEquipment } from '../util/http';
 import { UserContext } from '../store/context/user-context';
 import { Ionicons } from '@expo/vector-icons';
+import { format } from 'date-fns';
 
 const EquipmentScreen = () => {
     const userCtx = useContext(UserContext);
     const token = userCtx.token;
-    const [newEquipName, setNewEquipName] = useState('');
+    const [modalVisible, setModalVisible] = useState(false);
+    const [newName, setNewName] = useState('');
     const [equipment, setEquipment] = useState([]);
 
+    const header = {
+        tableHead: ['Name', 'Distance', 'Date Added', ''],
+        widthArr: [200, 100, 100, 40]
+    }
+    
     useEffect(() => {
-        async function getEquipment() {
+        async function getDBEquipment() {
             const dbEquipment = await fetchEquipment(userCtx.userId, token);
-            setEquipment(dbEquipment);
+            const equipArr = [];
+
+            for (const key in dbEquipment.data) {
+                if(dbEquipment.data[key].status != 'X') {
+                    const tmpArr = [
+                        dbEquipment.data[key].equipName,
+                        dbEquipment.data[key].distance,
+                        dbEquipment.data[key].insertDate,
+                        key
+                    ]
+                    equipArr.push(tmpArr);
+                }
+            }
+            setEquipment(equipArr);
         }
     
-        getEquipment();
+        getDBEquipment();
     }, [token]);
 
-    const Item = ({ item }) => (
-        // <ShadowBox>
-            <View style={styles.viewRow}>
-                <View style={styles.equipmentDetails}>
-                    <Text style={styles.text}>Name: {item.name}</Text>
-                    <Text style={styles.text}>Use: {item.distance}</Text>
-                </View>
-                <TouchableOpacity onPress={() => retireHandler(item)}>
-                    <Ionicons name="close-sharp" size={30} color="green" />
-                </TouchableOpacity>
-            </View>
-        // </ShadowBox>
-      );
-    
-    function retireHandler(equip) {
-        try {
-            deleteEquipment(equip.id, token);
-            console.log(equip.id);
-
-            const tempEquip = equipment;
-            const index = tempEquip.indexOf(equip);
-            if (index !== -1) {
-                tempEquip.splice(index, 1);
-                setEquipment(() => [...tempEquip]);
-            }
-        } catch (error) {
-            console.log(error);
-            Alert.alert('Retire Failed', 'Failed to retire equipment. Please try again later.')
-        }
-    }
-
-    async function submitHandler() {
-        try {
-            const equipData = 
-                {
-                    uid: userCtx.userId,
-                    equipName: newEquipName,
-                    distance: 0,
-                    description: '',
-                }
-
-            const id = await postEquipment(equipData, token);
-            const newEquip = [{id:id, name:newEquipName, distance:0}];
-            setEquipment((prevState) => [...prevState, ...newEquip]);
-            setNewEquipName("");
-        } catch (error) {
-            console.log(error);
-            Alert.alert('Addition Failed', 'Failed to add equipment. Please try again later.')
-        }
-    }
-    
-    const renderEquipmentItem = ({ item }) => (
-        <Item item={item} />
+    const retireElement = (data, index) => (
+        <View style={styles.retireButton}>
+            <TouchableOpacity onPress={() => retireHandler(data, index)}>
+                <Ionicons name='remove-circle-outline' size={17} color="red" />
+            </TouchableOpacity>
+        </View>
     );
+
+    function retireHandler(data, index) {
+        Alert.alert(
+            "Warning",
+            "Are you sure you want to delete that?",
+            [{
+                text: "Cancel",
+                onPress: () => console.log("Cancelled"),
+                style: "cancel"
+            },
+            { text: "Yes", onPress: () => confirm() }]
+        );
+
+        function confirm() {
+            const patchStatus = { status: "X" };
+            patchEquipment(data, patchStatus);
+            const tempEquipment = equipment;
+            tempEquipment.splice(index,1)
+            setEquipment(tempEquipment);
+        }
+    };
+
+    async function closeModal(action) {
+        if (action === 'add') {
+            const equipData = {
+                uid: userCtx.userId,
+                equipName: newName,
+                status: 'A', 
+                distance: 0,
+                insertDate: format(new Date(), "yyyy-MM-dd"),
+            }
+            await postEquipment(equipData, userCtx.token)
+            .then(function (response) {
+                const tmpArr = [
+                    newName,
+                    0,
+                    format(new Date(), "yyyy-MM-dd"),
+                    response.data.name
+                ]
+                setEquipment([...equipment, response.data])
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        }
+        
+        setModalVisible(!modalVisible);
+    }
 
     return (
         <View style={styles.container}>
-            <FlatList 
-                data={equipment}
-                renderItem={renderEquipmentItem}
-                keyExtractor={(item) => item.id }
-            />
-            <View style={styles.viewRow}>
-                <UserInput
-                    label="Equipment Name"
-                    value={newEquipName}
-                    onChangeText={setNewEquipName}
-                />
-                <OurButton
-                    buttonPressed={() => submitHandler()}
-                    buttonText="Add"
-                />
-            </View>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                Alert.alert("Modal has been closed.");
+                setModalVisible(!modalVisible);
+                }}
+            >
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalText}>Add Equipment</Text>
+                        <UserInput
+                            label="Name:"
+                            value={newName}
+                            onChangeText={setNewName}
+                        />
+                        <View style={styles.viewRow}>
+                            <OurButton
+                                buttonPressed={() => closeModal('cancel')}
+                                buttonText="Cancel"
+                                style={{marginHorizontal: 15, marginTop:15}}
+                            />
+                            <OurButton
+                                buttonPressed={() => closeModal('add')}
+                                buttonText="Add"
+                                style={{marginHorizontal: 15, marginTop:15}}
+                            />
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+
+            <Text style={styles.orgTitle}>Equipment</Text>
+            <ScrollView horizontal={true}>
+                <View>
+                    <Table borderStyle={{borderColor: 'black', borderRadius: 5}}>
+                        <Row data={header.tableHead} widthArr={header.widthArr} style={styles.head} textStyle={styles.equipmentHeader}/>
+                    </Table>
+                    <ScrollView style={styles.dataWrapper}>
+                        <Table borderStyle={{borderColor: '#C1C0B9'}}>
+                            { equipment.map((dataRow, index) => (
+                                <TableWrapper key={index} style={ index%2 ? styles.rowA : styles.rowB}>
+                                    {dataRow.map((cellData, cellIndex) => (
+                                        <Cell 
+                                            key={cellIndex} 
+                                            style={{width: header.widthArr[cellIndex]}}
+                                            data={cellIndex === 3 ? retireElement(cellData, index) : cellData}
+                                            textStyle={[{textAlign: 'center', fontWeight: '200' }]}
+                                        />
+                                ))}
+                                </TableWrapper>
+                            ))}
+                        </Table>
+                    </ScrollView>
+                </View>
+            </ScrollView>
+            <OurButton 
+                buttonPressed={() => setModalVisible(!modalVisible)}
+                buttonText="Add"
+                style={styles.createButton}/>
         </View>
     );
 };
@@ -103,28 +168,85 @@ const EquipmentScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 18,
+        margin: 20,
+        paddingTop: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
-    title: {
-        fontSize: 20,
-        fontWeight: 'bold'
+    orgTitle: {
+        width: '80%',
+        fontSize: 30,
+        fontWeight: 'bold',
+        marginBottom: 15,
+        color: 'darkgreen',
+        textAlign: 'center'
     },
     viewRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+    },
+    equipmentHeader: {
+        width: '80%',
+        fontSize: 17,
+        fontWeight: 'bold',
+        color: 'black',
+        textAlign: 'center',
+        borderColor: 'black',
+        paddingLeft: 9
+    },
+    head: { 
+        height: 50, 
+        backgroundColor: 'green',
+        borderRadius: 5
+    },
+    cellText: { 
+        textAlign: 'center', 
+        fontWeight: '200' 
+    },
+    dataWrapper: { 
+        marginTop: -1 
+    },
+    rowA: { 
+        flexDirection: 'row',
+        height: 40, 
+        backgroundColor: '#F7F8FA' 
+    },
+    rowB: { 
+        flexDirection: 'row',
+        height: 40, 
+        backgroundColor: '#ffffff' 
+    },
+    retireButton: {
         alignItems: 'center',
-        marginTop: 8,
-        padding: 5,
-        borderColor: 'darkgreen',
-        borderWidth: 1,
-        borderRadius: 6
+        justifyContent: 'center'
     },
-    text: {
-        fontSize: 22,
-        color: 'green'
+    modalContainer: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
     },
-    equipmentDetails: {
-        maxWidth: '80%'
+    modalView: {
+        width: '80%',
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+    },
+    modalText: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 15,
+        textAlign: "center"
     }
 });
 

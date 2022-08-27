@@ -18,42 +18,15 @@ export async function fetchUser(uid, token) {
 }
 
 export async function postEquipment(equipment, token) {
-  await axios.post(DB_URL + 'equipment.json', equipment)
-  .then(function (response) {
-    const id = response.data.name;
-    return id;
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
+  return await axios.post(DB_URL + 'equipment.json', equipment);
 }
 
 export async function fetchEquipment(uid, token) {
-  const response = await axios.get(DB_URL + 'equipment.json?orderBy="uid"&equalTo="'+uid+'"');
-
-  const equipment = [];
-
-  for (const key in response.data) {
-      const equipmentObj = {
-          id: key,
-          name: response.data[key].equipName,
-          distance: response.data[key].distance,
-          // date: new Date(response.data[key].date)
-      };
-      equipment.push(equipmentObj);
-  }
-
-  return equipment;
+  return await axios.get(DB_URL + 'equipment.json?orderBy="uid"&equalTo="'+uid+'"');
 }
 
-export function deleteEquipment(equipId, token) {
-  axios.delete(DB_URL + `equipment/${equipId}.json`)
-  .then(function (response) {
-    console.log('')
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
+export async function patchEquipment(equipId, data, token) {
+  await axios.patch(DB_URL + 'equipment/' + equipId +'.json', data);
 }
 
 /* Code to use in Screen
@@ -66,27 +39,12 @@ useEffect(() => {
 }, []);
 */
 
-export async function postCardio(cardio, token) {
-  await axios.post(DB_URL + 'cardio.json', cardio);
+export async function postEvent(event, token) {
+  await axios.post(DB_URL + 'event.json', event);
 }
 
-export async function fetchCardio(uid, token) {
-  const response = await axios.get(DB_URL + 'trainingLog.json?orderBy="uid"&equalTo="'+uid+'"');
-
-  const trainingLog = [];
-
-  for (const key in response.data) {
-      const cardioObj = {
-          id: key,
-          date: new Date(response.data[key].date),
-          distance: response.data[key].distance, // Convert this to units
-          duration: response.data[key].duration, // Convert this to time
-          notes: response.data[key].notes
-      };
-      trainingLog.push(cardioObj);
-  }
-
-  return trainingLog;
+export async function fetchEvents(uid, token) {
+  return await axios.get(DB_URL + 'event.json?orderBy="uid"&equalTo="'+uid+'"');
 }
 
 export async function postCardioLog(cardio, token) {
@@ -203,8 +161,6 @@ export async function postAthlete(athlete, token) {
 }
 
 export async function patchAthlete(athleteId, data, token) {
-  console.log(DB_URL + 'athlete/'+athleteId+'.json');
-  console.log(data);
   await axios.patch(DB_URL + 'athlete/' + athleteId +'.json', data);
 }
 

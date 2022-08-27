@@ -20,7 +20,7 @@ const CoachTeamRosterScreen = ( {navigation} ) => {
 
     const header = {
         tableHead: ['Name', 'Group', 'Year', 'Status', 'Cut'],
-        widthArr: [200, 200, 50, 50, 40]
+        widthArr: [200, 200, 60, 75, 40]
     }
 
     useEffect(() => {
@@ -104,7 +104,6 @@ const CoachTeamRosterScreen = ( {navigation} ) => {
     
     function closeModal(action) {
         if (action === 'recruit') {
-            console.log('Here');
             const athleteData = {
                 uid: recruitUid,
                 fullName: recruit.fullName,
@@ -165,11 +164,11 @@ const CoachTeamRosterScreen = ( {navigation} ) => {
                 </View>
             </Modal>
 
-            <Text style={styles.rosterHeader}>{userCtx.teamName} Team Roster</Text>
+            <Text style={styles.orgTitle}>{userCtx.teamName} Team Roster</Text>
             <ScrollView horizontal={true}>
                 <View>
-                    <Table borderStyle={{borderColor: '#C1C0B9'}}>
-                        <Row data={header.tableHead} widthArr={header.widthArr} style={styles.head} textStyle={styles.cellText}/>
+                    <Table borderStyle={{borderColor: 'black', borderRadius: 5}}>
+                        <Row data={header.tableHead} widthArr={header.widthArr} style={styles.head} textStyle={styles.rosterHeader}/>
                     </Table>
                     <ScrollView style={styles.dataWrapper}>
                         <Table borderStyle={{borderColor: '#C1C0B9'}}>
@@ -206,8 +205,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     orgTitle: {
-        borderTopWidth: 5,
-        borderColor: 'darkgreen',
         width: '80%',
         fontSize: 30,
         fontWeight: 'bold',
@@ -216,22 +213,22 @@ const styles = StyleSheet.create({
         color: 'darkgreen',
         textAlign: 'center'
     },
-    rosterHeader: {
-        width: '80%',
-        fontSize: 20,
-        fontWeight: 'bold',
-        margin: 5,
-        paddingVertical: 10,
-        color: 'darkgreen',
-        textAlign: 'center'
-    },
     viewRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
+    rosterHeader: {
+        width: '80%',
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: 'black',
+        textAlign: 'center',
+        borderColor: 'black'
+    },
     head: { 
         height: 50, 
-        backgroundColor: '#6F7BD9' 
+        backgroundColor: 'green',
+        borderRadius: 5
     },
     cellText: { 
         textAlign: 'center', 

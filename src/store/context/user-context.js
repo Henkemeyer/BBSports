@@ -51,17 +51,21 @@ function UserContextProvider({children}) {
     }
 
     function switchOrganization(orgData) {
-        setOrganizationId(orgData.id);
-        setOrganizationName(orgData.name);
-        // AsyncStorage.setItem('lastOrgId', orgData.id);
-        // AsyncStorage.setItem('lastOrgName', orgData.name);
+        if(orgData) {
+            setOrganizationId(orgData.id);
+            setOrganizationName(orgData.name);
+            AsyncStorage.setItem('lastOrgId', orgData.id);
+            AsyncStorage.setItem('lastOrgName', orgData.name);
+        }
     }
 
     function switchTeam(teamData) {
-        setTeamId(teamData.id);
-        setTeamName(teamData.name);
-        // AsyncStorage.setItem('lastTeam', teamData.id);
-        // AsyncStorage.setItem('lastTeam', teamData.name);
+        if(teamData) {
+            setTeamId(teamData.id);
+            setTeamName(teamData.name);
+            AsyncStorage.setItem('lastTeamId', teamData.id);
+            AsyncStorage.setItem('lastTeamName', teamData.name);
+        }
     }
 
     const value = {

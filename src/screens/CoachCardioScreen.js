@@ -3,7 +3,7 @@ import { Alert, Keyboard, KeyboardAvoidingView, StyleSheet, Text, TouchableOpaci
 import SelectDropdown from 'react-native-select-dropdown';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { format } from 'date-fns';
-import { fetchAthleteGroup, fetchCoachTeams, fetchRoster, postCardio } from '../util/http';
+import { fetchAthleteGroup, fetchCoachTeams, fetchRoster, postEvent } from '../util/http';
 import { UserContext } from '../store/context/user-context';
 import UserInput from '../components/UserInput';
 import OurButton from '../components/OurButton';
@@ -17,10 +17,13 @@ const CoachCardioScreen = ( ) => {
     const [date, setDate] = useState(new Date()); // Date of workout
     const [mode, setMode] = useState('date');     // Date picker mode
     const [show, setShow] = useState(false);      // Show or Hide Date Picker
-    const [time, setTime] = useState(new Date()); // Time of workout
-    const [getDist, setDist] = useState(0);       // Distance travelled during workout
-    const [getNotes, setNotes] = useState('');    // Workout notes
-    const [athletes, setAthletes] = useState([]); // List of users groups
+
+    const [startTime, setStartTime] = useState(''); // Time of workout
+    const [endTime, setEndTime] = useState('');    // End time of workout
+    const [getDist, setDist] = useState(0);        // Distance travelled during workout
+    const [location, setLoc] = useState('');
+    const [getNotes, setNotes] = useState('');     // Workout notes
+    const [athletes, setAthletes] = useState([]);  // List of users groups
     const [testID, setTestID] = useState('');
     const [group, setGroup] = useState('');         // Group used for workout
   
@@ -51,10 +54,6 @@ const CoachCardioScreen = ( ) => {
       showMode('date');
     };
 
-    const showTimepicker = () => {
-        showMode('time');
-    };
-
     useEffect(() => {
         async function getDBTeams() {
             const results = await fetchCoachTeams(userCtx.userId, token);
@@ -71,10 +70,9 @@ const CoachCardioScreen = ( ) => {
 
             for (const key in dbAthletes.data) {
                 const athObj = {
-                    id: key,
+                    id: dbAthletes.data[key].uid,
                     name: dbAthletes.data[key].fullName,
-                    group: dbAthletes.data[key].groupName,
-                    uid: dbAthletes.data[key].uid
+                    group: dbAthletes.data[key].groupName
                 };
                 holdAthletesObj.push(athObj);
             }
@@ -86,20 +84,24 @@ const CoachCardioScreen = ( ) => {
 
     function submitHandler() {
         try {
-            const cardioData = 
+            const eventData = 
                 {
                     uid: testID,
                     teamId: userCtx.teamId,
-                    // distance: getDist,
+                    teamName: userCtx.teamName,
                     notes: getNotes,
-                    date: time,
+                    date: date,
+                    type: 'practice',
+                    location: location,
+                    startTime: startTime,
+                    endTime: endTime
                     // duration: time
                 }
 
-            postCardio(cardioData, token);
+            postEvent(eventData, token);
         } catch (error) {
             console.log(error);
-            Alert.alert('Addition Failed', 'Failed to add workout. Please try again later.')
+            Alert.alert('Addition Failed', 'Failed to add event. Please try again later.')
         }
     }
 
@@ -143,7 +145,7 @@ const CoachCardioScreen = ( ) => {
             />
             <TouchableOpacity onPress={showDatepicker}>
                 <View style={styles.lengthRow}>
-                    <Text style={styles.formText}>Date: {format(time, "MMMM do, yyyy")}</Text>
+                    <Text style={styles.formText}>Date: {format(date, "MMMM do, yyyy")}</Text>
                     <Ionicons name="calendar-outline" size={24} color="darkgreen" style={styles.iconStyle} />
                 </View>
             </TouchableOpacity>
@@ -156,12 +158,21 @@ const CoachCardioScreen = ( ) => {
                     onChange={onDateChange}
                 />
             )}
-            <TouchableOpacity onPress={showTimepicker}>
-                <View style={styles.lengthRow}>
-                    <Text style={styles.formText}>Time: {format(time, "H:mm a")}</Text>
-                    <Ionicons name="time-outline" size={24} color="darkgreen" style={styles.iconStyle} />
-                </View>
-            </TouchableOpacity>
+            <UserInput
+                label="Start Time:"
+                onChangeText={setStartTime}
+                autoCorrect={false}
+            />
+            <UserInput
+                label="End Time:"
+                onChangeText={setEndTime}
+                autoCorrect={false}
+            />
+            <UserInput
+                label="Location:"
+                onChangeText={setLoc}
+                autoCorrect={false}
+            />
             {show && (
                 <DateTimePicker
                     testID="timePicker"
@@ -171,45 +182,8 @@ const CoachCardioScreen = ( ) => {
                     onChange={onTimeChange}
                 />
             )}
-            {/* <View style={styles.lengthRow}>
-                <Text style={styles.formText}>Group:</Text>
-                <SelectDropdown 
-                    data={groupList}
-                    onSelect={(selectedItem, index) => {
-                        setGroup(selectedItem);
-                        console.log(selectedItem, index)
-                    }}
-                    buttonTextAfterSelection={(selectedItem, index) => {
-                        // text represented after item is selected
-                        // if data array is an array of objects then return selectedItem.property to render after item is selected
-                        return selectedItem.name
-                    }}
-                    rowTextForSelection={(item, index) => {
-                        return item.name
-                    }}
-                />
-            </View>
             <UserInput
-                label="Duration:"
-                onChangeText={setTime}
-                keyboardType='numeric'
-                autoCorrect={false}
-                maxLength={8}
-                placeholder="hh:mm:ss"
-            />
-            <View style={styles.lengthRow}>
-                <UserInput
-                    label="Length:"
-                    onChangeText={setDist}
-                    keyboardType='numeric'
-                    autoCorrect={false}
-                    maxLength={7}
-                    style={{width: 275}}
-                />
-                <Text style={styles.formText}>Units</Text>
-            </View> */}
-            <UserInput
-                label="Workout:"
+                label="Notes:"
                 onChangeText={setNotes}
                 multiline   // ios starts top left
                 textAlignVertical='top'  // Android starts top left
@@ -221,7 +195,6 @@ const CoachCardioScreen = ( ) => {
                 onSelect={(selectedItem, index) => {
                     setTestID(selectedItem.id);
                 }}
-                // defaultButtonText={userCtx.teamName}
                 buttonTextAfterSelection={(selectedItem, index) => {
                     return selectedItem.name
                 }}

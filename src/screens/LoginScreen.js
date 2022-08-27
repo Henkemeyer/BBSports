@@ -35,8 +35,6 @@ function LoginScreen({ navigation }) {
         >
             <View style={styles.backgroundView}>
                 <View style={styles.containerView}>  
-                {   // Shadow box is not working on Web but is on IOS and Android 
-                /* <ShadowBox style={styles.containerView}> */}
                     <Text style={styles.headerText}>Login to BB Sports</Text>
                     <View style={styles.inputView}>
                         <UserInput
@@ -76,7 +74,6 @@ function LoginScreen({ navigation }) {
                     <TouchableOpacity onPress={() => navigation.navigate('SignUp')} >
                         <Text style={styles.clickText2}>Create Account?</Text>
                     </TouchableOpacity>
-                {/* </ShadowBox> */}
                 </View>
             </View>
         </TouchableWithoutFeedback>

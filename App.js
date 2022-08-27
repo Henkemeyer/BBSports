@@ -224,20 +224,28 @@ function Navigation () {
       async function fetchLocalToken() {
         const localToken = await AsyncStorage.getItem('authToken');
         const userId = await AsyncStorage.getItem('userID');
-        const organization = {
-          id: await AsyncStorage.getItem('lastOrgId'),
-          name: await AsyncStorage.getItem('lastOrgName')
-        };
-        const team = {
-          id: await AsyncStorage.getItem('lastTeamId'),
-          name: await AsyncStorage.getItem('lastTeamName')
-        };
+        const orgId = await AsyncStorage.getItem('lastOrgId');
+        const teamId = await AsyncStorage.getItem('lastTeamId');
+
+        if(orgId) {
+          const organization = {
+            id: orgId,
+            name: await AsyncStorage.getItem('lastOrgName')
+          };
+          userCtx.switchOrganization(organization);
+        }
+
+        if(teamId) {
+          const team = {
+            id: teamId,
+            name: await AsyncStorage.getItem('lastTeamName')
+          };
+          userCtx.switchTeam(team);
+        }
 
         if (localToken) {
           const authData = { idToken: localToken, localId: userId }
           userCtx.login(authData);
-          userCtx.switchOrganization(organization);
-          userCtx.switchTeam(team);
         }
 
         setIsLoading(false);

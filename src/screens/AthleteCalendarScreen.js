@@ -3,6 +3,7 @@ import { StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-nativ
 import { Agenda } from 'react-native-calendars';
 import { UserContext } from '../store/context/user-context';
 import { fetchEvents } from '../util/http';
+import { subDays } from 'date-fns';
 
 const timeToString = (time) => {
     const date = new Date(time);
@@ -12,22 +13,25 @@ const timeToString = (time) => {
 const AthleteCalendarScreen = () => {
     const userCtx = useContext(UserContext);
     const token = userCtx.token;
-    const [items, setItems] = React.useState({});   // populates everyday
-    const [events, setEvents] = React.useState({}); // card data
-    const [marked, setMarked] = React.useState({}); // makes calendar dates
-    // const events = {
-    //     '2022-08-23': {dots: [workout]},
-    //     '2022-08-23': {dots: [workout]}
-    // };
+    const [items, setItems] = useState({});   // populates everyday
+    const [events, setEvents] = useState({}); // card data
+    const [marked, setMarked] = useState({}); // makes calendar dates
+    const [minDate, setMinDate] = useState(new Date(new Date().valueOf() - 86400000));
+
+    const workout = {key: 'workout', color: 'green'}; // Cardio, lifting, scrimmage?
+    const competition = {key: 'competition', color: 'red'};  // Meet, game
+    const activity = {key: 'activity', color: 'blue'};   // Pictures, miscellaneous
 
     useEffect(() => {
         async function getEvents() {
             const dbEvents = await fetchEvents(userCtx.userId, token);
-            const eventsObj = [];
-            const markedObj = [];
+            const eventsObj = {};
+            const markedObj = {};
 
             for (const key in dbEvents.data) {
                 const time = '';
+                const eventType = dbEvents.data[key].type;
+
                 if(dbEvents.data[key].startTime) {
                     time = dbEvents.data[key].startTime;
                     if(dbEvents.data[key].endTime) {
@@ -37,67 +41,83 @@ const AthleteCalendarScreen = () => {
                 else {
                     time = 'On Own';
                 }
+                const eventDate = dbEvents.data[key].date;
+                const eventArr = {
+                    id: key,
+                    day: dbEvents.data[key].date,
+                    teamName: dbEvents.data[key].teamName,
+                    location: dbEvents.data[key].location,
+                    time: "Time: "+time,
+                    teamName: dbEvents.data[key].teamName,
+                    location: dbEvents.data[key].location,
+                    type: dbEvents.data[key].type,
+                    notes: dbEvents.data[key].notes
+                };
 
-                console.log(dbEvents.data[key]);
-                const tmp = {dots: [workout]};
-                const tmpDate = dbEvents.data[key].date;
-                
-                    // id: key,
-                    // day: dbEvents.data[key].date,
-                    // time: time,
-                    // teamName: dbEvents.data[key].teamName,
-                    // location: dbEvents.data[key].location,
-                    // type: dbEvents.data[key].type
-                // eventsObj.push(eventArr);
+                const setDot = {};
+                if(eventType==='Cardio' || eventType==='Lifting' || eventType==='Scrimmage' || eventType==='Practice') {
+                    setDot = workout; 
+                }
+                else if(eventType==='Meet' || eventType==='Game' || eventType==='Match') {
+                    setDot = competition;
+                }
+                else{
+                    setDot = activity;
+                }
 
-                // const temp = {
-                //     dots: [dbEvents.data[key].type] 
-                // };
-                // console.log(temp);
-                // console.log(eventsObj);
-                // markedObj[dbEvents.data[key].date] = [];
-                markedObj[tmpDate] = [1];
-                markedObj[tmpDate].push(tmp);
+                if(eventsObj[eventDate]){
+                    eventsObj[eventDate] = [...eventsObj[eventDate], eventArr];
+                    markedObj[eventDate]['dots'] = [...markedObj[eventDate]['dots'], setDot];
+                }
+                else {
+                    eventsObj[eventDate] = eventArr;
+                    markedObj[eventDate] = {dots: [setDot]};
+                }
             }
-            console.log(markedObj);
-            setEvents(eventsObj);
+            setItems(eventsObj);
             setMarked(markedObj);
         }
     
         getEvents();
     }, [userCtx.getUserId]);
 
+    // const loadItems = (day) => {
 
-    const workout = {key: 'workout', color: 'green'}; // Cardio, lifting, scrimmage?
-    const competition = {key: 'workout', color: 'green'};  // Meet, game
-    const activity = {key: 'workout', color: 'green'};   // Pictures, miscellaneous
+    //     setTimeout(() => {
+    //         for (let i = -15; i < 50; i++) {
+    //             const time = day.timestamp + i * 24 * 60 * 60 * 1000;
+    //             const strTime = timeToString(time);
 
-    const loadItems = (day) => {
+    //             if (!events[strTime]) {
+    //                 items[strTime] = [];
 
-        setTimeout(() => {
-            for (let i = -15; i < 85; i++) {
-                const time = day.timestamp + i * 24 * 60 * 60 * 1000;
-                const strTime = timeToString(time);
+    //                 items[strTime].push({
+    //                     teamName: 'Testing',
+    //                     height: 30,
+    //                     day: strTime
+    //                 });
+    //             }
+    //             else {
+    //                 items[strTime] = events[strTime];
+    //             }
+    //         }
+    //         const newItems = {};
+    //         Object.keys(items).forEach(key => {
+    //             newItems[key] = items[key];
+    //         });
 
-                if (!events[strTime]) {
-                    items[strTime] = [];
-
-                    items[strTime].push({ name: 'Nothing Scheduled yet for ' + strTime, day: strTime, });
-                }
-            }
-            const newItems = {};
-            Object.keys(items).forEach(key => {
-                newItems[key] = items[key];
-            });
-            setItems(newItems);
-        }, 1000);
-    }
+    //         setItems(newItems);
+    //     }, 1000);
+    // }
 
     const renderItem = (item) => {
+        console.log(item);
         return (
             <TouchableOpacity style={styles.item}>
                 <View>
-                    <Text>{item.name}</Text>
+                    <Text>{item.teamName}</Text>
+                    <Text>{item.location}</Text>
+                    <Text>{item.time}</Text>
                 </View>
             </TouchableOpacity>
         );
@@ -107,17 +127,17 @@ const AthleteCalendarScreen = () => {
         <View style={styles.container}>
             <Agenda
                 items={items}
-                loadItemsForMonth={loadItems}
+                // loadItemsForMonth={loadItems}
                 markingType={'multi-dot'}
                 markedDates={marked}
-                selected={new Date()}
+                selected={subDays(new Date(), 5)}
                 todayTextColor= 'darkgreen'
                 refreshControl={null}
                 hideKnob={false}
                 showClosingKnob={true}
                 refreshing={false}
                 renderItem={renderItem}
-                renderEmptyDate={() => { return <View />; }}
+                // renderEmptyDate={() => { return <View />; }}
                 theme={{
                     agendaDayTextColor: 'darkgreen',
                     agendaDayNumColor: 'green',
@@ -141,6 +161,8 @@ const styles = StyleSheet.create({
     item: {
         flex: 1,
         borderRadius: 5,
+        borderWidth: 1,
+        borderColor: 'darkgreen',
         padding: 10,
         marginRight: 10,
         marginTop: 17

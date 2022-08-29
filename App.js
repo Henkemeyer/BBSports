@@ -133,7 +133,7 @@ function AthleteTab() {
       }}
     >
       <TabNav.Screen name="Home" component={AthleteCalendarScreen} />
-      <TabNav.Screen name="Cardio" component={AthleteCardioScreen} />
+      <TabNav.Screen name="Cardio" component={TrainingLogScreen} />
       <TabNav.Screen name="Lifting" component={AthleteLiftingScreen} />
       <TabNav.Screen name="Settings" component={SettingsScreen} />
     </TabNav.Navigator>

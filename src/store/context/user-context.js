@@ -31,7 +31,7 @@ function UserContextProvider({children}) {
 
     function login(authData) {
         setToken(authData.idToken);
-        setUserType('Coach');
+        setUserType('Athlete');
         setUserId(authData.localId);
         AsyncStorage.setItem('authToken', authData.idToken);
         AsyncStorage.setItem('userID', authData.localId);

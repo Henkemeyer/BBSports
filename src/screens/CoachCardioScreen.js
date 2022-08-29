@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Alert, Keyboard, KeyboardAvoidingView, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { Alert, Keyboard, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, 
+    TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { format } from 'date-fns';
@@ -20,9 +21,9 @@ const CoachCardioScreen = ( ) => {
 
     const [startTime, setStartTime] = useState(''); // Time of workout
     const [endTime, setEndTime] = useState('');    // End time of workout
-    const [getDist, setDist] = useState(0);        // Distance travelled during workout
+    const [distance, setDist] = useState(0);        // Distance travelled during workout
     const [location, setLoc] = useState('');
-    const [getNotes, setNotes] = useState('');     // Workout notes
+    const [notes, setNotes] = useState('');     // Workout notes
     const [athletes, setAthletes] = useState([]);  // List of users groups
     const [testID, setTestID] = useState('');
     const [group, setGroup] = useState('');         // Group used for workout
@@ -89,7 +90,7 @@ const CoachCardioScreen = ( ) => {
                     uid: testID,
                     teamId: userCtx.teamId,
                     teamName: userCtx.teamName,
-                    notes: getNotes,
+                    notes: notes,
                     date: date,
                     type: 'practice',
                     location: location,
@@ -97,7 +98,6 @@ const CoachCardioScreen = ( ) => {
                     endTime: endTime
                     // duration: time
                 }
-
             postEvent(eventData, token);
         } catch (error) {
             console.log(error);
@@ -108,12 +108,22 @@ const CoachCardioScreen = ( ) => {
     function clearScreen() {
         setNotes('');
         setDist('');
-        // setTime(0);
+        setStartTime('');
+        setEndTime('');
+        setLoc('');
     }
 
     return (
         <TouchableWithoutFeedback onPress={() =>{ Keyboard.dismiss(); }} >
-        <KeyboardAvoidingView behavior='position'>
+        <KeyboardAvoidingView 
+            behavior={Platform.OS === "ios" ? "padding" : "height"}>
+            {/* keyboardVerticalOffset={
+                Platform.select({
+                   ios: () => 0,
+                   android: () => 0
+                })()
+              }> */}
+        <ScrollView>
         <View style={styles.container}>
             <Text style={styles.headerText}>Cardio Workouts</Text>
             <SelectDropdown
@@ -160,16 +170,19 @@ const CoachCardioScreen = ( ) => {
             )}
             <UserInput
                 label="Start Time:"
+                value={startTime}
                 onChangeText={setStartTime}
                 autoCorrect={false}
             />
             <UserInput
                 label="End Time:"
+                value={endTime}
                 onChangeText={setEndTime}
                 autoCorrect={false}
             />
             <UserInput
                 label="Location:"
+                value={location}
                 onChangeText={setLoc}
                 autoCorrect={false}
             />
@@ -184,6 +197,7 @@ const CoachCardioScreen = ( ) => {
             )}
             <UserInput
                 label="Notes:"
+                value={notes}
                 onChangeText={setNotes}
                 multiline   // ios starts top left
                 textAlignVertical='top'  // Android starts top left
@@ -213,7 +227,7 @@ const CoachCardioScreen = ( ) => {
             />
         </View>
         <View style={styles.buttonRow}>
-            <TouchableOpacity onPress={clearScreen}>
+            <TouchableOpacity onPress={() => clearScreen()}>
                 <Ionicons name="trash-outline" size={28} color="red" style={styles.iconStyle} />
             </TouchableOpacity>
             <OurButton 
@@ -221,6 +235,7 @@ const CoachCardioScreen = ( ) => {
                 buttonText="Submit"
             />
         </View>
+        </ScrollView>
         </KeyboardAvoidingView>
         </TouchableWithoutFeedback>
     );
@@ -233,7 +248,7 @@ const styles = StyleSheet.create({
     },
     headerText: {
         paddingVertical: 25,
-        fontSize: 24,
+        fontSize: 30,
         color: 'darkgreen',
         fontWeight: 'bold',
         textAlign: 'center',

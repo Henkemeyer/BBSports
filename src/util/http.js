@@ -48,7 +48,11 @@ export async function fetchEvents(uid, token) {
 }
 
 export async function postCardioLog(cardio, token) {
-  await axios.post(DB_URL + 'cardio.json', cardio);
+  await axios.post(DB_URL + 'cardioLog.json', cardio);
+}
+
+export async function fetchCardioLog(uid, token) {
+  return await axios.get(DB_URL + 'cardioLog.json?orderBy="uid"&equalTo="'+uid+'"');
 }
 
 export async function postOrganization(org, token) {

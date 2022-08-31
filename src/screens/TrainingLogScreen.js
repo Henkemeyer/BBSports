@@ -67,7 +67,7 @@ const TrainingLogScreen = ( ) => {
                     equipment: equipment.id,
                     distance: distance,
                     notes: notes,
-                    date: date,
+                    date: format(date, "yyyy-MM-dd"),
                     duration: time,
                     feel: feel
                 }
@@ -88,7 +88,7 @@ const TrainingLogScreen = ( ) => {
     function clearScreen() {
         setNotes('');
         setDist('0');
-        setTime(0);
+        setTime('0');
         setFeel('');
     }
 

@@ -1,21 +1,24 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Table, TableWrapper, Row, Cell } from 'react-native-table-component';
 import { Ionicons } from '@expo/vector-icons';
 import OurButton from '../components/OurButton';
 import UserInput from '../components/UserInput';
 import { UserContext } from '../store/context/user-context';
-import { fetchRoster, fetchUser, patchAthlete, postAthlete } from '../util/http';
+import { fetchCardioLog, fetchRoster, fetchUser, patchAthlete, postAthlete } from '../util/http';
 
 const CoachTeamRosterScreen = ( {navigation} ) => {
     const userCtx = useContext(UserContext);
     const token = userCtx.token;
-    const [modalVisible, setModalVisible] = useState(false);
+    const [modalRecruitVisible, setModalRecruitVisible] = useState(false);
     const [uidValid, setUidValid] = useState(false);
     const [recruitUid, setRecruitUid] = useState('');
     const [recruit, setRecruit] = useState([]);
 
-    const [athletesObj, setAthletesObj] = useState([]);
+    const [modalLogsVisible, setModalLogsVisible] = useState(false);
+    const [athleteLogs, setAthleteLogs] = useState([]);
+    const [athleteObj, setAthletesObj] = useState([]);
+    const [logAthletesName, setLogAthletesName] = useState('');
     const [roster, setRoster] = useState([]);
 
     const header = {
@@ -27,43 +30,30 @@ const CoachTeamRosterScreen = ( {navigation} ) => {
         async function getDBAthletes() {
             const dbAthletes = await fetchRoster(userCtx.teamId, token);
             const rosterArr = [];
-            const holdAthletesObj = [];
 
             for (const key in dbAthletes.data) {
-                const athObj = {
-                    id: key,
-                    name: dbAthletes.data[key].fullName,
-                    group: dbAthletes.data[key].groupName,
-                    age: dbAthletes.data[key].age,
-                    status: dbAthletes.data[key].status,
-                    uid: dbAthletes.data[key].uid
-                    // date: new Date(response.data[key].date)
-                };
-                holdAthletesObj.push(athObj);
-
                 const athArr = [
-                    dbAthletes.data[key].fullName,
+                    <TouchableOpacity 
+                        onPress={() => showLogsHandler(dbAthletes.data[key].uid, dbAthletes.data[key].fullName)}
+                    >
+                        <Text style={styles.clickableText}>{dbAthletes.data[key].fullName}</Text>
+                    </TouchableOpacity>,
                     dbAthletes.data[key].groupName,
                     dbAthletes.data[key].age,
                     dbAthletes.data[key].status,
-                    key
+                    <View style={styles.cutButton}>
+                        <TouchableOpacity onPress={() => cutAthlete(key, rosterArr.length-1)}>
+                            <Ionicons name='remove-circle-outline' size={17} color="red" />
+                        </TouchableOpacity>
+                    </View>
                 ]
                 rosterArr.push(athArr);
             }
-            setAthletesObj(holdAthletesObj);
             setRoster(rosterArr);
         }
     
         getDBAthletes();
     }, [userCtx.teamId]);
-
-    const cutElement = (data, index) => (
-        <View style={styles.cutButton}>
-            <TouchableOpacity onPress={() => cutAthlete(data, index)}>
-                <Ionicons name='remove-circle-outline' size={17} color="red" />
-            </TouchableOpacity>
-        </View>
-    );
 
     function cutAthlete(data, index) {
         const patchStatus = { status: "X" };
@@ -86,12 +76,12 @@ const CoachTeamRosterScreen = ( {navigation} ) => {
             }
             else {
                 for (const key in response.data) {
-                    const athleteObj = {
+                    const recruitObj = {
                         uid: key,
                         fullName: response.data[key].fullName,
                         location: response.data[key].location
                     };
-                    setRecruit(athleteObj);
+                    setRecruit(recruitObj);
                 }
                 setUidValid(true);
             }
@@ -102,7 +92,7 @@ const CoachTeamRosterScreen = ( {navigation} ) => {
         });
     }
     
-    function closeModal(action) {
+    function closeRecruitModal(action) {
         if (action === 'recruit') {
             const athleteData = {
                 uid: recruitUid,
@@ -111,25 +101,75 @@ const CoachTeamRosterScreen = ( {navigation} ) => {
                 teamId: userCtx.teamId,
                 age: 29
             }
-            console.log(athleteData);
             postAthlete(athleteData, userCtx.token);
         }
         
         setRecruitUid('');
         setUidValid(false);
-        setModalVisible(!modalVisible);
+        setModalRecruitVisible(!modalVisible);
         setRecruit({});
     }
+
+    function showLogsHandler(athletesUid, athletesName) {
+        async function getDBAthleteLogs() {
+            const dbLogs = await fetchCardioLog(athletesUid, token);
+            var listArr = [];
+            const logData = [];
+
+            for (const key in dbLogs.data) {
+                const tmpObj = {
+                    id: key,
+                    title: dbLogs.data[key].date
+                }
+                listArr = [...listArr, tmpObj];
+
+                const tmpData = {
+                    notes: dbLogs.data[key].notes,
+                    feel: dbLogs.data[key].feel,
+                    distance: dbLogs.data[key].distance,
+                    duration: dbLogs.data[key].duration,
+                    date: dbLogs.data[key].date
+                }
+                logData[key] = tmpData;
+            }
+
+            const dateDescending = [...listArr].sort((a, b) =>
+                a.title > b.title ? -1 : 1,
+            );
+            console.log(logData);
+            setAthletesObj(logData);
+            setAthleteLogs(dateDescending);
+        }
+    
+        getDBAthleteLogs();
+        setLogAthletesName(athletesName);
+        console.log(athleteObj);
+        setModalLogsVisible(!modalLogsVisible)
+    }
+
+    const Item = ({ itemData }) => (
+        <View style={styles.item}>
+            <Text style={styles.title}>Date: {athleteObj[itemData.id].date}</Text>
+            <Text style={styles.title}>Felt: {athleteObj[itemData.id].feel}</Text>
+            <Text style={styles.title}>Distance: {athleteObj[itemData.id].distance}</Text>
+            <Text style={styles.title}>Duration: {athleteObj[itemData.id].duration}</Text>
+            <Text style={styles.title}>Notes: {athleteObj[itemData.id].notes}</Text>
+        </View>
+    );
+
+    const renderItem = ({ item }) => (
+        <Item itemData={item} />
+    );
 
     return (
         <View style={styles.container}>
             <Modal
                 animationType="slide"
                 transparent={true}
-                visible={modalVisible}
+                visible={modalRecruitVisible}
                 onRequestClose={() => {
-                Alert.alert("Modal has been closed.");
-                setModalVisible(!modalVisible);
+                    Alert.alert("Modal has been closed.");
+                    setModalRecruitVisible(!modalVisible);
                 }}
             >
                 <View style={styles.modalContainer}>
@@ -148,18 +188,45 @@ const CoachTeamRosterScreen = ( {navigation} ) => {
                         <Text style={styles.modalText}>Location: {recruit.location}</Text>
                         <View style={styles.viewRow}>
                             <OurButton
-                                buttonPressed={() => closeModal('cancel')}
+                                buttonPressed={() => closeRecruitModal('cancel')}
                                 buttonText="Cancel"
                                 style={{marginHorizontal: 15, marginTop:15}}
                             />
                             { uidValid ? <>
                                 <OurButton
-                                    buttonPressed={() => closeModal('recruit')}
+                                    buttonPressed={() => closeRecruitModal('recruit')}
                                     buttonText="Recruit"
                                     style={{marginHorizontal: 15, marginTop:15}}
                                 />
                             </> : null}
                         </View>
+                    </View>
+                </View>
+            </Modal>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalLogsVisible}
+                onRequestClose={() => {
+                    Alert.alert("Modal has been closed.");
+                    setAthletesObj([]);
+                    setModalLogsVisible(!modalLogsVisible);
+                }}
+            >
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalText}>{logAthletesName}</Text>
+                        {athleteObj ?
+                            <FlatList
+                                data={athleteLogs}
+                                renderItem={renderItem}
+                            />
+                        : <Text>No Training Log Data</Text> }
+                        <OurButton
+                            buttonPressed={() => setModalLogsVisible(!modalLogsVisible)}
+                            buttonText="Close"
+                            style={{marginHorizontal: 15, marginTop:15}}
+                        />
                     </View>
                 </View>
             </Modal>
@@ -178,7 +245,7 @@ const CoachTeamRosterScreen = ( {navigation} ) => {
                                         <Cell 
                                             key={cellIndex} 
                                             style={{width: header.widthArr[cellIndex]}}
-                                            data={cellIndex === 4 ? cutElement(cellData, index) : cellData}
+                                            data={cellData}
                                             textStyle={[{textAlign: 'center', fontWeight: '200' }]}
                                         />
                                 ))}
@@ -189,7 +256,7 @@ const CoachTeamRosterScreen = ( {navigation} ) => {
                 </View>
             </ScrollView>
             <OurButton 
-                buttonPressed={() => setModalVisible(!modalVisible)}
+                buttonPressed={() => setModalRecruitVisible(!modalRecruitVisible)}
                 buttonText="Recruit"
                 style={styles.createButton}/>
         </View>
@@ -234,8 +301,13 @@ const styles = StyleSheet.create({
         textAlign: 'center', 
         fontWeight: '200' 
     },
+    clickableText: {
+        color: 'orange',
+        fontSize: 16,
+        textAlign: 'center'
+    },
     dataWrapper: { 
-        marginTop: -1 
+        marginTop: -1
     },
     rowA: { 
         flexDirection: 'row',
@@ -255,7 +327,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        marginTop: 22
+        marginVertical: 22
     },
     modalView: {
         width: '80%',
@@ -278,6 +350,14 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 15,
         textAlign: "center"
+    },
+    item: {
+        borderWidth: 1,
+        borderColor: 'green',
+        borderRadius: 5,
+        marginVertical: 7,
+        marginHorizontal: 15,
+        padding: 18
     }
 });
 

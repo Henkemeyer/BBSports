@@ -52,7 +52,7 @@ export async function postCardioLog(cardio, token) {
 }
 
 export async function fetchCardioLog(uid, token) {
-  return await axios.get(DB_URL + 'cardioLog.json?orderBy="uid"&equalTo="'+uid+'"');
+  return await axios.get(DB_URL + 'cardioLog.json?orderBy="uid"&equalTo="'+uid+'"&limitToLast=100');
 }
 
 export async function postOrganization(org, token) {

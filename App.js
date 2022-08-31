@@ -226,6 +226,7 @@ function Navigation () {
         const userId = await AsyncStorage.getItem('userID');
         const orgId = await AsyncStorage.getItem('lastOrgId');
         const teamId = await AsyncStorage.getItem('lastTeamId');
+        const userType = await AsyncStorage.getItem('lastUserType');
 
         if(orgId) {
           const organization = {
@@ -244,6 +245,7 @@ function Navigation () {
         }
 
         if (localToken) {
+          userCtx.switchUserType(userType);
           const authData = { idToken: localToken, localId: userId }
           userCtx.login(authData);
         }

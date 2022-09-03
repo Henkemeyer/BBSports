@@ -92,7 +92,7 @@ const CoachCardioScreen = ( ) => {
                     teamName: userCtx.teamName,
                     notes: notes,
                     date: date,
-                    type: 'practice',
+                    type: 'Practice',
                     location: location,
                     startTime: startTime,
                     endTime: endTime
@@ -117,12 +117,6 @@ const CoachCardioScreen = ( ) => {
         <TouchableWithoutFeedback onPress={() =>{ Keyboard.dismiss(); }} >
         <KeyboardAvoidingView 
             behavior={Platform.OS === "ios" ? "padding" : "height"}>
-            {/* keyboardVerticalOffset={
-                Platform.select({
-                   ios: () => 0,
-                   android: () => 0
-                })()
-              }> */}
         <ScrollView>
         <View style={styles.container}>
             <Text style={styles.headerText}>Cardio Workouts</Text>
@@ -186,15 +180,6 @@ const CoachCardioScreen = ( ) => {
                 onChangeText={setLoc}
                 autoCorrect={false}
             />
-            {show && (
-                <DateTimePicker
-                    testID="timePicker"
-                    value={time}
-                    mode={mode}
-                    is24Hour={false}
-                    onChange={onTimeChange}
-                />
-            )}
             <UserInput
                 label="Notes:"
                 value={notes}

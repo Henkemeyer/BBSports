@@ -136,14 +136,12 @@ const CoachTeamRosterScreen = ( {navigation} ) => {
             const dateDescending = [...listArr].sort((a, b) =>
                 a.title > b.title ? -1 : 1,
             );
-            console.log(logData);
             setAthletesObj(logData);
             setAthleteLogs(dateDescending);
         }
     
         getDBAthleteLogs();
         setLogAthletesName(athletesName);
-        console.log(athleteObj);
         setModalLogsVisible(!modalLogsVisible)
     }
 
@@ -216,12 +214,10 @@ const CoachTeamRosterScreen = ( {navigation} ) => {
                 <View style={styles.modalContainer}>
                     <View style={styles.modalView}>
                         <Text style={styles.modalText}>{logAthletesName}</Text>
-                        {athleteObj ?
-                            <FlatList
-                                data={athleteLogs}
-                                renderItem={renderItem}
-                            />
-                        : <Text>No Training Log Data</Text> }
+                        <FlatList
+                            data={athleteLogs}
+                            renderItem={renderItem}
+                        />
                         <OurButton
                             buttonPressed={() => setModalLogsVisible(!modalLogsVisible)}
                             buttonText="Close"

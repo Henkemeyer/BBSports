@@ -65,50 +65,50 @@ const AthleteCalendarScreen = () => {
                     setDot = activity;
                 }
 
-                if(eventsObj[eventDate]){
-                    eventsObj[eventDate] = [...eventsObj[eventDate], eventArr];
-                    markedObj[eventDate]['dots'] = [...markedObj[eventDate]['dots'], setDot];
-                }
-                else {
-                    eventsObj[eventDate] = eventArr;
-                    markedObj[eventDate] = {dots: [setDot]};
-                }
+                // if(eventsObj[eventDate]){
+                //     eventsObj[eventDate] = [...eventsObj[eventDate], eventArr];
+                //     markedObj[eventDate]['dots'] = [...markedObj[eventDate]['dots'], setDot];
+                // }
+                // else {
+                //     eventsObj[eventDate] = eventArr;
+                //     markedObj[eventDate] = {dots: [setDot]};
+                // }
             }
-            setItems(eventsObj);
+            // setItems(eventsObj);
             setMarked(markedObj);
         }
     
         getEvents();
     }, [userCtx.getUserId]);
 
-    // const loadItems = (day) => {
+    const loadItems = (day) => {
 
-    //     setTimeout(() => {
-    //         for (let i = -15; i < 50; i++) {
-    //             const time = day.timestamp + i * 24 * 60 * 60 * 1000;
-    //             const strTime = timeToString(time);
+        setTimeout(() => {
+            for (let i = -15; i < 50; i++) {
+                const time = day.timestamp + i * 24 * 60 * 60 * 1000;
+                const strTime = timeToString(time);
 
-    //             if (!events[strTime]) {
-    //                 items[strTime] = [];
+                if (!items[strTime]) {
+                    items[strTime] = [];
 
-    //                 items[strTime].push({
-    //                     teamName: 'Testing',
-    //                     height: 30,
-    //                     day: strTime
-    //                 });
-    //             }
-    //             else {
-    //                 items[strTime] = events[strTime];
-    //             }
-    //         }
-    //         const newItems = {};
-    //         Object.keys(items).forEach(key => {
-    //             newItems[key] = items[key];
-    //         });
+                    items[strTime].push({
+                        teamName: 'Testing',
+                        height: 30,
+                        day: strTime
+                    });
+                }
+                // else {
+                //     items[strTime] = events[strTime];
+                // }
+            }
+            const newItems = {};
+            Object.keys(items).forEach(key => {
+                newItems[key] = items[key];
+            });
 
-    //         setItems(newItems);
-    //     }, 1000);
-    // }
+            setItems(newItems);
+        }, 1000);
+    }
 
     const renderItem = (item) => {
         console.log(item);
@@ -127,7 +127,7 @@ const AthleteCalendarScreen = () => {
         <View style={styles.container}>
             <Agenda
                 items={items}
-                // loadItemsForMonth={loadItems}
+                loadItemsForMonth={loadItems}
                 markingType={'multi-dot'}
                 markedDates={marked}
                 selected={subDays(new Date(), 5)}

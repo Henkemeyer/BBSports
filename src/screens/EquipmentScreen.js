@@ -159,8 +159,7 @@ const EquipmentScreen = () => {
             </ScrollView>
             <OurButton 
                 buttonPressed={() => setModalVisible(!modalVisible)}
-                buttonText="Add"
-                style={styles.createButton}/>
+                buttonText="Add"/>
         </View>
     );
 };

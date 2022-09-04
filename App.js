@@ -15,6 +15,7 @@ import AthleteCalendarScreen from './src/screens/AthleteCalendarScreen';
 import AthleteCardioScreen from './src/screens/AthleteCardioScreen';
 import AthleteLiftingScreen from './src/screens/AthleteLiftingScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
+import AddEventScreen from './src/screens/AddEventScreen';
 import CoachTeamRosterScreen from './src/screens/CoachTeamRosterScreen';
 import CoachCardioScreen from './src/screens/CoachCardioScreen';
 import CoachLiftingScreen from './src/screens/CoachLiftingScreen';
@@ -210,7 +211,7 @@ function CoachTab() {
     >
       <TabNav.Screen name="Home" component={CoachTeamRosterScreen} />
       <TabNav.Screen name="Cardio" component={CoachCardioScreen} />
-      <TabNav.Screen name="Lifting" component={CoachLiftingScreen} />
+      <TabNav.Screen name="Lifting" component={AddEventScreen} />
       <TabNav.Screen name="Settings" component={SettingsScreen} />
     </TabNav.Navigator>
   );

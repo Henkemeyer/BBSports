@@ -1,27 +1,26 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import Colors from '../constants/ColorThemes';
-import { Ionicons } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 
 export default function CheckBox({ checked, toggle }){
     if(!checked){
         return (
             <View style={styles.containerView}>
-                <View style={{height:3}}/>
-                <TouchableOpacity 
-                    style={styles.unchecked}
-                    onPress={() => toggle()}
-                />
+                <TouchableOpacity onPress={() => toggle()} >
+                    <MaterialIcons name="check-box-outline-blank" size={24} color={Colors.primary} />
+                </TouchableOpacity>
+            </View>
+        );
+    } else {
+        return (
+            <View style={styles.containerView}>
+                <TouchableOpacity onPress={() => toggle()} >
+                    <MaterialIcons name="check-box" size={24} color={Colors.primary} />
+                </TouchableOpacity>
             </View>
         );
     }
-    return (
-        <View style={styles.containerView}>
-            <TouchableOpacity onPress={() => toggle()} >
-                <Ionicons name="ios-checkbox" size={24} color={Colors.primary} />
-            </TouchableOpacity>
-        </View>
-    );
 };
 
 const styles = StyleSheet.create({

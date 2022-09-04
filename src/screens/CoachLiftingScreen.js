@@ -26,9 +26,9 @@ const CoachLiftingScreen = () => {
     const [notes, setNotes] = useState('');
 
     const UNITS = [
-        {id: 1, name: 'kg'},
-        {id: 2, name: 'lbs'},
-        {id: 3, name: '%'}];
+        {id: 0, name: 'kg'},
+        {id: 1, name: 'lbs'},
+        {id: 2, name: '%'}];
 
     const test = {
         0: "works?",
@@ -237,7 +237,8 @@ const CoachLiftingScreen = () => {
                 date: format(date, "yyyy-MM-dd"),
                 type: 'Lifting',
                 startTime: format(time, "h:mm a"),
-                workout: { tableData }
+                insertDate: new Date(),
+                workout: tableData
             }
             postEvent(eventData, token);
             Alert.alert('Lift Added', 'Your lift has been submitted.')

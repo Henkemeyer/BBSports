@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Alert, Keyboard, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, 
     TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
@@ -17,6 +17,15 @@ const AddEventScreen = ( ) => {
     const token = userCtx.token;                  // User Auth Token
     const [teams, setTeams] = useState([]);       // List of Coach's Teams
     const [onOwn, setOnOwn] = useState(false);    // If it's a solo task or not
+    const [location, setLoc] = useState('');        // Location to meet
+    const typeDropdownRef = useRef({});
+    const [type, setType] = useState('Cardio');   // Event Type
+    const [types, setTypes] = useState([
+        {id:0, name: 'Cardio'},
+        {id:1, name: 'Weights'},
+        {id:2, name: 'Meet'},
+        {id:3, name: 'Activity'}
+    ]);
 
     const [date, setDate] = useState(new Date()); // Date of workout
     const [showDate, setShowDate] = useState(false);      // Show or Hide Date Picker
@@ -67,19 +76,9 @@ const AddEventScreen = ( ) => {
         showTimeMode('endTime');
     };
 
-    const [location, setLoc] = useState('');        // Location to meet
-    const [type, setType] = useState('Cardio');   // Event Type
-    const [types, setTypes] = useState([
-        {id:0, name: 'Cardio'},
-        {id:1, name: 'Weights'},
-        {id:2, name: 'Meet'},
-        {id:3, name: 'Activity'}
-    ]);
-
     const toggleOnOwn = () => {
         setOnOwn(!onOwn);
-        console.log(onOwn);
-        if(onOwn) {
+        if(!onOwn) {
             setTypes([
                 {id:0, name: 'Cardio'},
                 {id:1, name: 'Weights'}
@@ -87,6 +86,7 @@ const AddEventScreen = ( ) => {
 
             if(type === 'Meet' || type === 'Activity') {
                 setType('Cardio');
+                typeDropdownRef.current.reset();
             }
         } else {
             setTypes([
@@ -144,7 +144,34 @@ const AddEventScreen = ( ) => {
             behavior={Platform.OS === "ios" ? "padding" : "height"}>
         <ScrollView>
         <View style={styles.container}>
-            <Text style={styles.headerText}>Add Event</Text>
+            {showDate && (
+                <DateTimePicker
+                    testID="datePicker"
+                    value={date}
+                    mode={'date'}
+                    is24Hour={true}
+                    onChange={onDateChange}
+                />
+            )}
+            {showStartTime && (
+                <DateTimePicker
+                    testID="startPicker"
+                    value={startTime}
+                    mode={'time'}
+                    is24Hour={false}
+                    onChange={onStartTimeChange}
+                />
+            )}
+            {showEndTime && (
+                <DateTimePicker
+                    testID="endPicker"
+                    value={startTime}
+                    mode={'time'}
+                    is24Hour={false}
+                    onChange={onEndTimeChange}
+                />
+            )}
+            <Text style={styles.teamText}>Team:</Text>
             <SelectDropdown
                 data={teams}
                 onSelect={(selectedItem, index) => {
@@ -177,15 +204,6 @@ const AddEventScreen = ( ) => {
                     <Ionicons name="calendar-outline" size={24} color="darkgreen" style={styles.iconStyle} />
                 </View>
             </TouchableOpacity>
-            {showDate && (
-                <DateTimePicker
-                    testID="datePicker"
-                    value={date}
-                    mode={'date'}
-                    is24Hour={true}
-                    onChange={onDateChange}
-                />
-            )}
             <View style={styles.lengthRow}>
                 <Text>On Own?</Text>
                 <CheckBox
@@ -193,45 +211,50 @@ const AddEventScreen = ( ) => {
                     toggle={toggleOnOwn}
                 />
             </View>
-            <TouchableOpacity onPress={showStartTimepicker} disabled={onOwn}>
-                <View style={styles.lengthRow}>
-                    <Text style={styles.formText}>Start Time: {format(startTime, "h:mm a")}</Text>
-                    <Ionicons name="time-outline" size={24} color="darkgreen" style={styles.iconStyle} />
+            {onOwn ?
+                <View>
+                    <View style={styles.lengthRow}>
+                        <Text style={styles.disabledText}>Start Time: On Own</Text>
+                    </View>
+                    <View style={styles.lengthRow}>
+                        <Text style={styles.disabledText}>End Time: On Own</Text>
+                    </View>
+                    <View style={styles.locInput}>
+                        <UserInput
+                            label="Location:"
+                            value={"On Own"}
+                            editable={false}
+                        />
+                    </View>
                 </View>
-            </TouchableOpacity>
-            {showStartTime && (
-                <DateTimePicker
-                    testID="startPicker"
-                    value={startTime}
-                    mode={'time'}
-                    is24Hour={false}
-                    onChange={onStartTimeChange}
-                />
-            )}
-            <TouchableOpacity onPress={showEndTimepicker} disabled={onOwn}>
-                <View style={styles.lengthRow}>
-                    <Text style={styles.formText}>End Time: {format(endTime, "h:mm a")}</Text>
-                    <Ionicons name="time-outline" size={24} color="darkgreen" style={styles.iconStyle} />
+            :
+                <View>
+                    <TouchableOpacity onPress={showStartTimepicker} disabled={onOwn}>
+                        <View style={styles.lengthRow}>
+                            <Text style={styles.formText}>Start Time: {format(startTime, "h:mm a")}</Text>
+                            <Ionicons name="time-outline" size={24} color="darkgreen" style={styles.iconStyle} />
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={showEndTimepicker} disabled={onOwn}>
+                        <View style={styles.lengthRow}>
+                            <Text style={styles.formText}>End Time: {format(endTime, "h:mm a")}</Text>
+                            <Ionicons name="time-outline" size={24} color="darkgreen" style={styles.iconStyle} />
+                        </View>
+                    </TouchableOpacity>
+                    <View style={styles.locInput}>
+                        <UserInput
+                            label="Location:"
+                            value={location}
+                            onChangeText={setLoc}
+                            autoCorrect={false}
+                            editable={!onOwn}
+                        />
+                    </View>
                 </View>
-            </TouchableOpacity>
-            {showEndTime && (
-                <DateTimePicker
-                    testID="endPicker"
-                    value={startTime}
-                    mode={'time'}
-                    is24Hour={false}
-                    onChange={onEndTimeChange}
-                />
-            )}
-            <UserInput
-                label="Location:"
-                value={location}
-                onChangeText={setLoc}
-                autoCorrect={false}
-                editable={!onOwn}
-            />
+            }
             <SelectDropdown
                 data={types}
+                ref={typeDropdownRef}  
                 onSelect={(selectedItem, index) => {
                     setType(selectedItem.name);
                 }}
@@ -296,31 +319,31 @@ const AddEventScreen = ( ) => {
 
 const styles = StyleSheet.create({
     container: {
-        paddingVertical: 30,
-        alignItems: 'center'
+        paddingVertical: 25
     },
-    headerText: {
-        paddingVertical: 25,
-        fontSize: 30,
+    teamText: {
+        paddingHorizontal: 40,
+        fontSize: 22,
         color: 'darkgreen',
-        fontWeight: 'bold',
-        textAlign: 'center',
-        paddingRight: 15
+        fontWeight: 'bold'
     },
     selectDropDownButton: {
         width: '80%',
         height: 40,
+        marginVertical: 15,
         backgroundColor: 'darkgreen',
-        borderRadius: 8
+        borderRadius: 8,
+        alignSelf: 'center',
+        alignContent: 'center'
     },
     selectDropDown: {
         backgroundColor: 'darkgreen',
         borderBottomLeftRadius: 12,
-        borderBottomRightRadius: 12
+        borderBottomRightRadius: 12,
     },
     selectDropDownRow: {
         backgroundColor: 'darkgreen', 
-        borderBottomColor: '#C5C5C5'
+        borderBottomColor: '#C5C5C5',
     },
     selectDropDownText: {
         color: '#FFF',
@@ -329,13 +352,22 @@ const styles = StyleSheet.create({
     },
     lengthRow: {
         flexDirection: 'row',
-        padding: 10,
+        paddingLeft: '10%',
+        paddingVertical: 8,
         alignItems: 'center'
     },
     formText: {
         fontSize: 22,
         textAlign: 'center',
         color: 'darkgreen'
+    },
+    disabledText: {
+        fontSize: 22,
+        textAlign: 'center',
+        color: 'gray'
+    },
+    locInput: {
+        alignItems: 'center'
     },
     notesInput: {
         height: 150,
@@ -346,7 +378,8 @@ const styles = StyleSheet.create({
     },
     button: {
         margin: 25,
-        alignItems: 'center'
+        alignItems: 'center',
+        alignSelf: 'center'
     }
 });
 

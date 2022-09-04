@@ -27,6 +27,7 @@ import OrganizationScreen from './src/screens/OrganizationScreen';
 import CreateOrganizationScreen from './src/screens/CreateOrganizationScreen';
 import CreateTeamScreen from './src/screens/CreateTeamScreen';
 import AddCoachScreen from './src/screens/AddCoachScreen';
+import CoachCalendarScreen from './src/screens/CoachCalendarScreen';
 
 const TabNav = createBottomTabNavigator();
 const StackNav = createStackNavigator();
@@ -105,6 +106,36 @@ function OrganizationStack() {
   );
 }
 
+function EventStack() {
+  return (
+    <StackNav.Navigator
+      screenOptions={{
+        headerTintColor: 'green',
+      }}>
+      <StackNav.Screen 
+        name="CoachCalendar" 
+        component={CoachCalendarScreen} 
+        options={{ title: 'Team Calendar' }}
+      />
+      <StackNav.Screen 
+        name="AddEvent" 
+        component={AddEventScreen} 
+        options={{ title: "Add Event" }}
+      />
+      <StackNav.Screen 
+        name="CoachCardio" 
+        component={CoachCardioScreen} 
+        options={{ title: "Cardio Training" }}
+      />
+      <StackNav.Screen 
+        name="CoachLifting" 
+        component={CoachLiftingScreen} 
+        options={{ title: "Weight Training" }}
+      />
+    </StackNav.Navigator>
+  );
+}
+
 function AthleteTab() {
   return (
     <TabNav.Navigator
@@ -177,6 +208,11 @@ function CoachContainerStack() {
         component={OrganizationStack}
         options={{ headerShown: false }} 
       />
+      <StackNav.Screen 
+        name="EventStack" 
+        component={EventStack}
+        options={{ headerShown: false }} 
+      />
     </StackNav.Navigator>
   );
 }
@@ -189,7 +225,7 @@ function CoachTab() {
           let iconName;
 
           if (route.name === 'Home') {
-            iconName = focused ? 'home' : 'home-outline';
+            iconName = focused ? 'calendar' : 'calendar-outline';
           } else if (route.name === 'Cardio') {
             iconName = focused ? 'beer' : 'beer-outline';
           } else if (route.name === 'Timer') {
@@ -209,7 +245,7 @@ function CoachTab() {
         inactiveTintColor: 'black',
       }}
     >
-      <TabNav.Screen name="Home" component={CoachTeamRosterScreen} />
+      <TabNav.Screen name="Home" component={EventStack} />
       <TabNav.Screen name="Cardio" component={CoachCardioScreen} />
       <TabNav.Screen name="Lifting" component={AddEventScreen} />
       <TabNav.Screen name="Settings" component={SettingsScreen} />

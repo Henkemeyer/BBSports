@@ -2,15 +2,16 @@ import React, { useContext, useEffect, useState } from 'react';
 import { StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Agenda } from 'react-native-calendars';
 import { UserContext } from '../store/context/user-context';
-import { fetchUserEvents } from '../util/http';
+import { fetchTeamEvents } from '../util/http';
 import { subDays } from 'date-fns';
+import { Ionicons } from '@expo/vector-icons';
 
 const timeToString = (time) => {
     const date = new Date(time);
     return date.toISOString().split('T')[0];
 }
 
-const AthleteCalendarScreen = () => {
+const CoachCalendarScreen = ({ navigation }) => {
     const userCtx = useContext(UserContext);
     const token = userCtx.token;
     const [items, setItems] = useState({});   // populates everyday
@@ -23,8 +24,8 @@ const AthleteCalendarScreen = () => {
     const activity = {key: 'activity', color: 'blue'};   // Pictures, miscellaneous
 
     useEffect(() => {
-        async function getEvents() {
-            const dbEvents = await fetchUserEvents(userCtx.userId, token);
+        async function getTeamEvents() {
+            const dbEvents = await fetchTeamEvents(userCtx.teamId, token);
             const eventsObj = {};
             const markedObj = {};
 
@@ -65,21 +66,21 @@ const AthleteCalendarScreen = () => {
                     setDot = activity;
                 }
 
-                // if(eventsObj[eventDate]){
-                //     eventsObj[eventDate] = [...eventsObj[eventDate], eventArr];
-                //     markedObj[eventDate]['dots'] = [...markedObj[eventDate]['dots'], setDot];
-                // }
-                // else {
-                //     eventsObj[eventDate] = eventArr;
-                //     markedObj[eventDate] = {dots: [setDot]};
-                // }
+                if(eventsObj[eventDate]){
+                    eventsObj[eventDate] = [...eventsObj[eventDate], eventArr];
+                    markedObj[eventDate]['dots'] = [...markedObj[eventDate]['dots'], setDot];
+                }
+                else {
+                    eventsObj[eventDate] = eventArr;
+                    markedObj[eventDate] = {dots: [setDot]};
+                }
             }
-            // setItems(eventsObj);
+            setEvents(eventsObj);
             setMarked(markedObj);
         }
     
-        getEvents();
-    }, [userCtx.userId]);
+        getTeamEvents();
+    }, [userCtx.teamId]);
 
     const loadItems = (day) => {
 
@@ -92,9 +93,9 @@ const AthleteCalendarScreen = () => {
                     items[strTime] = [];
 
                     items[strTime].push({
-                        teamName: 'Testing',
-                        height: 30,
-                        day: strTime
+                        text: 'Add Event',
+                        day: strTime,
+                        placeholder: true
                     });
                 }
                 // else {
@@ -111,16 +112,26 @@ const AthleteCalendarScreen = () => {
     }
 
     const renderItem = (item) => {
-        console.log(item);
-        return (
-            <TouchableOpacity style={styles.item}>
-                <View>
-                    <Text>{item.teamName}</Text>
-                    <Text>{item.location}</Text>
-                    <Text>{item.time}</Text>
-                </View>
-            </TouchableOpacity>
-        );
+        if(item.placeholder) {
+            return (
+                <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('AddEvent')}>
+                    <View style={styles.viewRow}>
+                        <Ionicons name="add-circle-outline" size={24} color="darkgreen"/>
+                        <Text style={styles.itemText}>{item.text}</Text>
+                    </View>
+                </TouchableOpacity>
+            );
+        }else {
+            return (
+                <TouchableOpacity style={styles.item}>
+                    <View>
+                        <Text style={styles.itemText}>{item.teamName}</Text>
+                        <Text style={styles.itemText}>{item.location}</Text>
+                        <Text style={styles.itemText}>{item.time}</Text>
+                    </View>
+                </TouchableOpacity>
+            );
+        }
     }
 
     return (
@@ -167,6 +178,16 @@ const styles = StyleSheet.create({
         marginRight: 10,
         marginTop: 17
     },
+    viewRow: {
+        flexDirection: 'row',
+        padding: 10,
+        alignItems: 'center'
+    },
+    itemText: {
+        fontSize: 19,
+        color: 'darkgreen',
+        marginLeft: 10
+    }
 });
 
-export default AthleteCalendarScreen;
+export default CoachCalendarScreen;

@@ -43,8 +43,12 @@ export async function postEvent(event, token) {
   await axios.post(DB_URL + 'event.json', event);
 }
 
-export async function fetchEvents(uid, token) {
+export async function fetchUserEvents(uid, token) {
   return await axios.get(DB_URL + 'event.json?orderBy="uid"&equalTo="'+uid+'"');
+}
+
+export async function fetchTeamEvents(teamId, token) {
+  return await axios.get(DB_URL + 'event.json?orderBy="teamId"&equalTo="'+teamId+'"');
 }
 
 export async function postCardioLog(cardio, token) {

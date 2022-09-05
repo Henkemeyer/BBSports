@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { FlatList, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, FlatList, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Table, TableWrapper, Row, Cell } from 'react-native-table-component';
 import { Ionicons } from '@expo/vector-icons';
 import OurButton from '../components/OurButton';
@@ -106,7 +106,7 @@ const CoachTeamRosterScreen = ( {navigation} ) => {
         
         setRecruitUid('');
         setUidValid(false);
-        setModalRecruitVisible(!modalVisible);
+        setModalRecruitVisible(!modalRecruitVisible);
         setRecruit({});
     }
 
@@ -138,11 +138,16 @@ const CoachTeamRosterScreen = ( {navigation} ) => {
             );
             setAthletesObj(logData);
             setAthleteLogs(dateDescending);
+
+            if(listArr.length===0) {
+                Alert.alert("Athlete has no log data");
+            } else {
+                setLogAthletesName(athletesName);
+                setModalLogsVisible(!modalLogsVisible)
+            }
         }
     
         getDBAthleteLogs();
-        setLogAthletesName(athletesName);
-        setModalLogsVisible(!modalLogsVisible)
     }
 
     const Item = ({ itemData }) => (
@@ -167,7 +172,7 @@ const CoachTeamRosterScreen = ( {navigation} ) => {
                 visible={modalRecruitVisible}
                 onRequestClose={() => {
                     Alert.alert("Modal has been closed.");
-                    setModalRecruitVisible(!modalVisible);
+                    setModalRecruitVisible(!modalRecruitVisible);
                 }}
             >
                 <View style={styles.modalContainer}>

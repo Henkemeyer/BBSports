@@ -48,11 +48,8 @@ const CoachCalendarScreen = ({ navigation }) => {
                     day: dbEvents.data[key].date,
                     teamName: dbEvents.data[key].teamName,
                     location: dbEvents.data[key].location,
-                    time: "Time: "+time,
-                    teamName: dbEvents.data[key].teamName,
-                    location: dbEvents.data[key].location,
+                    time: time,
                     type: dbEvents.data[key].type,
-                    notes: dbEvents.data[key].notes
                 };
 
                 const setDot = {};
@@ -80,7 +77,7 @@ const CoachCalendarScreen = ({ navigation }) => {
         }
     
         getTeamEvents();
-    }, [userCtx.teamId]);
+    }, []);
 
     const loadItems = (day) => {
 
@@ -89,18 +86,17 @@ const CoachCalendarScreen = ({ navigation }) => {
                 const time = day.timestamp + i * 24 * 60 * 60 * 1000;
                 const strTime = timeToString(time);
 
-                if (!items[strTime]) {
-                    items[strTime] = [];
+                items[strTime] = [];
 
-                    items[strTime].push({
-                        text: 'Add Event',
-                        day: strTime,
-                        placeholder: true
-                    });
+                if (events[strTime]) {
+                    items[strTime].push(events[strTime]);
                 }
-                // else {
-                //     items[strTime] = events[strTime];
-                // }
+
+                items[strTime].push({
+                    text: 'Add Event',
+                    day: strTime,
+                    placeholder: true
+                });
             }
             const newItems = {};
             Object.keys(items).forEach(key => {
@@ -114,7 +110,7 @@ const CoachCalendarScreen = ({ navigation }) => {
     const renderItem = (item) => {
         if(item.placeholder) {
             return (
-                <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('AddEvent')}>
+                <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('AddEvent', {day: item.day})}>
                     <View style={styles.viewRow}>
                         <Ionicons name="add-circle-outline" size={24} color="darkgreen"/>
                         <Text style={styles.itemText}>{item.text}</Text>
@@ -123,11 +119,11 @@ const CoachCalendarScreen = ({ navigation }) => {
             );
         }else {
             return (
-                <TouchableOpacity style={styles.item}>
+                <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('EditEvent', {event: item})}>
                     <View>
-                        <Text style={styles.itemText}>{item.teamName}</Text>
-                        <Text style={styles.itemText}>{item.location}</Text>
-                        <Text style={styles.itemText}>{item.time}</Text>
+                        <Text style={styles.itemText}>Team: {item.teamName}</Text>
+                        <Text style={styles.itemText}>Loc: {item.location}</Text>
+                        <Text style={styles.itemText}>Time: {item.time}</Text>
                     </View>
                 </TouchableOpacity>
             );

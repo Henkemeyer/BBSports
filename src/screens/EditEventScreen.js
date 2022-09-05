@@ -4,7 +4,7 @@ import { Alert, Keyboard, KeyboardAvoidingView, Modal, Platform, ScrollView, Sty
 import SelectDropdown from 'react-native-select-dropdown';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { format } from 'date-fns';
-import { fetchAthleteGroup, fetchCoachTeams, fetchRoster, postEvent } from '../util/http';
+import { fetchAthleteGroup, fetchCoachTeams, fetchRoster, patchEvent } from '../util/http';
 import { UserContext } from '../store/context/user-context';
 import UserInput from '../components/UserInput';
 import OurButton from '../components/OurButton';
@@ -12,12 +12,8 @@ import CheckBox from '../components/CheckBox';
 import Colors from '../constants/ColorThemes';
 import { Ionicons } from '@expo/vector-icons';
 
-const AddEventScreen = ({ route, navigation }) => {
-    const { day } = route.params;
-    var defaultDay = new Date();
-    if(day) {
-        defaultDay = new Date(new Date(day).valueOf() + 86400000);
-    } // For some reason it subtracts a day so I added it back on
+const EditEventScreen = ({ route, navigation }) => {
+    const { event } = route.params;
 
     const userCtx = useContext(UserContext);      // App User Info
     const token = userCtx.token;                  // User Auth Token
@@ -36,7 +32,7 @@ const AddEventScreen = ({ route, navigation }) => {
         {id:3, name: 'Activity'}
     ]);
 
-    const [date, setDate] = useState(defaultDay);         // Date of workout
+    const [date, setDate] = useState(new Date());         // Date of workout
     const [showDate, setShowDate] = useState(false);      // Show or Hide Date Picker
 
     const onDateChange = (event, selectedDate) => {
@@ -116,6 +112,36 @@ const AddEventScreen = ({ route, navigation }) => {
     };
 
     useEffect(() => {
+        console.log(event)
+        setDate(new Date(new Date(event.date).valueOf() + 86400000));
+        
+        const teamData = {
+            name: event.teamName,
+            id: event.teamId
+        };
+        userCtx.switchTeam(teamData);
+
+        setType(event.type)
+
+        if(event.location==='On Own') {
+            setLoc('On Own');
+            setOnOwn(true);
+            setTypes([
+                {id:0, name: 'Cardio'},
+                {id:1, name: 'Weights'}
+            ]);
+        } else {
+            setLoc(event.location)
+            // setStartTime(event.startTime)
+            // setEndTime(event.endTime)
+
+        }
+
+        if(type==='Meet' || type==='Activity') {
+            setNotes(event.notes)
+            setLink(event.link)
+        }
+
         async function getDBTeams() {
             const results = await fetchCoachTeams(userCtx.userId, token);
             setTeams(results);
@@ -139,7 +165,7 @@ const AddEventScreen = ({ route, navigation }) => {
                 insertDate: new Date()
             }
 
-            await postEvent(eventData, token)
+            await patchEvent('', eventData, token)
             .then(function (response) {
                 const eventId = response.data.name;
                 if(type==='Cardio') {
@@ -167,7 +193,7 @@ const AddEventScreen = ({ route, navigation }) => {
                 endTime: format(endTime, "h:mm a"),
                 insertDate: new Date()
             }
-            await postEvent(eventData, token)
+            await patchEvent('', eventData, token)
             .then(function (response) {
                 eventId = response.data.name;
             })
@@ -470,4 +496,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default AddEventScreen;
+export default EditEventScreen;

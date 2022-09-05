@@ -111,7 +111,6 @@ const AthleteCalendarScreen = () => {
     }
 
     const renderItem = (item) => {
-        console.log(item);
         return (
             <TouchableOpacity style={styles.item}>
                 <View>

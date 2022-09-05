@@ -40,7 +40,11 @@ useEffect(() => {
 */
 
 export async function postEvent(event, token) {
-  await axios.post(DB_URL + 'event.json', event);
+  return await axios.post(DB_URL + 'event.json', event);
+}
+
+export async function patchEvent(eventId, event, token) {
+  await axios.patch(DB_URL + 'event/'+eventId+'.json', event);
 }
 
 export async function fetchUserEvents(uid, token) {

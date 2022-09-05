@@ -28,6 +28,7 @@ import CreateOrganizationScreen from './src/screens/CreateOrganizationScreen';
 import CreateTeamScreen from './src/screens/CreateTeamScreen';
 import AddCoachScreen from './src/screens/AddCoachScreen';
 import CoachCalendarScreen from './src/screens/CoachCalendarScreen';
+import EditEventScreen from './src/screens/EditEventScreen';
 
 const TabNav = createBottomTabNavigator();
 const StackNav = createStackNavigator();
@@ -121,6 +122,11 @@ function EventStack() {
         name="AddEvent" 
         component={AddEventScreen} 
         options={{ title: "Add Event" }}
+      />
+      <StackNav.Screen 
+        name="EditEvent" 
+        component={EditEventScreen} 
+        options={{ title: "Edit Event" }}
       />
       <StackNav.Screen 
         name="CoachCardio" 
@@ -247,7 +253,7 @@ function CoachTab() {
     >
       <TabNav.Screen name="Home" component={EventStack} />
       <TabNav.Screen name="Cardio" component={CoachCardioScreen} />
-      <TabNav.Screen name="Lifting" component={AddEventScreen} />
+      <TabNav.Screen name="Lifting" component={CoachTeamRosterScreen} />
       <TabNav.Screen name="Settings" component={SettingsScreen} />
     </TabNav.Navigator>
   );

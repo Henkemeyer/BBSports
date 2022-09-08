@@ -175,9 +175,7 @@ const AddEventScreen = ({ route, navigation }) => {
                 console.log(error);
             });
 
-
         }
-        
         setModalVisible(!modalVisible);
     }
 

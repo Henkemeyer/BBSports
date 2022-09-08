@@ -29,6 +29,8 @@ import CreateTeamScreen from './src/screens/CreateTeamScreen';
 import AddCoachScreen from './src/screens/AddCoachScreen';
 import CoachCalendarScreen from './src/screens/CoachCalendarScreen';
 import EditEventScreen from './src/screens/EditEventScreen';
+import SoloTimerScreen from './src/screens/SoloTimerScreen';
+import MultiTimerScreen from './src/screens/MultiTimerScreen';
 
 const TabNav = createBottomTabNavigator();
 const StackNav = createStackNavigator();
@@ -170,9 +172,9 @@ function AthleteTab() {
         inactiveTintColor: 'black',
       }}
     >
-      <TabNav.Screen name="Home" component={AthleteCalendarScreen} />
-      <TabNav.Screen name="Cardio" component={TrainingLogScreen} />
-      <TabNav.Screen name="Lifting" component={AthleteLiftingScreen} />
+      <TabNav.Screen name="Home" component={SoloTimerScreen} />
+      {/* <TabNav.Screen name="Cardio" component={TrainingLogScreen} /> */}
+      {/* <TabNav.Screen name="Lifting" component={AthleteCalendarScreen} /> */}
       <TabNav.Screen name="Settings" component={SettingsScreen} />
     </TabNav.Navigator>
   );
@@ -252,7 +254,7 @@ function CoachTab() {
       }}
     >
       <TabNav.Screen name="Home" component={EventStack} />
-      <TabNav.Screen name="Cardio" component={CoachCardioScreen} />
+      {/* <TabNav.Screen name="Cardio" component={CoachCardioScreen} /> */}
       <TabNav.Screen name="Lifting" component={CoachTeamRosterScreen} />
       <TabNav.Screen name="Settings" component={SettingsScreen} />
     </TabNav.Navigator>

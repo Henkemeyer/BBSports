@@ -1,185 +1,210 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Alert, Keyboard, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, 
-    TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
-import SelectDropdown from 'react-native-select-dropdown';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import { format } from 'date-fns';
-import { fetchAthleteGroup, fetchCoachTeams, fetchRoster, postEvent } from '../util/http';
+import { Alert, FlatList, Keyboard, KeyboardAvoidingView, Modal, Platform, ScrollView, StyleSheet,
+    Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import Select from 'react-dropdown-select';
+import { Table, TableWrapper, Row, Cell } from 'react-native-table-component';
+import { fetchAthleteGroup, fetchCardioLog, fetchRoster, postEvent } from '../util/http';
 import { UserContext } from '../store/context/user-context';
+import CheckBox from '../components/CheckBox';
 import UserInput from '../components/UserInput';
 import OurButton from '../components/OurButton';
 import Colors from '../constants/ColorThemes';
 import { Ionicons } from '@expo/vector-icons';
 
-const CoachCardioScreen = ( ) => {
+const CoachCardioScreen = ({ route, navigation }) => {
+    const { eventId } = route.params;
     const userCtx = useContext(UserContext);      // App User Info
     const token = userCtx.token;                  // User Auth Token
-    const [teams, setTeams] = useState([]);       // List of Coach's Teams
-    const [date, setDate] = useState(new Date()); // Date of workout
-    const [mode, setMode] = useState('date');     // Date picker mode
-    const [show, setShow] = useState(false);      // Show or Hide Date Picker
 
-    const [startTime, setStartTime] = useState(''); // Time of workout
-    const [endTime, setEndTime] = useState('');    // End time of workout
     const [distance, setDist] = useState(0);        // Distance travelled during workout
-    const [location, setLoc] = useState('');
     const [notes, setNotes] = useState('');     // Workout notes
-    const [athletes, setAthletes] = useState([]);  // List of users groups
+    const [selAthletes, setSelAthletes] = useState([]);
+    const [athletes, setAthletes] = useState([]);  // List of users for Roster
     const [testID, setTestID] = useState('');
-    const [group, setGroup] = useState('');         // Group used for workout
-  
-    const onDateChange = (event, selectedDate) => {
-        if(event.type != 'dismissed')
-        {
-            const currentDate = selectedDate;
-            setDate(currentDate);
-        }
-        setShow(false);
-    };
+    const [groups, setGroups] = useState([]);         // Group used for workout
+    const [groupToggles, setGroupToggles] = useState({});
 
-    const onTimeChange = (event, selectedTime) => {
-        if(event.type != 'dismissed')
-        {
-            const currentTime = selectedTime;
-            setTime(currentTime);
-        }
-        setShow(false);
-    };
-  
-    const showMode = (currentMode) => {
-      setShow(true);
-      setMode(currentMode);
-    };
-  
-    const showDatepicker = () => {
-      showMode('date');
-    };
+    const [modalLogsVisible, setModalLogsVisible] = useState(false);
+    const [athleteLogs, setAthleteLogs] = useState([]);
+    const [athleteObj, setAthletesObj] = useState([]);
+    const [logAthletesName, setLogAthletesName] = useState('');
 
-    useEffect(() => {
-        async function getDBTeams() {
-            const results = await fetchCoachTeams(userCtx.userId, token);
-            setTeams(results);
-        }
-    
-        getDBTeams();
-    }, [token]);
+    const header = {
+        tableHead: ['', 'Name', 'Groups', 'Year'],
+        widthArr: [40, 200, 400, 60]
+    }
 
     useEffect(() => {
         async function getAthletes() {
             const dbAthletes = await fetchRoster(userCtx.teamId, token);
-            const holdAthletesObj = [];
+            const rosterArr = [];
+            let selAthArr = []
+            let tmpGroups = []
+            let tmpGrpToggle = {}
 
             for (const key in dbAthletes.data) {
-                const athObj = {
-                    id: dbAthletes.data[key].uid,
-                    name: dbAthletes.data[key].fullName,
-                    group: dbAthletes.data[key].groupName
-                };
-                holdAthletesObj.push(athObj);
+                if(dbAthletes.data[key].status !== 'A') {
+                    continue;
+                }
+                let groupStr = '';
+
+                if(dbAthletes.data[key].groups) {
+                    const abb = dbAthletes.data[key].groups
+                    for (const group in abb) {
+                        console.log(abb[group])
+                        if(tmpGroups.indexOf(abb[group]) < 0) {
+                            tmpGroups = [...tmpGroups, abb[group]];
+
+                            const hold = {
+                                selected: false,
+                                name: abb[group],
+                                athletes: [dbAthletes.data[key].uid]
+                            }
+                            tmpGrpToggle[abb[group]] = hold
+                        } else {
+                            tmpGrpToggle[abb[group]].athletes = [...tmpGrpToggle[abb[group]].athletes, dbAthletes.data[key].uid]
+                        }
+                    }
+                    setGroupToggles(tmpGrpToggle)
+                    setGroups(tmpGroups)
+
+                    dbAthletes.data[key].groups.map((groupName, id) => (
+                        groupStr += groupName+", "
+                    ))
+                    groupStr = groupStr.slice(0, -2)
+                }
+                selAthArr[dbAthletes.data[key].uid] = false;
+
+                const athArr = [
+                    <CheckBox toggle={() => toggleAthleteSelection(dbAthletes.data[key].uid)} />,
+                    <TouchableOpacity onPress={() => showLogsHandler(dbAthletes.data[key].uid, dbAthletes.data[key].fullName)}>
+                        <Text style={styles.clickableText}>{dbAthletes.data[key].fullName}</Text>
+                    </TouchableOpacity>,
+                    groupStr,
+                    dbAthletes.data[key].age,
+                ]
+                rosterArr.push(athArr);
             }
-            setAthletes(holdAthletesObj);
+            setSelAthletes(selAthArr)
+            setAthletes(rosterArr);
         }
     
         getAthletes();
     }, [userCtx.teamId]);
 
+    function showLogsHandler(athletesUid, athletesName) {
+        async function getDBAthleteLogs() {
+            const dbLogs = await fetchCardioLog(athletesUid, token);
+            var listArr = [];
+            const logData = [];
+
+            for (const key in dbLogs.data) {
+                const tmpObj = {
+                    id: key,
+                    title: dbLogs.data[key].date
+                }
+                listArr = [...listArr, tmpObj];
+
+                const tmpData = {
+                    notes: dbLogs.data[key].notes,
+                    feel: dbLogs.data[key].feel,
+                    distance: dbLogs.data[key].distance,
+                    duration: dbLogs.data[key].duration,
+                    date: dbLogs.data[key].date
+                }
+                logData[key] = tmpData;
+            }
+
+            const dateDescending = [...listArr].sort((a, b) =>
+                a.title > b.title ? -1 : 1,
+            );
+            setAthletesObj(logData);
+            setAthleteLogs(dateDescending);
+
+            if(listArr.length===0) {
+                Alert.alert("Athlete has no log data");
+            } else {
+                setLogAthletesName(athletesName);
+                setModalLogsVisible(!modalLogsVisible)
+            }
+        }
+    
+        getDBAthleteLogs();
+    }
+
+    const Item = ({ itemData }) => (
+        <View style={styles.item}>
+            <Text style={styles.title}>Date: {athleteObj[itemData.id].date}</Text>
+            <Text style={styles.title}>Felt: {athleteObj[itemData.id].feel}</Text>
+            <Text style={styles.title}>Distance: {athleteObj[itemData.id].distance}</Text>
+            <Text style={styles.title}>Duration: {athleteObj[itemData.id].duration}</Text>
+            <Text style={styles.title}>Notes: {athleteObj[itemData.id].notes}</Text>
+        </View>
+    );
+
+    const renderItem = ({ item }) => (
+        <Item itemData={item} />
+    );
+
+    function toggleGroupSelection(group, groupId) {
+        let tmpArr = selAthletes
+        let tmpGrpTog = groupToggles
+        let tmpGroups = groups
+
+        tmpGrpTog[group].selected = !tmpGrpTog[group].selected
+        // tmpGroups[groupId][1] = tmpGrpTog[group].selected
+
+        for (const i in tmpGrpTog[group].athletes) {
+            const uid = tmpGrpTog[group].athletes[i]
+            tmpArr[uid] = tmpGrpTog[group].selected
+        }
+
+        setGroupToggles(tmpGrpTog)
+        setGroups(tmpGroups)
+        setSelAthletes(tmpArr)
+    }
+
+    function toggleAthleteSelection(uid) {
+        let tmpArr = selAthletes
+        tmpArr[uid] = !tmpArr[uid]
+        setSelAthletes(tmpArr)
+        console.log(selAthletes[uid])
+    }
+
     function submitHandler() {
         try {
-            const eventData = 
-                {
-                    uid: testID,
-                    teamId: userCtx.teamId,
-                    teamName: userCtx.teamName,
-                    notes: notes,
-                    date: date,
-                    type: 'Practice',
-                    location: location,
-                    startTime: startTime,
-                    endTime: endTime
-                    // duration: time
+            for (const uid in selAthletes) {
+                if(selAthletes[uid]) {
+                    const taskData = {
+                        uid: uid,
+                        eventId: eventId,
+                        notes: notes,
+                        type: 'Cardio',
+                        insertDate: new Date(),
+                        insertUser: userCtx.userId
+                    }
+                    postEvent(taskData, token);
                 }
-            postEvent(eventData, token);
+            }
         } catch (error) {
             console.log(error);
-            Alert.alert('Addition Failed', 'Failed to add event. Please try again later.')
+            Alert.alert('Addition Failed', 'Failed to add task. Please try again later.')
         }
     }
 
     function clearScreen() {
         setNotes('');
         setDist('');
-        setStartTime('');
-        setEndTime('');
-        setLoc('');
     }
 
     return (
-        <TouchableWithoutFeedback onPress={() =>{ Keyboard.dismiss(); }} >
         <KeyboardAvoidingView 
             behavior={Platform.OS === "ios" ? "padding" : "height"}>
         <ScrollView>
         <View style={styles.container}>
+        <TouchableWithoutFeedback onPress={() =>{ Keyboard.dismiss(); }} >
+            <>
             <Text style={styles.headerText}>Cardio Workouts</Text>
-            <SelectDropdown
-                data={teams}
-                onSelect={(selectedItem, index) => {
-                    const teamData = {
-                        name: selectedItem.name,
-                        id: selectedItem.id
-                    };
-                    userCtx.switchTeam(teamData);
-                    // selectTeamHandler(selectedItem.id);
-                }}
-                defaultButtonText={userCtx.teamName}
-                buttonTextAfterSelection={(selectedItem, index) => {
-                    return selectedItem.name
-                }}
-                rowTextForSelection={(item, index) => {
-                    return item.name
-                }}
-                buttonStyle={styles.selectDropDownButton}
-                buttonTextStyle={styles.selectDropDownText}
-                renderDropdownIcon={isOpened => {
-                    return <Ionicons name={isOpened ? 'chevron-up-circle-sharp' : 'chevron-down-circle-outline'} color={'#FFF'} size={18} />;
-                }}
-                dropdownIconPosition={'right'}
-                dropdownStyle={styles.selectDropDown}
-                rowStyle={styles.selectDropDownRow}
-                rowTextStyle={styles.selectDropDownText}
-            />
-            <TouchableOpacity onPress={showDatepicker}>
-                <View style={styles.lengthRow}>
-                    <Text style={styles.formText}>Date: {format(date, "MMMM do, yyyy")}</Text>
-                    <Ionicons name="calendar-outline" size={24} color="darkgreen" style={styles.iconStyle} />
-                </View>
-            </TouchableOpacity>
-            {show && (
-                <DateTimePicker
-                    testID="datePicker"
-                    value={date}
-                    mode={mode}
-                    is24Hour={true}
-                    onChange={onDateChange}
-                />
-            )}
-            <UserInput
-                label="Start Time:"
-                value={startTime}
-                onChangeText={setStartTime}
-                autoCorrect={false}
-            />
-            <UserInput
-                label="End Time:"
-                value={endTime}
-                onChangeText={setEndTime}
-                autoCorrect={false}
-            />
-            <UserInput
-                label="Location:"
-                value={location}
-                onChangeText={setLoc}
-                autoCorrect={false}
-            />
             <UserInput
                 label="Notes:"
                 value={notes}
@@ -189,27 +214,66 @@ const CoachCardioScreen = ( ) => {
                 numberOfLines={6}
                 style={styles.notesInput}
             />
-            <SelectDropdown
-                data={athletes}
-                onSelect={(selectedItem, index) => {
-                    setTestID(selectedItem.id);
+            </>
+        </TouchableWithoutFeedback>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalLogsVisible}
+                onRequestClose={() => {
+                    Alert.alert("Modal has been closed.");
+                    setAthletesObj([]);
+                    setModalLogsVisible(!modalLogsVisible);
                 }}
-                buttonTextAfterSelection={(selectedItem, index) => {
-                    return selectedItem.name
-                }}
-                rowTextForSelection={(item, index) => {
-                    return item.name
-                }}
-                buttonStyle={styles.selectDropDownButton}
-                buttonTextStyle={styles.selectDropDownText}
-                renderDropdownIcon={isOpened => {
-                    return <Ionicons name={isOpened ? 'chevron-up-circle-sharp' : 'chevron-down-circle-outline'} color={'#FFF'} size={18} />;
-                }}
-                dropdownIconPosition={'right'}
-                dropdownStyle={styles.selectDropDown}
-                rowStyle={styles.selectDropDownRow}
-                rowTextStyle={styles.selectDropDownText}
-            />
+            >
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalText}>{logAthletesName}</Text>
+                        <FlatList
+                            data={athleteLogs}
+                            renderItem={renderItem}
+                        />
+                        <OurButton
+                            buttonPressed={() => setModalLogsVisible(!modalLogsVisible)}
+                            buttonText="Close"
+                            style={{marginHorizontal: 15, marginTop:15}}
+                        />
+                    </View>
+                </View>
+            </Modal>
+            <Text style={styles.leftText}>Groups:</Text>
+            <View style={styles.groupRow}>
+            {/* {groups.map((groupName) => (
+                <TouchableOpacity
+                    onPress={() => toggleGroupSelection(groupName)}
+                    style={ groupToggles[groupName].selected ? styles.groupButtonTrue : styles.groupButtonFalse}>
+                    <Text style={{fontWeight:'bold'}}>{groupName}</Text>
+                </TouchableOpacity>
+            ))} */}
+            </View>
+            <ScrollView horizontal={true}>
+                <View style={{paddingHorizontal: 7}}>
+                    <Table borderStyle={{borderColor: 'black', borderRadius: 5}}>
+                        <Row data={header.tableHead} widthArr={header.widthArr} style={styles.head} textStyle={styles.rosterHeader}/>
+                    </Table>
+                    <ScrollView style={styles.dataWrapper}>
+                        <Table borderStyle={{borderColor: '#C1C0B9'}}>
+                            { athletes.map((dataRow, index) => (
+                                <TableWrapper key={index} style={ index%2 ? styles.rowA : styles.rowB}>
+                                    {dataRow.map((cellData, cellIndex) => (
+                                        <Cell 
+                                            key={cellIndex} 
+                                            style={{width: header.widthArr[cellIndex]}}
+                                            data={cellData}
+                                            textStyle={[{textAlign: 'center', fontWeight: '200' }]}
+                                        />
+                                    ))}
+                                </TableWrapper>
+                            ))}
+                        </Table>
+                    </ScrollView>
+                </View>
+            </ScrollView>
         </View>
         <View style={styles.buttonRow}>
             <TouchableOpacity onPress={() => clearScreen()}>
@@ -220,9 +284,9 @@ const CoachCardioScreen = ( ) => {
                 buttonText="Submit"
             />
         </View>
+        <Text>{eventId}</Text>
         </ScrollView>
         </KeyboardAvoidingView>
-        </TouchableWithoutFeedback>
     );
 };
 
@@ -282,6 +346,105 @@ const styles = StyleSheet.create({
         paddingHorizontal: 40,
         justifyContent: 'space-between',
         alignItems: 'center'
+    },
+    rosterHeader: {
+        width: '80%',
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: 'black',
+        textAlign: 'center',
+        borderColor: 'black'
+    },
+    head: { 
+        height: 50, 
+        backgroundColor: 'green',
+        borderRadius: 5
+    },
+    cellText: { 
+        textAlign: 'center', 
+        fontWeight: '200' 
+    },
+    clickableText: {
+        color: 'orange',
+        fontSize: 16,
+        textAlign: 'center'
+    },
+    dataWrapper: { 
+        marginTop: -1
+    },
+    rowA: { 
+        flexDirection: 'row',
+        height: 40, 
+        backgroundColor: '#F7F8FA'
+    },
+    rowB: { 
+        flexDirection: 'row',
+        height: 40, 
+        backgroundColor: '#ffffff' 
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginVertical: 22
+    },
+    modalView: {
+        width: '80%',
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+    },
+    modalText: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 15,
+        textAlign: "center",
+        color: 'darkgreen'
+    },
+    item: {
+        borderWidth: 1,
+        borderColor: 'green',
+        borderRadius: 5,
+        marginVertical: 7,
+        marginHorizontal: 15,
+        padding: 18
+    },
+    groupRow: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        margin: 12,
+        backgroundColor: 'white',
+        borderRadius: 8
+    },
+    groupButtonTrue: {
+        borderRadius: 100,
+        borderWidth: 1,
+        margin: 5,
+        padding: 8,
+        backgroundColor: 'lightgreen'
+    },
+    groupButtonFalse: {
+        borderRadius: 100,
+        borderWidth: 1,
+        margin: 5,
+        padding: 8,
+        backgroundColor: 'red'
+    },
+    leftText: {
+        alignSelf: 'flex-start',
+        fontSize: 18,
+        fontWeight: 'bold',
+        paddingLeft: 10
     }
 });
 

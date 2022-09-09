@@ -101,6 +101,10 @@ export async function postTeam(team, token) {
   });
 }
 
+export async function fetchTeam(teamId, token) {
+  return await axios.get(DB_URL + 'team/'+teamId+'.json');
+}
+
 export async function fetchOrgTeams(orgId, token) {
   const response = await axios.get(DB_URL + 'team.json?orderBy="organizationId"&equalTo="'+orgId+'"');
 

@@ -29,6 +29,7 @@ import CreateTeamScreen from './src/screens/CreateTeamScreen';
 import AddCoachScreen from './src/screens/AddCoachScreen';
 import CoachCalendarScreen from './src/screens/CoachCalendarScreen';
 import EditEventScreen from './src/screens/EditEventScreen';
+import StopwatchSetupScreen from './src/screens/StopwatchSetupScreen';
 import SoloTimerScreen from './src/screens/SoloTimerScreen';
 import MultiTimerScreen from './src/screens/MultiTimerScreen';
 
@@ -144,6 +145,31 @@ function EventStack() {
   );
 }
 
+function RecordStack() {
+  return (
+    <StackNav.Navigator
+      screenOptions={{
+        headerTintColor: 'green',
+      }}>
+      <StackNav.Screen 
+        name="RecordCardio" 
+        component={StopwatchSetupScreen} 
+        options={{ title: 'Record Setup' }}
+      />
+      <StackNav.Screen 
+        name="SoloTimer" 
+        component={SoloTimerScreen} 
+        options={{ title: "Stopwatch" }}
+      />
+      <StackNav.Screen 
+        name="MultiTimer" 
+        component={MultiTimerScreen} 
+        options={{ title: "Stopwatch" }}
+      />
+    </StackNav.Navigator>
+  );
+}
+
 function AthleteTab() {
   return (
     <TabNav.Navigator
@@ -172,7 +198,7 @@ function AthleteTab() {
         inactiveTintColor: 'black',
       }}
     >
-      <TabNav.Screen name="Home" component={SoloTimerScreen} />
+      <TabNav.Screen name="Home" component={StopwatchSetupScreen} />
       {/* <TabNav.Screen name="Cardio" component={TrainingLogScreen} /> */}
       {/* <TabNav.Screen name="Lifting" component={AthleteCalendarScreen} /> */}
       <TabNav.Screen name="Settings" component={SettingsScreen} />
@@ -189,6 +215,11 @@ function AthleteContainerStack() {
       <StackNav.Screen 
         name="AthleteTab" 
         component={AthleteTab}
+        options={{ headerShown: false }} 
+      />
+      <StackNav.Screen 
+        name="RecordStack" 
+        component={RecordStack}
         options={{ headerShown: false }} 
       />
       <StackNav.Screen 

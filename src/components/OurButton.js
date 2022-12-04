@@ -7,6 +7,7 @@ const OurButton = props => {
         <TouchableOpacity 
             style={{...styles.button, ...props.style}}
             onPress={() => props.buttonPressed()}
+            disabled={props.disabled}
         >
             <Text style={styles.buttonText}>{props.buttonText}</Text>
         </TouchableOpacity>

@@ -31,7 +31,7 @@ import CoachCalendarScreen from './src/screens/CoachCalendarScreen';
 import EditEventScreen from './src/screens/EditEventScreen';
 import StopwatchSetupScreen from './src/screens/StopwatchSetupScreen';
 import SoloTimerScreen from './src/screens/SoloTimerScreen';
-import MultiTimerScreen from './src/screens/MultiTimerScreen';
+import XCTimerScreen from './src/screens/XCTimerScreen';
 
 const TabNav = createBottomTabNavigator();
 const StackNav = createStackNavigator();
@@ -162,8 +162,8 @@ function RecordStack() {
         options={{ title: "Stopwatch" }}
       />
       <StackNav.Screen 
-        name="MultiTimer" 
-        component={MultiTimerScreen} 
+        name="XCTimer" 
+        component={XCTimerScreen} 
         options={{ title: "Stopwatch" }}
       />
     </StackNav.Navigator>
@@ -198,7 +198,7 @@ function AthleteTab() {
         inactiveTintColor: 'black',
       }}
     >
-      <TabNav.Screen name="Home" component={StopwatchSetupScreen} />
+      <TabNav.Screen name="Home" component={RecordStack} />
       {/* <TabNav.Screen name="Cardio" component={TrainingLogScreen} /> */}
       {/* <TabNav.Screen name="Lifting" component={AthleteCalendarScreen} /> */}
       <TabNav.Screen name="Settings" component={SettingsScreen} />
@@ -302,7 +302,7 @@ function Navigation () {
         const userId = await AsyncStorage.getItem('userID');
         const orgId = await AsyncStorage.getItem('lastOrgId');
         const teamId = await AsyncStorage.getItem('lastTeamId');
-        const userType = await AsyncStorage.getItem('lastUserType');
+        const userMode = await AsyncStorage.getItem('lastUserMode');
 
         if(orgId) {
           const organization = {
@@ -321,7 +321,7 @@ function Navigation () {
         }
 
         if (localToken) {
-          userCtx.switchUserType(userType);
+          userCtx.switchUserMode(userMode);
           const authData = { idToken: localToken, localId: userId }
           userCtx.login(authData);
         }
@@ -341,7 +341,7 @@ function Navigation () {
         {userCtx.userId==0 ? (
           <LoginStack />
         ) :
-        userCtx.userType=='Athlete' ?  (
+        userCtx.userMode=='Athlete' ?  (
           <AthleteContainerStack />
         ) : (
           <CoachContainerStack />

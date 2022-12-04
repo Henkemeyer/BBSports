@@ -8,7 +8,7 @@ import { UserContext } from '../store/context/user-context';
 function SettingsScreen ({navigation}) {
     const userCtx = useContext(UserContext);
     const userId = userCtx.userId;
-    const userType = userCtx.userType;
+    const userMode = userCtx.userMode;
 
     function logoutUserHandler() {
         userCtx.logout();
@@ -22,12 +22,12 @@ function SettingsScreen ({navigation}) {
         navigation.navigate("OrganizationStack");
     }
 
-    function switchTypeHandler() {
-        if(userCtx.userType=='Athlete'){
-            userCtx.switchUserType('Coach');
+    function switchModeHandler() {
+        if(userCtx.userMode=='Athlete'){
+            userCtx.switchUserMode('Coach');
         }
         else {
-            userCtx.switchUserType('Athlete');
+            userCtx.switchUserMode('Athlete');
         }
     }
 
@@ -36,14 +36,14 @@ function SettingsScreen ({navigation}) {
                 <ShadowBox style={styles.containerView}>
                     <Text style={styles.textStyle}>User ID:</Text>
                     <Text style={styles.textStyle} selectable>{userId}</Text>
-                    <Text style={styles.textStyle}>Screens Visible:{userType}</Text>
+                    <Text style={styles.textStyle}>Screens Visible:{userMode}</Text>
                     <Text style={styles.textStyle}>Fair Weather Mode: OFF</Text>
                     <OurButton 
                         buttonPressed={() => placeholder()}
                         buttonText="Theme"
                         style={styles.buttonStyle}
                     />
-                    {userCtx.userType=='Athlete' || userCtx.userType=='Athlete' ? (
+                    {userCtx.userMode=='Athlete' || userCtx.userMode=='Athlete' ? (
                         <OurButton 
                             buttonPressed={() => equipmentScreenHandler()}
                             buttonText="Manage Equipment"
@@ -55,8 +55,8 @@ function SettingsScreen ({navigation}) {
                             style={styles.buttonStyle} />
                     )}
                     <OurButton 
-                        buttonPressed={() => switchTypeHandler()}
-                        buttonText="Swap User"
+                        buttonPressed={() => switchModeHandler()}
+                        buttonText="Switch Mode"
                         style={styles.buttonStyle}
                     />
                     <OurButton 
@@ -86,12 +86,13 @@ const styles = StyleSheet.create({
     thiccButtonStyle: {
         height: 75,
         fontSize: 25,
-        margin: 20
+        margin: 20,
+        width: '60%'
     },
     buttonStyle: {
         fontSize: 25,
         margin: 20,
-        width: '70%'
+        width: '60%'
     },
     textStyle: {
         fontSize: 16,

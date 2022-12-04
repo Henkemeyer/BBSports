@@ -3,9 +3,9 @@ import { StyleSheet, Text, View, TextInput } from 'react-native';
 
 const UserInput = props => {
     return (
-        <View style={styles.container}>
+        <View style={{...styles.container, ...props.style}}>
             <Text style={styles.inputHeader}>{props.label}</Text>
-            <TextInput {...props} style={{...styles.input, ...props.style}} />
+            <TextInput {...props} style={styles.input} />
         </View>
     );
 };

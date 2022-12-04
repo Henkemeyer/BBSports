@@ -8,8 +8,8 @@ export const UserContext = createContext({
     fullName: '',
     login: (authData) => {},
     logout: () => {},
-    userType: '', // Athlete, Coach, Fan?
-    switchUserType: (input) => null,
+    userMode: '', // Athlete, Coach, Fan?
+    switchUserMode: (input) => null,
     organizationId: null,
     organizationName: '',
     switchOrganization: (orgData) => {},
@@ -21,7 +21,7 @@ export const UserContext = createContext({
 function UserContextProvider({children}) {
     const [getUserId, setUserId] = useState([]);
     const [getToken, setToken] = useState([]);
-    const [getUserType, setUserType] = useState([]);
+    const [getUserMode, setUserMode] = useState([]);
     const [getName, setName] = useState([]);
     const [getFullName, setFullName] = useState([]);
     const [getOrganizationId, setOrganizationId] = useState([]);
@@ -44,9 +44,9 @@ function UserContextProvider({children}) {
         .then(() => alert('Logout Success'));
     }
 
-    function switchUserType(input) {
-        setUserType(input);
-        AsyncStorage.setItem('lastUserType', input);
+    function switchUserMode(input) {
+        setUserMode(input);
+        AsyncStorage.setItem('lastUserMode', input);
     }
 
     function switchOrganization(orgData) {
@@ -72,14 +72,14 @@ function UserContextProvider({children}) {
         token: getToken,
         name: getName,
         fullName: getFullName,
-        userType: getUserType,
+        userMode: getUserMode,
         organizationId: getOrganizationId,
         organizationName: getOrganizationName,
         teamId: getTeamId,
         teamName: getTeamName,
         login: login,
         logout: logout,
-        switchUserType: switchUserType,
+        switchUserMode: switchUserMode,
         switchOrganization: switchOrganization,
         switchTeam: switchTeam
     }

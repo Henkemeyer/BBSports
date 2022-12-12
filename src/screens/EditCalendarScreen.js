@@ -4,7 +4,7 @@ import { Alert, Keyboard, KeyboardAvoidingView, Modal, Platform, ScrollView, Sty
 import SelectDropdown from 'react-native-select-dropdown';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { format } from 'date-fns';
-import { fetchAthleteGroup, fetchCoachTeams, fetchRoster, patchEvent } from '../util/http';
+import { fetchAthleteGroup, fetchCoachTeams, fetchRoster, patchCalendar } from '../util/http';
 import { UserContext } from '../store/context/user-context';
 import UserInput from '../components/UserInput';
 import OurButton from '../components/OurButton';
@@ -12,8 +12,8 @@ import CheckBox from '../components/CheckBox';
 import Colors from '../constants/ColorThemes';
 import { Ionicons } from '@expo/vector-icons';
 
-const EditEventScreen = ({ route, navigation }) => {
-    const { event } = route.params;
+const EditCalendarScreen = ({ route, navigation }) => {
+    const { calendar } = route.params;
 
     const userCtx = useContext(UserContext);      // App User Info
     const token = userCtx.token;                  // User Auth Token
@@ -23,8 +23,8 @@ const EditEventScreen = ({ route, navigation }) => {
     const [notes, setNotes] = useState('');       // Coaches notes if they have any
     const [link, setLink] = useState('');         // Link for additional info like schedule or results
     const [modalVisible, setModalVisible] = useState(false);
-    const typeDropdownRef = useRef({});           // Event type drop down reference
-    const [type, setType] = useState('Cardio');   // Event Type
+    const typeDropdownRef = useRef({});           // Calendar type drop down reference
+    const [type, setType] = useState('Cardio');   // Calendar Type
     const [types, setTypes] = useState([
         {id:0, name: 'Cardio'},
         {id:1, name: 'Weights'},
@@ -112,18 +112,17 @@ const EditEventScreen = ({ route, navigation }) => {
     };
 
     useEffect(() => {
-        console.log(event)
-        setDate(new Date(new Date(event.date).valueOf() + 86400000));
+        setDate(new Date(new Date(calendar.date).valueOf() + 86400000));
         
         const teamData = {
-            name: event.teamName,
-            id: event.teamId
+            name: calendar.teamName,
+            id: calendar.teamId
         };
         userCtx.switchTeam(teamData);
 
-        setType(event.type)
+        setType(calendar.type)
 
-        if(event.location==='On Own') {
+        if(calendar.location==='On Own') {
             setLoc('On Own');
             setOnOwn(true);
             setTypes([
@@ -131,15 +130,15 @@ const EditEventScreen = ({ route, navigation }) => {
                 {id:1, name: 'Weights'}
             ]);
         } else {
-            setLoc(event.location)
+            setLoc(calendar.location)
             // setStartTime(event.startTime)
             // setEndTime(event.endTime)
 
         }
 
         if(type==='Meet' || type==='Activity') {
-            setNotes(event.notes)
-            setLink(event.link)
+            setNotes(calendar.notes)
+            setLink(calendar.link)
         }
 
         async function getDBTeams() {
@@ -154,7 +153,7 @@ const EditEventScreen = ({ route, navigation }) => {
         if(type==='Meet' || type==='Activity') {
             setModalVisible(!modalVisible);
         } else {
-            const eventData = {
+            const calendarData = {
                 teamId: userCtx.teamId,
                 teamName: userCtx.teamName,
                 date: format(date, "yyyy-MM-dd"),
@@ -165,13 +164,13 @@ const EditEventScreen = ({ route, navigation }) => {
                 insertDate: new Date()
             }
 
-            await patchEvent('', eventData, token)
+            await patchCalendar('', calendarData, token)
             .then(function (response) {
-                const eventId = response.data.name;
+                const calendarId = response.data.name;
                 if(type==='Cardio') {
-                    navigation.navigate("CoachCardio", { eventId })
+                    navigation.navigate("CoachCardio", { calendarId })
                 } else {
-                    navigation.navigate("CoachLifting", { eventId })
+                    navigation.navigate("CoachLifting", { calendarId })
                 }
             })
             .catch(function (error) {
@@ -182,8 +181,8 @@ const EditEventScreen = ({ route, navigation }) => {
 
     async function closeModal(action) {
         if (action === 'add') {
-            var eventId = '';
-            const eventData = {
+            var calendarId = '';
+            const calendarData = {
                 teamId: userCtx.teamId,
                 teamName: userCtx.teamName,
                 date: format(date, "yyyy-MM-dd"),
@@ -193,9 +192,9 @@ const EditEventScreen = ({ route, navigation }) => {
                 endTime: format(endTime, "h:mm a"),
                 insertDate: new Date()
             }
-            await patchEvent('', eventData, token)
+            await patchCalendar('', calendarData, token)
             .then(function (response) {
-                eventId = response.data.name;
+                calendarId = response.data.name;
             })
             .catch(function (error) {
                 console.log(error);
@@ -496,4 +495,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default EditEventScreen;
+export default EditCalendarScreen;

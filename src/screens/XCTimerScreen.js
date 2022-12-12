@@ -1,117 +1,116 @@
 import React, { useContext, useEffect, useState} from 'react';
 import { Button, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import OurButton from '../components/OurButton';
-import { postEquipment, fetchEquipment, patchEquipment } from '../util/http';
+import { postEquipment, fetchEquipment, patchEquipment, postEvent } from '../util/http';
 import { UserContext } from '../store/context/user-context';
 import { Table, TableWrapper, Row, Cell } from 'react-native-table-component';
 import { Ionicons } from '@expo/vector-icons';
 import { differenceInMilliseconds, format } from 'date-fns';
 
 const XCTimerScreen = ({ navigation, route}) => {
-    const { meet, event, athletes } = route.params
+    const { meet, event, numSplits, athletes } = route.params
 
     const userCtx = useContext(UserContext);
     const token = userCtx.token;
-    const [numSplits, setNumSplits] = useState(1);
     const [running, setRunning] = useState(false)
     const [stopwatch, setStopwatch] = useState('0:00:00.00')
     const [timer, setTimer] = useState(null);
     const [tableForm, setTableForm] = useState([]); // Table of UX elements
     const [tableData, setTableData] = useState([]); // Table of actual values
     const [header, setHeader] = useState([]);
-    const [headerValues, setHeaderValues] = useState([]);
 
     useEffect(() => {
         function initializeValues() {
-            let tmpForm = []
+            let tempTableData = Array(athletes.length+1).fill(0).map(row => new Array(parseInt(numSplits)+1).fill(''))
+            tempTableData[0][0] = 'Name'
+
+            for(let x=1; x<=numSplits; x++) {
+                tempTableData[0][x] = (Math.ceil((event.distance / numSplits) * x)).toString()
+            }
 
             athletes.map((data, index) => (
-                tmpForm[index] = [data.name]
+                tempTableData[index+1][0] = data.name
             ))
-            setTableForm(tmpForm)
-            setHeader({
-                tableHead: ['Name'],
-                widthArr: [150],
-            })
+            
+            setTableData(tempTableData)
+
+            let tempHeader = Array(2).fill(0).map(row => new Array(parseInt(numSplits)+1).fill(150))
+            tempHeader[0][0] = <Text>Name</Text>
+
+            let tempTable = Array(athletes.length).fill(0).map(row => new Array(parseInt(numSplits)+1).fill(''))
+            
+            for(let x=1; x<=numSplits; x++) {
+                tempHeader[0][x] = <TextInput
+                    maxLength={5}
+                    keyboardType='numeric'
+                    defaultValue={tempTableData[0][x]}
+                    onChangeText={text => {
+                        let tableDataCopy = tableData
+                        tableDataCopy[0][x] = text
+
+                        setTableData(tableDataCopy)
+                    }}
+                    style={styles.cellText}/>
+            }
+
+            athletes.map((data, index) => (
+                tempTable[index][0] = data.name
+            ))
+            
+            setHeader(tempHeader)
+            setTableForm(tempTable)
         }
 
         initializeValues();
     }, [route.params]);
 
-    const generateTable = () => {
-        if(numSplits === '' || numSplits === '0') {
-            setNumSplits('1')
+    function setTableCell(row, value) {
+        const next = tableData[row+1].findIndex((data) => data === '')
+        let tableDataCopy = tableData
+        let tableFormCopy = tableForm
+        if(next > 0) {
+            tableDataCopy[row+1][next] = value
+            tableFormCopy[row][next] = value
         }
+        else {
+            const numColumns = tableData[0].length
+            const numRows = tableData.length
 
-        const tempTableData = [];
-        const tempTableForm = [];
-        const tmpHeader = {
-            tableHead: ['Name'],
-            widthArr: [150],
-        }
-        const tmpHeaderVal = ['Name']
+            for(let y=0; y<numRows; y++) {
+                if(y === 0) {
+                    let headerCopy = header
+                    const nextSplit = parseInt(tableDataCopy[0][numColumns-1])+200
+                    tableDataCopy[0].push(nextSplit)
 
-        athletes.map((data, index) => (
-            tempTableForm[index] = [data.name]
-        ))
-        athletes.map((data, index) => (
-            tempTableData[index] = [data.id]
-        ))
-
-        for(let x=0; x<athletes.length; x++) {
-            for(let y=1; y<=numSplits; y++) {
-                if(x===0){ // Header
-                    const dist = (Math.ceil((event.distance / numSplits) * y)).toString()
-                    tmpHeaderVal.push(dist)
-                    tmpHeader.widthArr.push(75)
-                }
-                tempTableData[x].push('')
-            }
-        }
-        setTableData(tempTableData)
-        setHeaderValues(tmpHeaderVal)
-
-        for(let x=0; x<athletes.length; x++) {
-            for(let y=1; y<=numSplits; y++) {
-                if(x===0) {
-                    console.log(headerValues[y])
-                    tmpHeader.tableHead.push(<TextInput
+                    headerCopy[0].push(<TextInput
                         maxLength={5}
                         keyboardType='numeric'
-                        value={headerValues[y]}
+                        defaultValue={nextSplit}
                         onChangeText={text => {
-                            let tmpHeaderVal = headerValues
-                            tmpHeaderVal[y] = text
+                            let tableDataCopy = tableData
+                            tableDataCopy[0][numColumns] = text
 
-                            setHeaderValues(tmpHeaderVal)
+                            setTableData(tableDataCopy)
                         }}
                         style={styles.cellText}/>)
+
+                    headerCopy[1].push(150)
+                    console.log(headerCopy)
+                    setHeader(headerCopy)
                 }
-                tempTableForm[x].push(<TextInput
-                    maxLength={10}
-                    value={tableData[x][y]}
-                    onChangeText={text => setTableCell(x,y,text)}
-                    style={styles.cellText}/>)
+                else if(y === row+1) {
+                    tableDataCopy[y].push(value)
+                    tableFormCopy[y-1].push(value)
+                }
+                else {
+                    tableDataCopy[y].push('')
+                    tableFormCopy[y-1].push('')
+                }
             }
         }
-        setHeader(tmpHeader)
-        setTableForm(tempTableForm);
-    }
 
-    function setTableCell(x,y,value) {
-        console.log(value)
-        if(x === 'head') {
-            let tmpHeaderVal = headerValues
-            tmpHeaderVal[y] = value
-
-            setHeaderValues(tmpHeaderVal)
-        } else if (y === 'new') {
-            const column = tableData[x].findIndex((split) => split === '');
-            let tempTableData = tableData;
-        
-            tempTableData[x][column] = value;
-            setTableData(tempTableData);
-        }
+        setTableData(tableDataCopy)
+        setTableForm(tableFormCopy)
     }
 
     const onButtonStart = () => {
@@ -139,31 +138,37 @@ const XCTimerScreen = ({ navigation, route}) => {
         setRunning(false);
     }
 
+    const submitSplits = () => {
+        for(let x=1;x<tableData.length;x++){
+            let splits = []
+            for(let y=1;y<tableData[x].length;y++){
+                const truple = [tableData[0][y],tableData[x][y]]
+                splits.push(truple)
+            }
+
+            try {
+                const eventData = {
+                    calendarId:meet.id,
+                    calendarName:meet.name,
+                    eventName:event.name,
+                    athleteId:athletes[x-1].uid,
+                    athleteName:athletes[x-1].name,
+                    stats: splits
+    
+                }
+                postEvent(eventData, token)
+            } catch (error) {
+                Alert.alert('Split Creation Failed!', 'Failed to post splits. Sorry for the inconvenience') 
+            }
+        }
+        navigation.goBack();
+    }
+
     return(
         <ScrollView>
         <View style={styles.container}>
             <Text style={styles.header}>{meet.name}</Text>
             <Text style={styles.header}>{event.name}</Text>
-            <View style={{flexDirection: 'row'}}>
-                <Text style = {styles.inputHeader}>Num of Splits: </Text>
-                <TextInput
-                    value={numSplits}
-                    onChangeText={(text) => {
-                        const value = text.replace(/[^0-9]/g, '')
-                        setNumSplits(value)
-                    }}
-                    keyboardType="numeric"
-                    maxLength={2}
-                    placeholder='1'
-                    placeholderTextColor={'red'}
-                    style={styles.inputContainer}
-                />
-                <TouchableOpacity
-                    onPress={generateTable}
-                    style={{alignSelf: 'center'}}>
-                    <Ionicons name="md-enter-outline" size={24} color="darkgreen" />
-                </TouchableOpacity>
-            </View>
             <Text style={styles.counter}>{stopwatch}</Text>
             <OurButton
                 buttonText="Start"
@@ -182,39 +187,44 @@ const XCTimerScreen = ({ navigation, route}) => {
                 style={styles.swButton}
             />
             <View style={styles.athleteRow}>
-                {athletes.map((athlete, id) => (
+                {athletes.map((athlete, index) => (
                     <TouchableOpacity
                         testID={athlete.id}
-                        onPress={() => setTableCell(id, 'new', stopwatch)}
+                        onPress={() => setTableCell(index, stopwatch)}
                         style={styles.athleteButton}>
                         <Text style={{fontWeight:'bold'}}>{athlete.name}</Text>
                     </TouchableOpacity>
                 ))}
             </View>
-        </View>
-        <ScrollView horizontal={true} style={{paddingVertical: 20}}>
-            <View>
-                <Table borderStyle={{borderColor: 'black', borderRadius: 5}}>
-                    <Row data={header.tableHead} widthArr={header.widthArr} style={styles.head} textStyle={styles.tableHeader}/>
-                </Table>
-                <ScrollView style={styles.dataWrapper}>
-                    <Table borderStyle={{borderColor: '#C1C0B9'}}>
-                        { tableForm.map((dataRow, index) => (
-                            <TableWrapper key={index} style={ index%2 ? styles.rowA : styles.rowB}>
-                                {dataRow.map((cellData, cellIndex) => (
-                                    <Cell 
-                                        key={cellIndex}
-                                        data={cellData}
-                                        style={{width: header.widthArr[cellIndex]}}
-                                        textStyle={[{textAlign: 'center', fontWeight: '200' }]}
-                                    />
-                            ))}
-                            </TableWrapper>
-                        ))}
+            <ScrollView horizontal={true} style={{paddingVertical: 20}}>
+                <View>
+                    <Table borderStyle={{borderColor: 'black', borderRadius: 5}}>
+                        <Row data={header[0]} widthArr={header[1]} style={styles.head}/>
                     </Table>
-                </ScrollView>
+                    <ScrollView style={styles.dataWrapper}>
+                        <Table borderStyle={{borderColor: 'black', borderRadius: 5}}>
+                            { tableForm.map((dataRow, index) => (
+                                <TableWrapper key={index} style={ index%2 ? styles.rowA : styles.rowB}>
+                                    {dataRow.map((cellData, cellIndex) => (
+                                        <Cell 
+                                            key={index+','+cellIndex}
+                                            data={cellData}
+                                            style={{width: 150}}
+                                        />
+                                ))}
+                                </TableWrapper>
+                            ))}
+                        </Table>
+                    </ScrollView>
+                </View>
+            </ScrollView>
+            <View style={{alignItems: 'center'}}>
+                <OurButton
+                    buttonText="Submit"
+                    buttonPressed={submitSplits}
+                />
             </View>
-        </ScrollView>
+        </View>
         </ScrollView>
     );
 }
@@ -223,7 +233,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: 'linen',
+        backgroundColor: '#F4F4F4',
         paddingVertical: 25
     },
     counter: {
@@ -257,6 +267,7 @@ const styles = StyleSheet.create({
     },
     swButton: {
         width: '50%',
+        marginVertical: 5
     },
     athleteRow: {
         flexDirection: 'row',

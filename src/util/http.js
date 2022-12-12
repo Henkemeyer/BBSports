@@ -39,20 +39,20 @@ useEffect(() => {
 }, []);
 */
 
-export async function postEvent(event, token) {
-  return await axios.post(DB_URL + 'event.json', event);
+export async function postCalendar(calendar, token) {
+  return await axios.post(DB_URL + 'calendar.json', calendar);
 }
 
-export async function patchEvent(eventId, event, token) {
-  await axios.patch(DB_URL + 'event/'+eventId+'.json', event);
+export async function patchCalendar(calendarId, calendar, token) {
+  await axios.patch(DB_URL + 'calendar/'+calendarId+'.json', calendar);
 }
 
-export async function fetchUserEvents(uid, token) {
-  return await axios.get(DB_URL + 'event.json?orderBy="uid"&equalTo="'+uid+'"');
+export async function fetchUserCalendar(uid, token) {
+  return await axios.get(DB_URL + 'calendar.json?orderBy="uid"&equalTo="'+uid+'"');
 }
 
-export async function fetchTeamEvents(teamId, token) {
-  return await axios.get(DB_URL + 'event.json?orderBy="teamId"&equalTo="'+teamId+'"');
+export async function fetchTeamCalendar(teamId, token) {
+  return await axios.get(DB_URL + 'calendar.json?orderBy="teamId"&equalTo="'+teamId+'"');
 }
 
 export async function postCardioLog(cardio, token) {
@@ -216,3 +216,11 @@ export async function fetchGroups(teamId, token) {
 
   return groups;
 }
+
+export async function postEvent(event, token) {
+  return await axios.post(DB_URL + 'event.json', event);
+}
+
+// export async function patchEvent(athleteId, data, token) {
+//   await axios.patch(DB_URL + 'athlete/' + athleteId +'.json', data);
+// }

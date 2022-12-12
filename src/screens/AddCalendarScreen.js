@@ -4,7 +4,7 @@ import { Alert, Keyboard, KeyboardAvoidingView, Modal, Platform, ScrollView, Sty
 import SelectDropdown from 'react-native-select-dropdown';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { format } from 'date-fns';
-import { fetchAthleteGroup, fetchCoachTeams, fetchRoster, postEvent } from '../util/http';
+import { fetchAthleteGroup, fetchCoachTeams, fetchRoster, postCalendar } from '../util/http';
 import { UserContext } from '../store/context/user-context';
 import UserInput from '../components/UserInput';
 import OurButton from '../components/OurButton';
@@ -12,7 +12,7 @@ import CheckBox from '../components/CheckBox';
 import Colors from '../constants/ColorThemes';
 import { Ionicons } from '@expo/vector-icons';
 
-const AddEventScreen = ({ route, navigation }) => {
+const AddCalendarScreen = ({ route, navigation }) => {
     const { day } = route.params;
     var defaultDay = new Date();
     if(day) {
@@ -128,7 +128,7 @@ const AddEventScreen = ({ route, navigation }) => {
         if(type==='Meet' || type==='Activity') {
             setModalVisible(!modalVisible);
         } else {
-            const eventData = {
+            const calendarData = {
                 teamId: userCtx.teamId,
                 teamName: userCtx.teamName,
                 date: format(date, "yyyy-MM-dd"),
@@ -139,13 +139,13 @@ const AddEventScreen = ({ route, navigation }) => {
                 insertDate: new Date()
             }
 
-            await postEvent(eventData, token)
+            await postCalendar(calendarData, token)
             .then(function (response) {
-                const eventId = response.data.name;
+                const calendarId = response.data.name;
                 if(type==='Cardio') {
-                    navigation.navigate("CoachCardio", { eventId })
+                    navigation.navigate("CoachCardio", { calendarId })
                 } else {
-                    navigation.navigate("CoachLifting", { eventId })
+                    navigation.navigate("CoachLifting", { calendarId })
                 }
             })
             .catch(function (error) {
@@ -156,8 +156,8 @@ const AddEventScreen = ({ route, navigation }) => {
 
     async function closeModal(action) {
         if (action === 'add') {
-            var eventId = '';
-            const eventData = {
+            var calendarId = '';
+            const calendarData = {
                 teamId: userCtx.teamId,
                 teamName: userCtx.teamName,
                 date: format(date, "yyyy-MM-dd"),
@@ -167,9 +167,9 @@ const AddEventScreen = ({ route, navigation }) => {
                 endTime: format(endTime, "h:mm a"),
                 insertDate: new Date()
             }
-            await postEvent(eventData, token)
+            await postCalendar(calendarData, token)
             .then(function (response) {
-                eventId = response.data.name;
+                calendarId = response.data.name;
             })
             .catch(function (error) {
                 console.log(error);
@@ -468,4 +468,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default AddEventScreen;
+export default AddCalendarScreen;

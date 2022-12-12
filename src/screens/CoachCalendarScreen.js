@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Agenda } from 'react-native-calendars';
 import { UserContext } from '../store/context/user-context';
-import { fetchTeamEvents } from '../util/http';
+import { fetchTeamCalendar } from '../util/http';
 import { subDays } from 'date-fns';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -25,12 +25,12 @@ const CoachCalendarScreen = ({ navigation }) => {
 
     useEffect(() => {
         async function getTeamEvents() {
-            const dbEvents = await fetchTeamEvents(userCtx.teamId, token);
+            const dbEvents = await fetchTeamCalendar(userCtx.teamId, token);
             const eventsObj = {};
             const markedObj = {};
 
             for (const key in dbEvents.data) {
-                const time = '';
+                var time = '';
                 const eventType = dbEvents.data[key].type;
 
                 if(dbEvents.data[key].startTime) {

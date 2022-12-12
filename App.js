@@ -15,7 +15,7 @@ import AthleteCalendarScreen from './src/screens/AthleteCalendarScreen';
 import AthleteCardioScreen from './src/screens/AthleteCardioScreen';
 import AthleteLiftingScreen from './src/screens/AthleteLiftingScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
-import AddEventScreen from './src/screens/AddEventScreen';
+import AddCalendarScreen from './src/screens/AddCalendarScreen';
 import CoachTeamRosterScreen from './src/screens/CoachTeamRosterScreen';
 import CoachCardioScreen from './src/screens/CoachCardioScreen';
 import CoachLiftingScreen from './src/screens/CoachLiftingScreen';
@@ -28,7 +28,7 @@ import CreateOrganizationScreen from './src/screens/CreateOrganizationScreen';
 import CreateTeamScreen from './src/screens/CreateTeamScreen';
 import AddCoachScreen from './src/screens/AddCoachScreen';
 import CoachCalendarScreen from './src/screens/CoachCalendarScreen';
-import EditEventScreen from './src/screens/EditEventScreen';
+import EditCalendarScreen from './src/screens/EditCalendarScreen';
 import StopwatchSetupScreen from './src/screens/StopwatchSetupScreen';
 import SoloTimerScreen from './src/screens/SoloTimerScreen';
 import XCTimerScreen from './src/screens/XCTimerScreen';
@@ -123,12 +123,12 @@ function EventStack() {
       />
       <StackNav.Screen 
         name="AddEvent" 
-        component={AddEventScreen} 
+        component={AddCalendarScreen} 
         options={{ title: "Add Event" }}
       />
       <StackNav.Screen 
         name="EditEvent" 
-        component={EditEventScreen} 
+        component={EditCalendarScreen} 
         options={{ title: "Edit Event" }}
       />
       <StackNav.Screen 

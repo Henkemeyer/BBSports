@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useRef, useState} from 'react';
-import { Alert,  Keyboard, KeyboardAvoidingView ,StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { Alert, Keyboard, KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native';
 import OurButton from '../components/OurButton';
 import Events from '../constants/Events';
-import { fetchRoster, fetchTeam, fetchTeamEvents } from '../util/http';
+import { fetchRoster, fetchTeam, fetchTeamCalendar } from '../util/http';
 import { UserContext } from '../store/context/user-context';
 import SelectDropdown from 'react-native-select-dropdown';
 import OurDropDownSelect from '../components/OurDropDownSelect';
@@ -27,7 +27,7 @@ const StopwatchSetupScreen = ({ navigation }) => {
     const [search, setSearch] = useState('')
     const [selectedAthletes, setSelectedAthletes] = useState([])
 
-    const [splits, setSplits] = useState(0)
+    const [splits, setSplits] = useState(1)
     const [alternating, setAlternating] = useState(false) // Track ex: 200, 600 vs 400, 800
 
     useEffect(() => {
@@ -61,7 +61,8 @@ const StopwatchSetupScreen = ({ navigation }) => {
             const eventStr = 'MCollegeXC' // sex+level+abbSport
             setEventsList(Events.MCollegeXC)
 
-            const dbMeets = await fetchTeamEvents(userCtx.teamId, token);
+            console.log(userCtx.teamId)
+            const dbMeets = await fetchTeamCalendar(userCtx.teamId, token);
             const meetsArr = [];
             const today = format(new Date(), 'yyyy-MM-dd')
 
@@ -127,6 +128,7 @@ const StopwatchSetupScreen = ({ navigation }) => {
                 navigation.navigate("XCTimer", {
                     meet: meet,
                     event: event,
+                    numSplits: splits,
                     athletes: selAthArr
                 })
             }
@@ -143,6 +145,7 @@ const StopwatchSetupScreen = ({ navigation }) => {
                 onSelect={(selectedItem, index) => {
                     setMeet(selectedItem);
                 }}
+                defaultButtonText="Select a Meet"
                 defaultValueByIndex={0}
                 buttonTextAfterSelection={(selectedItem, index) => {
                     return selectedItem.name
@@ -165,6 +168,7 @@ const StopwatchSetupScreen = ({ navigation }) => {
                 onSelect={(selectedItem, index) => {
                     setEvent(selectedItem);
                 }}
+                defaultButtonText="Select an Event"
                 defaultValueByIndex={0}
                 buttonTextAfterSelection={(selectedItem, index) => {
                     return selectedItem.name
@@ -182,6 +186,21 @@ const StopwatchSetupScreen = ({ navigation }) => {
                 rowStyle={styles.selectDropDownRow}
                 rowTextStyle={styles.selectDropDownText}
             />
+            <View style={styles.viewRow}>
+                <Text style = {styles.header}>Num of Splits: </Text>
+                <TextInput
+                    value={splits}
+                    onChangeText={(text) => {
+                        const value = text.replace(/[^0-9]/g, '')
+                        setSplits(value)
+                    }}
+                    keyboardType="numeric"
+                    maxLength={2}
+                    placeholder='1'
+                    placeholderTextColor={'red'}
+                    style={styles.inputContainer}
+                />
+            </View>
             <OurDropDownSelect
                 items={athletes}
                 // ref={multiSelectRef}
@@ -204,7 +223,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'space-evenly',
-        backgroundColor: 'linen'
+        backgroundColor: 'F4F4F4'
     },
     title: {
         fontSize: 24,
@@ -216,7 +235,11 @@ const styles = StyleSheet.create({
         fontSize: 21,
         fontWeight: 'bold',
         color: 'darkgreen',
-        paddingTop: 20,
+        alignSelf: 'center'
+    },
+    viewRow: {
+        flexDirection: 'row',
+        alignContent: 'center',
         alignSelf: 'center'
     },
     selectDropDownButton: {
@@ -239,6 +262,15 @@ const styles = StyleSheet.create({
         color: '#FFF',
         textAlign: 'center',
         fontWeight: 'bold'
+    },
+    inputContainer: {
+        backgroundColor: 'white',
+        borderBottomWidth: 1,
+        borderColor: 'darkgreen',
+        margin:10,
+        padding:5,
+        borderRadius:8,
+        textAlign: 'center'
     },
     athletes: {
         paddingVertical: 15,

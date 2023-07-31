@@ -242,13 +242,13 @@ const CoachCardioScreen = ({ route, navigation }) => {
             </Modal>
             <Text style={styles.leftText}>Groups:</Text>
             <View style={styles.groupRow}>
-            {/* {groups.map((groupName) => (
+            {groups.map((groupName) => (
                 <TouchableOpacity
                     onPress={() => toggleGroupSelection(groupName)}
                     style={ groupToggles[groupName].selected ? styles.groupButtonTrue : styles.groupButtonFalse}>
                     <Text style={{fontWeight:'bold'}}>{groupName}</Text>
                 </TouchableOpacity>
-            ))} */}
+            ))}
             </View>
             <ScrollView horizontal={true}>
                 <View style={{paddingHorizontal: 7}}>
@@ -291,7 +291,7 @@ const CoachCardioScreen = ({ route, navigation }) => {
 
 const styles = StyleSheet.create({
     container: {
-        paddingVertical: 30,
+        paddingVertical: 15,
         alignItems: 'center'
     },
     headerText: {

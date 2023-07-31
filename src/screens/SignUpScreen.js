@@ -12,7 +12,7 @@ function SignUpScreen({ navigation }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [firstName, setFirstName] = useState('');
-    const [nickName, setNickName] = useState('');
+    const [nickname, setNickname] = useState('');
     const [lastName, setLastName] = useState('');
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPWError] = useState('');
@@ -50,15 +50,15 @@ function SignUpScreen({ navigation }) {
                 {
                     uid: authData.localId,
                     firstName: firstName,
-                    nickName: nickName,
+                    nickname: nickname,
                     lastName: lastName,
                     email: email
                 }
 
             postUser(userData, authData.idToken)
-            userCtx.login(authData);
+            userCtx.signUp(authData, userData);
         } catch (error) {
-            Alert.alert('Login Failed!', 'Failed to login. Please check E-mail and Password.')
+            Alert.alert('Sign Up Failed!', 'Failed to sign up. Please check E-mail and Password.')
         }
     }
 
@@ -109,7 +109,7 @@ function SignUpScreen({ navigation }) {
                             <UserInput
                                 label="Nickname"
                                 value={nickName}
-                                onChangeText={setNickName}
+                                onChangeText={setNickname}
                                 autoCorrect={false}
                             />
                         </View>

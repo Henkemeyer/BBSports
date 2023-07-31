@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import AppLoading from 'expo-app-loading';
+import SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { TouchableOpacity, View } from 'react-native';
 
@@ -271,6 +271,8 @@ function CoachTab() {
             iconName = focused ? 'stopwatch' : 'stopwatch-outline';
           } else if (route.name === 'Lifting') {
             iconName = focused ? 'barbell' : 'barbell-outline';
+          } else if (route.name === 'Roster') {
+            iconName = focused ? 'document-text' : 'document-text-outline';
           } else if (route.name === 'Settings') {
             iconName = focused ? 'settings-sharp' : 'settings-outline';
           }
@@ -285,8 +287,9 @@ function CoachTab() {
       }}
     >
       <TabNav.Screen name="Home" component={EventStack} />
-      {/* <TabNav.Screen name="Cardio" component={CoachCardioScreen} /> */}
-      <TabNav.Screen name="Lifting" component={CoachTeamRosterScreen} />
+      <TabNav.Screen name="Cardio" component={CoachCardioScreen} />
+      <TabNav.Screen name="Lifting" component={CoachLiftingScreen} />
+      <TabNav.Screen name="Roster" component={CoachTeamRosterScreen} />
       <TabNav.Screen name="Settings" component={SettingsScreen} />
     </TabNav.Navigator>
   );
@@ -298,11 +301,15 @@ function Navigation () {
 
     useEffect(() => {
       async function fetchLocalToken() {
+        try {
+          await SplashScreen.preventAutoHideAsync();
+        } catch (e) {
+          console.warn(e);
+        }
         const localToken = await AsyncStorage.getItem('authToken');
         const userId = await AsyncStorage.getItem('userID');
         const orgId = await AsyncStorage.getItem('lastOrgId');
         const teamId = await AsyncStorage.getItem('lastTeamId');
-        const userMode = await AsyncStorage.getItem('lastUserMode');
 
         if(orgId) {
           const organization = {
@@ -321,11 +328,13 @@ function Navigation () {
         }
 
         if (localToken) {
-          userCtx.switchUserMode(userMode);
+          // const userMode = await AsyncStorage.getItem('lastUserMode');
+          // userCtx.switchUserMode(userMode);
           const authData = { idToken: localToken, localId: userId }
           userCtx.login(authData);
         }
-
+        setIsLoading(false);
+        async () => { await SplashScreen.hideAsync(); };
         setIsLoading(false);
       }
       
@@ -333,7 +342,7 @@ function Navigation () {
     }, []);
 
     if (isLoading) {
-      return <AppLoading />
+      return null;
     }
 
     return (

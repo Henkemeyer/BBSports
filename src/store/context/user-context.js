@@ -6,6 +6,7 @@ export const UserContext = createContext({
     token: null,
     name: '',
     fullName: '',
+    signUp: (authData, userData) => {},
     login: (authData) => {},
     logout: () => {},
     userMode: '', // Athlete, Coach, Fan?
@@ -29,6 +30,21 @@ function UserContextProvider({children}) {
     const [getOrganizationName, setOrganizationName] = useState([]);
     const [getTeamName, setTeamName] = useState([]);
 
+    function signUp(authData, userData) {
+        setToken(authData.idToken);
+        setUserId(authData.localId);
+
+        if(userData.nickname) {
+            setName(userData.nickname);
+        } else { setName(userData.firstName); }
+
+        setFullName(getName + ' ' + userData.lastName);
+        AsyncStorage.setItem('authToken', authData.idToken);
+        AsyncStorage.setItem('userID', authData.localId);
+        AsyncStorage.setItem('lastUserMode', 'Athlete');
+        AsyncStorage.setItem('firstName', getName);
+    }
+    
     function login(authData) {
         setToken(authData.idToken);
         setUserId(authData.localId);
@@ -77,6 +93,7 @@ function UserContextProvider({children}) {
         organizationName: getOrganizationName,
         teamId: getTeamId,
         teamName: getTeamName,
+        signUp: signUp,
         login: login,
         logout: logout,
         switchUserMode: switchUserMode,

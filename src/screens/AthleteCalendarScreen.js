@@ -54,7 +54,7 @@ const AthleteCalendarScreen = () => {
                     notes: dbEvents.data[key].notes
                 };
 
-                const setDot = {};
+                let setDot = {};
                 if(eventType==='Cardio' || eventType==='Lifting' || eventType==='Scrimmage' || eventType==='Practice') {
                     setDot = workout; 
                 }

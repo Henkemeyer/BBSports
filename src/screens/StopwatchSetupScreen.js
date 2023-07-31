@@ -18,6 +18,7 @@ const StopwatchSetupScreen = ({ navigation }) => {
 
     const [meetList, setMeetList] = useState([])
     const [meet, setMeet] = useState('')
+    const [meetError, setMeetError] = useState('')
     
     const [eventsList, setEventsList] = useState([])
     const [event, setEvent] = useState('')
@@ -61,7 +62,6 @@ const StopwatchSetupScreen = ({ navigation }) => {
             const eventStr = 'MCollegeXC' // sex+level+abbSport
             setEventsList(Events.MCollegeXC)
 
-            console.log(userCtx.teamId)
             const dbMeets = await fetchTeamCalendar(userCtx.teamId, token);
             const meetsArr = [];
             const today = format(new Date(), 'yyyy-MM-dd')
@@ -82,6 +82,10 @@ const StopwatchSetupScreen = ({ navigation }) => {
                 meetsArr.push(tmpArr)
             }
             setMeetList([...meetsArr]);
+            console.log(meetList.length)
+            if(!meetList || meetList.length === 0) {
+                setMeetError("Nothing scheduled for today to time.")
+            }
             
             const dbAthletes = await fetchRoster(userCtx.teamId, token);
             const rosterArr = [];
@@ -142,10 +146,11 @@ const StopwatchSetupScreen = ({ navigation }) => {
             <Text style={styles.header}>{userCtx.teamName}</Text>
             <SelectDropdown
                 data={meetList}
+                disabled={meetList.length===0 ? true : false}
                 onSelect={(selectedItem, index) => {
                     setMeet(selectedItem);
                 }}
-                defaultButtonText="Select a Meet"
+                defaultButtonText={meetList.length===0 ? "Nothing Scheduled" : "Select a Meet"}
                 defaultValueByIndex={0}
                 buttonTextAfterSelection={(selectedItem, index) => {
                     return selectedItem.name
@@ -153,7 +158,7 @@ const StopwatchSetupScreen = ({ navigation }) => {
                 rowTextForSelection={(item, index) => {
                     return item.name
                 }}
-                buttonStyle={styles.selectDropDownButton}
+                buttonStyle={meetList.length===0 ? styles.disabledDropDownButton : styles.selectDropDownButton}
                 buttonTextStyle={styles.selectDropDownText}
                 renderDropdownIcon={isOpened => {
                     return <Ionicons name={isOpened ? 'chevron-up-circle-sharp' : 'chevron-down-circle-outline'} color={'#FFF'} size={18} />;
@@ -277,6 +282,13 @@ const styles = StyleSheet.create({
     },
     swButton: {
         width: '25%',
+    },
+    disabledDropDownButton: {
+        width: '80%',
+        height: 50,
+        backgroundColor: 'darkgray',
+        borderRadius: 8,
+        alignSelf: 'center'
     }
 });
 

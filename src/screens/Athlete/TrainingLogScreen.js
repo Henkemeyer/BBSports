@@ -4,11 +4,11 @@ import { Ionicons } from '@expo/vector-icons';
 import SelectDropdown from 'react-native-select-dropdown';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { format } from 'date-fns';
-import { fetchEquipment, patchEquipment, postCardioLog } from '../util/http';
-import { UserContext } from '../store/context/user-context';
-import UserInput from '../components/UserInput';
-import OurButton from '../components/OurButton';
-import Colors from '../constants/ColorThemes';
+import { fetchEquipment, patchEquipment, postCardioLog } from '../../util/http';
+import { UserContext } from '../../store/context/user-context';
+import UserInput from '../../components/UserInput';
+import OurButton from '../../components/OurButton';
+import Colors from '../../constants/ColorThemes';
 
 const TrainingLogScreen = ( ) => {
     const userCtx = useContext(UserContext);      // App User Info

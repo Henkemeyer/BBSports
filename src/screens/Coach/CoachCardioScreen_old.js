@@ -4,11 +4,11 @@ import { Alert, Keyboard, KeyboardAvoidingView, Platform, ScrollView, StyleSheet
 import SelectDropdown from 'react-native-select-dropdown';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { format } from 'date-fns';
-import { fetchAthleteGroup, fetchCoachTeams, fetchRoster, postEvent } from '../util/http';
-import { UserContext } from '../store/context/user-context';
-import UserInput from '../components/UserInput';
-import OurButton from '../components/OurButton';
-import Colors from '../constants/ColorThemes';
+import { fetchAthleteGroup, fetchCoachTeams, fetchRoster, postEvent } from '../../util/http';
+import { UserContext } from '../../store/context/user-context';
+import UserInput from '../../components/UserInput';
+import OurButton from '../../components/OurButton';
+import Colors from '../../constants/ColorThemes';
 import { Ionicons } from '@expo/vector-icons';
 
 const CoachCardioScreen = ( ) => {

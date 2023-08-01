@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Agenda, DateData, AgendaEntry, AgendaSchedule } from 'react-native-calendars';
-import { UserContext } from '../store/context/user-context';
-import { fetchTeamCalendar } from '../util/http';
+import { UserContext } from '../../store/context/user-context';
+import { fetchTeamCalendar } from '../../util/http';
 import { subDays } from 'date-fns';
 import { Ionicons } from '@expo/vector-icons';
 

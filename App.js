@@ -4,34 +4,37 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import UserContextProvider, { UserContext } from './src/store/context/user-context';
 import SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { TouchableOpacity, View } from 'react-native';
+// Our Screens
+import TrainingLogScreen        from './src/screens/Athlete/TrainingLogScreen';
+import AthleteCalendarScreen    from './src/screens/Athlete/AthleteCalendarScreen';
+import AthleteCardioScreen      from './src/screens/Athlete/AthleteCardioScreen';
+import AthleteLiftingScreen     from './src/screens/Athlete/AthleteLiftingScreen';
+import AddCalendarScreen        from './src/screens/Coach/AddCalendarScreen';
+import CoachTeamRosterScreen    from './src/screens/Coach/CoachTeamRosterScreen';
+import CoachCardioScreen        from './src/screens/Coach/CoachCardioScreen';
+import CoachLiftingScreen       from './src/screens/Coach/CoachLiftingScreen';
+// Login Stack
+import LoginScreen              from './src/screens/Users/LoginScreen';
+import SignUpScreen             from './src/screens/Users/SignUpScreen';
 
-import UserContextProvider, { UserContext } from './src/store/context/user-context';
+// Settings Stack
+import ProfileScreen            from './src/screens/Users/ProfileScreen';
+import SettingsScreen           from './src/screens/Users/SettingsScreen';
+import EquipmentScreen          from './src/screens/Athlete/EquipmentScreen';
 
-import TrainingLogScreen from './src/screens/TrainingLogScreen';
-import AthleteCalendarScreen from './src/screens/AthleteCalendarScreen';
-import AthleteCardioScreen from './src/screens/AthleteCardioScreen';
-import AthleteLiftingScreen from './src/screens/AthleteLiftingScreen';
-import SettingsScreen from './src/screens/SettingsScreen';
-import AddCalendarScreen from './src/screens/AddCalendarScreen';
-import CoachTeamRosterScreen from './src/screens/CoachTeamRosterScreen';
-import CoachCardioScreen from './src/screens/CoachCardioScreen';
-import CoachLiftingScreen from './src/screens/CoachLiftingScreen';
-
-import LoginScreen from './src/screens/LoginScreen';
-import SignUpScreen from './src/screens/SignUpScreen';
-import EquipmentScreen from './src/screens/EquipmentScreen';
-import OrganizationScreen from './src/screens/OrganizationScreen';
-import CreateOrganizationScreen from './src/screens/CreateOrganizationScreen';
-import CreateTeamScreen from './src/screens/CreateTeamScreen';
-import AddCoachScreen from './src/screens/AddCoachScreen';
-import CoachCalendarScreen from './src/screens/CoachCalendarScreen';
-import EditCalendarScreen from './src/screens/EditCalendarScreen';
-import StopwatchSetupScreen from './src/screens/StopwatchSetupScreen';
-import SoloTimerScreen from './src/screens/SoloTimerScreen';
-import XCTimerScreen from './src/screens/XCTimerScreen';
+import OrganizationScreen       from './src/screens/Coach/OrganizationScreen';
+import CreateOrganizationScreen from './src/screens/Coach/CreateOrganizationScreen';
+import CreateTeamScreen         from './src/screens/Coach/CreateTeamScreen';
+import AddCoachScreen           from './src/screens/Coach/AddCoachScreen';
+import CoachCalendarScreen      from './src/screens/Coach/CoachCalendarScreen';
+import EditCalendarScreen       from './src/screens/Coach/EditCalendarScreen';
+import StopwatchSetupScreen     from './src/screens/Athlete/StopwatchSetupScreen';
+import SoloTimerScreen          from './src/screens/Athlete/SoloTimerScreen';
+import XCTimerScreen            from './src/screens/Athlete/XCTimerScreen';
 
 const TabNav = createBottomTabNavigator();
 const StackNav = createStackNavigator();
@@ -48,12 +51,22 @@ function LoginStack() {
   );
 }
 
-function EquipmentStack() {
+function SettingsStack() {
   return (
     <StackNav.Navigator
       screenOptions={{
         headerTintColor: 'green',
       }}>
+      <StackNav.Screen 
+        name="Settings" 
+        component={SettingsScreen} 
+        options={{title: "Settings" }}
+      />
+      <StackNav.Screen 
+        name="Profile" 
+        component={ProfileScreen} 
+        options={{title: "Profile" }}
+      />
       <StackNav.Screen 
         name="Equip" 
         component={EquipmentScreen} 
@@ -201,7 +214,7 @@ function AthleteTab() {
       <TabNav.Screen name="Home" component={AthleteCalendarScreen} />
       <TabNav.Screen name="Timer" component={RecordStack} />
       {/* <TabNav.Screen name="Lifting" component={AthleteCalendarScreen} /> */}
-      <TabNav.Screen name="Settings" component={SettingsScreen} />
+      <TabNav.Screen name="Settings" component={SettingsStack} />
     </TabNav.Navigator>
   );
 }
@@ -223,8 +236,8 @@ function AthleteContainerStack() {
         options={{ headerShown: false }} 
       />
       <StackNav.Screen 
-        name="EquipmentStack" 
-        component={EquipmentStack}
+        name="SettingsStack" 
+        component={SettingsStack}
         options={{ headerShown: false }} 
       />
     </StackNav.Navigator>
@@ -290,7 +303,7 @@ function CoachTab() {
       <TabNav.Screen name="Cardio" component={CoachCardioScreen} />
       <TabNav.Screen name="Lifting" component={CoachLiftingScreen} />
       <TabNav.Screen name="Roster" component={CoachTeamRosterScreen} />
-      <TabNav.Screen name="Settings" component={SettingsScreen} />
+      <TabNav.Screen name="Settings" component={SettingsStack} />
     </TabNav.Navigator>
   );
 }

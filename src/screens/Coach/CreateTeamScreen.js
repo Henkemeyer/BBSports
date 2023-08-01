@@ -1,11 +1,11 @@
 import React, { useContext, useState } from 'react';
 import { Alert, ScrollView, StyleSheet, Text, Keyboard, KeyboardAvoidingView, TouchableWithoutFeedback, View } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
-import UserInput from '../components/UserInput';
-import ShadowBox from '../components/ShadowBox';
-import OurButton from '../components/OurButton';
-import { UserContext } from '../store/context/user-context';
-import { postTeam } from '../util/http';
+import UserInput from '../../components/UserInput';
+import ShadowBox from '../../components/ShadowBox';
+import OurButton from '../../components/OurButton';
+import { UserContext } from '../../store/context/user-context';
+import { postTeam } from '../../util/http';
 import { Ionicons } from '@expo/vector-icons';
 
 function CreateTeamScreen({ navigation }) {

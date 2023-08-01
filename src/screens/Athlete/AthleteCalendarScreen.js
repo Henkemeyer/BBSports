@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Agenda } from 'react-native-calendars';
-import { UserContext } from '../store/context/user-context';
-import { fetchUserEvents } from '../util/http';
+import { UserContext } from '../../store/context/user-context';
+import { fetchUserEvents } from '../../util/http';
 import { subDays } from 'date-fns';
 
 const timeToString = (time) => {
@@ -92,7 +92,7 @@ const AthleteCalendarScreen = () => {
                     items[strTime] = [];
 
                     items[strTime].push({
-                        teamName: 'Testing',
+                        teamName: 'Nothing Today',
                         height: 30,
                         day: strTime
                     });

@@ -4,13 +4,11 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { format } from 'date-fns';
 import SelectDropdown from 'react-native-select-dropdown';
 import { Ionicons } from '@expo/vector-icons';
-import UserInput from '../components/UserInput';
-import ShadowBox from '../components/ShadowBox';
-import OurButton from '../components/OurButton';
-import { UserContext } from '../store/context/user-context';
-import { fetchUser } from '../util/http';
-import { authenticate } from '../util/auth';
-import { postUser } from '../util/http';
+import UserInput from '../../components/UserInput';
+import ShadowBox from '../../components/ShadowBox';
+import OurButton from '../../components/OurButton';
+import { UserContext } from '../../store/context/user-context';
+import { fetchUser, postUser } from '../../util/http';
 
 function SignUpScreen({ navigation }) {
     const userCtx = useContext(UserContext);
@@ -18,7 +16,7 @@ function SignUpScreen({ navigation }) {
     const [firstName, setFirstName] = useState('');
     const [nickname, setNickname] = useState('');
     const [lastName, setLastName] = useState('');
-    const [birthday, setBirthday] = useState('');
+    const [birthday, setBirthday] = useState(new Date());
     const [showDate, setShowDate] = useState(false);      // Show or Hide Date Picker
     const [sex, setSex] = useState('X');
 
@@ -168,29 +166,31 @@ function SignUpScreen({ navigation }) {
                                 <Ionicons name="calendar-outline" size={24} color="darkgreen" style={styles.iconStyle} />
                             </View>
                         </TouchableOpacity>
-                        <SelectDropdown
-                            data={["X","Male","Female"]}
-                            onSelect={(selectedItem, index) => {
-                                setSex(selectedItem.substring(0,1))
-                            }}
-                            defaultButtonText="Sex"
-                            buttonTextAfterSelection={(selectedItem, index) => {
-                                return selectedItem
-                            }}
-                            rowTextForSelection={(item, index) => {
-                                return item
-                            }}
-                            buttonStyle={styles.selectDropDownButton}
-                            buttonTextStyle={styles.selectDropDownText}
-                            renderDropdownIcon={isOpened => {
-                                return <Ionicons name={isOpened ? 'chevron-up-circle-sharp' : 'chevron-down-circle-outline'} color={'#FFF'} size={18} />;
-                            }}
-                            dropdownIconPosition={'right'}
-                            dropdownStyle={styles.selectDropDown}
-                            rowStyle={styles.selectDropDownRow}
-                            rowTextStyle={styles.selectDropDownText}
-                        />
-
+                        <View>
+                            <Text style={styles.selectText}>Sex:</Text>
+                            <SelectDropdown
+                                data={["X","Male","Female"]}
+                                onSelect={(selectedItem, index) => {
+                                    setSex(selectedItem.substring(0,1))
+                                }}
+                                defaultButtonText="Sex"
+                                buttonTextAfterSelection={(selectedItem, index) => {
+                                    return selectedItem
+                                }}
+                                rowTextForSelection={(item, index) => {
+                                    return item
+                                }}
+                                buttonStyle={styles.selectDropDownButton}
+                                buttonTextStyle={styles.selectDropDownText}
+                                renderDropdownIcon={isOpened => {
+                                    return <Ionicons name={isOpened ? 'chevron-up-circle-sharp' : 'chevron-down-circle-outline'} color={'#FFF'} size={18} />;
+                                }}
+                                dropdownIconPosition={'right'}
+                                dropdownStyle={styles.selectDropDown}
+                                rowStyle={styles.selectDropDownRow}
+                                rowTextStyle={styles.selectDropDownText}
+                            />
+                        </View>
                         <OurButton
                             buttonPressed={confirmInputAgent}
                             buttonText="Save"
@@ -238,6 +238,12 @@ const styles = StyleSheet.create({
         fontSize: 18,
         textAlign: 'center',
         marginRight: '2%',
+        color: 'darkgreen'
+    },
+    selectText: {
+        fontSize: 18,
+        textAlign: 'left',
+        marginHorizontal: '5%',
         color: 'darkgreen'
     },
     saveButton: {

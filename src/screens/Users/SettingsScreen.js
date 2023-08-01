@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import { ScrollView, StyleSheet, Text, View} from 'react-native';
-import OurButton from '../components/OurButton';
-import ShadowBox from '../components/ShadowBox';
+import OurButton from '../../components/OurButton';
+import ShadowBox from '../../components/ShadowBox';
 
-import { UserContext } from '../store/context/user-context';
+import { UserContext } from '../../store/context/user-context';
 
 function SettingsScreen ({navigation}) {
     const userCtx = useContext(UserContext);
@@ -14,8 +14,16 @@ function SettingsScreen ({navigation}) {
         userCtx.logout();
     }
 
+    function profileScreenHandler() {
+        navigation.navigate("Profile");
+    }
+
+    function themeScreenHandler() {
+        alert('Not implemented yet')
+    }
+
     function equipmentScreenHandler() {
-        navigation.navigate("EquipmentStack");
+        navigation.navigate("Equip");
     }
 
     function orgHandler() {
@@ -34,12 +42,17 @@ function SettingsScreen ({navigation}) {
     return (
         <ScrollView style={styles.backgroundView} contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <ShadowBox style={styles.containerView}>
-                    <Text style={styles.textStyle}>User ID:</Text>
+                    <Text style={styles.textStyle}>User ID: </Text>
                     <Text style={styles.textStyle} selectable>{userId}</Text>
+                    <Text style={styles.textStyle}></Text>
                     <Text style={styles.textStyle}>Screens Visible:{userMode}</Text>
-                    <Text style={styles.textStyle}>Fair Weather Mode: OFF</Text>
                     <OurButton 
-                        buttonPressed={() => placeholder()}
+                        buttonPressed={() => profileScreenHandler()}
+                        buttonText="Profile"
+                        style={styles.buttonStyle}
+                    />
+                    <OurButton 
+                        buttonPressed={() => themeScreenHandler()}
                         buttonText="Theme"
                         style={styles.buttonStyle}
                     />
@@ -80,7 +93,8 @@ const styles = StyleSheet.create({
         borderColor: 'gray',
         backgroundColor: '#ffffff',
         borderRadius: 10,
-        marginVertical: 65,
+        marginVertical: 40,
+        paddingVertical: 20,
         width: '80%'
     },
     thiccButtonStyle: {
@@ -98,7 +112,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         textAlign: 'center',
         textAlignVertical: 'center',
-        margin: 20
+        margin: 5
     }
 });
 

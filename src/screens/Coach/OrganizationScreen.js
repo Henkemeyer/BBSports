@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
-import OurButton from '../components/OurButton';
-import { UserContext } from '../store/context/user-context';
-import { fetchCoaches, fetchOrganizations, fetchOrgTeams } from '../util/http';
+import OurButton from '../../components/OurButton';
+import { UserContext } from '../../store/context/user-context';
+import { fetchCoaches, fetchOrganizations, fetchOrgTeams } from '../../util/http';
 import { Ionicons } from '@expo/vector-icons';
 
 function OrganizationScreen({ navigation }) {

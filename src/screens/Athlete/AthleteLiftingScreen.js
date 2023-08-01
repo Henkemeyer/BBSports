@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Alert, Keyboard, KeyboardAvoidingView, ScrollView, StyleSheet, 
     Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
-import { UserContext } from '../store/context/user-context';
+import { UserContext } from '../../store/context/user-context';
 import SelectDropdown from 'react-native-select-dropdown';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import OurButton from '../components/OurButton';
-import UserInput from '../components/UserInput';
-import { fetchAthleteGroup, fetchCoachTeams, fetchRoster, postEvent } from '../util/http';
+import OurButton from '../../components/OurButton';
+import UserInput from '../../components/UserInput';
+import { fetchAthleteGroup, fetchCoachTeams, fetchRoster, postEvent } from '../../util/http';
 import { Table, TableWrapper, Row, Cell } from 'react-native-table-component';
 import { Ionicons } from '@expo/vector-icons';
 import { format } from 'date-fns';

@@ -2,12 +2,12 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Alert, FlatList, Keyboard, KeyboardAvoidingView, Modal, Platform, ScrollView, StyleSheet,
     Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { Table, TableWrapper, Row, Cell } from 'react-native-table-component';
-import { fetchAthleteGroup, fetchCardioLog, fetchRoster, postEvent } from '../util/http';
-import { UserContext } from '../store/context/user-context';
-import CheckBox from '../components/CheckBox';
-import UserInput from '../components/UserInput';
-import OurButton from '../components/OurButton';
-import Colors from '../constants/ColorThemes';
+import { fetchAthleteGroup, fetchCardioLog, fetchRoster, postEvent } from '../../util/http';
+import { UserContext } from '../../store/context/user-context';
+import CheckBox from '../../components/CheckBox';
+import UserInput from '../../components/UserInput';
+import OurButton from '../../components/OurButton';
+import Colors from '../../constants/ColorThemes';
 import { Ionicons } from '@expo/vector-icons';
 
 const CoachCardioScreen = ({ route, navigation }) => {

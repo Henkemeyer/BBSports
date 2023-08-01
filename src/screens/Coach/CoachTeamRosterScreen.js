@@ -2,10 +2,10 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Alert, FlatList, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Table, TableWrapper, Row, Cell } from 'react-native-table-component';
 import { Ionicons } from '@expo/vector-icons';
-import OurButton from '../components/OurButton';
-import UserInput from '../components/UserInput';
-import { UserContext } from '../store/context/user-context';
-import { fetchCardioLog, fetchRoster, fetchUser, patchAthlete, postAthlete } from '../util/http';
+import OurButton from '../../components/OurButton';
+import UserInput from '../../components/UserInput';
+import { UserContext } from '../../store/context/user-context';
+import { fetchCardioLog, fetchRoster, fetchUser, patchAthlete, postAthlete } from '../../util/http';
 
 const CoachTeamRosterScreen = ( {navigation} ) => {
     const userCtx = useContext(UserContext);

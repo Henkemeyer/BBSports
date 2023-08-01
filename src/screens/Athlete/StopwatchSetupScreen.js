@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useRef, useState} from 'react';
 import { Alert, Keyboard, KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native';
-import OurButton from '../components/OurButton';
-import Events from '../constants/Events';
-import { fetchRoster, fetchTeam, fetchTeamCalendar } from '../util/http';
-import { UserContext } from '../store/context/user-context';
+import OurButton from '../../components/OurButton';
+import Events from '../../constants/Events';
+import { fetchRoster, fetchTeam, fetchTeamCalendar } from '../../util/http';
+import { UserContext } from '../../store/context/user-context';
 import SelectDropdown from 'react-native-select-dropdown';
-import OurDropDownSelect from '../components/OurDropDownSelect';
+import OurDropDownSelect from '../../components/OurDropDownSelect';
 import { Ionicons } from '@expo/vector-icons';
 import { format } from 'date-fns';
 

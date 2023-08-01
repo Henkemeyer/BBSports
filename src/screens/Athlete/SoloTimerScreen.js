@@ -1,8 +1,8 @@
 import React, { useContext, useState} from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
-import OurButton from '../components/OurButton';
-import { postEquipment, fetchEquipment, patchEquipment } from '../util/http';
-import { UserContext } from '../store/context/user-context';
+import OurButton from '../../components/OurButton';
+import { postEquipment, fetchEquipment, patchEquipment } from '../../util/http';
+import { UserContext } from '../../store/context/user-context';
 import { Ionicons } from '@expo/vector-icons';
 import { differenceInMilliseconds, format } from 'date-fns';
 

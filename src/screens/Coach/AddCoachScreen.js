@@ -1,10 +1,10 @@
 import React, { useContext, useState } from 'react';
 import { StyleSheet, Text, TouchableWithoutFeedback } from 'react-native';
-import OurButton from '../components/OurButton';
-import UserInput from '../components/UserInput';
-import ShadowBox from '../components/ShadowBox';
-import { UserContext } from '../store/context/user-context';
-import { fetchUser, postCoach } from '../util/http';
+import OurButton from '../../components/OurButton';
+import UserInput from '../../components/UserInput';
+import ShadowBox from '../../components/ShadowBox';
+import { UserContext } from '../../store/context/user-context';
+import { fetchUser, postCoach } from '../../util/http';
 
 const AddCoachScreen = ({ navigation }) => {
     const userCtx = useContext(UserContext);

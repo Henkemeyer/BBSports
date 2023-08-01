@@ -4,12 +4,12 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { format } from 'date-fns';
 import SelectDropdown from 'react-native-select-dropdown';
 import { Ionicons } from '@expo/vector-icons';
-import UserInput from '../components/UserInput';
-import ShadowBox from '../components/ShadowBox';
-import OurButton from '../components/OurButton';
-import { UserContext } from '../store/context/user-context';
-import { authenticate } from '../util/auth';
-import { postUser } from '../util/http';
+import UserInput from '../../components/UserInput';
+import ShadowBox from '../../components/ShadowBox';
+import OurButton from '../../components/OurButton';
+import { UserContext } from '../../store/context/user-context';
+import { authenticate } from '../../util/auth';
+import { postUser } from '../../util/http';
 
 function SignUpScreen({ navigation }) {
     const userCtx = useContext(UserContext);

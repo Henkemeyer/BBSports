@@ -1,11 +1,11 @@
 import React, { useContext, useState } from 'react';
 import { Alert, View, Text, TouchableOpacity, StyleSheet, Keyboard, TouchableWithoutFeedback } from 'react-native';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
-import { UserContext } from '../store/context/user-context';
-import { authenticate } from '../util/auth';
-import UserInput from '../components/UserInput';
-import OurButton from '../components/OurButton';
-import Colors from '../constants/ColorThemes';
+import { UserContext } from '../../store/context/user-context';
+import { authenticate } from '../../util/auth';
+import UserInput from '../../components/UserInput';
+import OurButton from '../../components/OurButton';
+import Colors from '../../constants/ColorThemes';
 
 function LoginScreen({ navigation }) {
     const userCtx = useContext(UserContext);

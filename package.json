@@ -1,5 +1,5 @@
 {
-  "name": "bbsports",
+  "name": "coacheslog",
   "version": "1.0.0",
   "description": "app to enhance communication between athletes and coaches",
   "main": "node_modules/expo/AppEntry.js",

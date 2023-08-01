@@ -24,9 +24,10 @@ const AddCalendarScreen = ({ route, navigation }) => {
     const [teams, setTeams] = useState([]);       // List of Coach's Teams
     const [onOwn, setOnOwn] = useState(false);    // If it's a solo task or not
     const [location, setLoc] = useState('');      // Location to meet
+    const [calName, setCalName] = useState('');      // Name for Calendar Event
     const [notes, setNotes] = useState('');       // Coaches notes if they have any
-    const [link, setLink] = useState('');         // Link for additional info like schedule or results
-    const [modalVisible, setModalVisible] = useState(false);
+    const [extLink, setExtLink] = useState('');         // Link for additional info like schedule or results
+    // const [modalVisible, setModalVisible] = useState(false);
     const typeDropdownRef = useRef({});           // Event type drop down reference
     const [type, setType] = useState('Cardio');   // Event Type
     const [types, setTypes] = useState([
@@ -125,59 +126,62 @@ const AddCalendarScreen = ({ route, navigation }) => {
     }, [token]);
 
     async function submitHandler() {
-        if(type==='Meet' || type==='Activity') {
-            setModalVisible(!modalVisible);
-        } else {
-            const calendarData = {
-                teamId: userCtx.teamId,
-                teamName: userCtx.teamName,
-                date: format(date, "yyyy-MM-dd"),
-                type: type,
-                location: location,
-                startTime: format(startTime, "h:mm a"),
-                endTime: format(endTime, "h:mm a"),
-                insertDate: new Date()
-            }
-
-            await postCalendar(calendarData, token)
-            .then(function (response) {
-                const calendarId = response.data.name;
-                if(type==='Cardio') {
-                    navigation.navigate("CoachCardio", { calendarId })
-                } else {
-                    navigation.navigate("CoachLifting", { calendarId })
-                }
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+        // if(type==='Meet' || type==='Activity') {
+        //     setModalVisible(!modalVisible);
+        // } else {
+        const calendarData = {
+            teamId: userCtx.teamId,
+            teamName: userCtx.teamName,
+            date: format(date, "yyyy-MM-dd"),
+            type: type,
+            location: location,
+            startTime: format(startTime, "h:mm a"),
+            endTime: format(endTime, "h:mm a"),
+            insertDate: new Date(),
+            calendarName: calName,
+            notes: notes,
+            extLink: extLink
         }
+
+        await postCalendar(calendarData, token)
+        .then(function (response) {
+            const calendarId = response.data.name;
+            if(type==='Cardio') {
+                navigation.navigate("CoachCardio", { calendarId })
+            } else {
+                navigation.navigate("CoachLifting", { calendarId })
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+        // }
     }
 
-    async function closeModal(action) {
-        if (action === 'add') {
-            var calendarId = '';
-            const calendarData = {
-                teamId: userCtx.teamId,
-                teamName: userCtx.teamName,
-                date: format(date, "yyyy-MM-dd"),
-                type: type,
-                location: location,
-                startTime: format(startTime, "h:mm a"),
-                endTime: format(endTime, "h:mm a"),
-                insertDate: new Date()
-            }
-            await postCalendar(calendarData, token)
-            .then(function (response) {
-                calendarId = response.data.name;
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+    // async function closeModal(action) {
+    //     if (action === 'add') {
+    //         var calendarId = '';
+    //         const calendarData = {
+    //             teamId: userCtx.teamId,
+    //             teamName: userCtx.teamName,
+    //             date: format(date, "yyyy-MM-dd"),
+    //             type: type,
+    //             location: location,
+    //             startTime: format(startTime, "h:mm a"),
+    //             endTime: format(endTime, "h:mm a"),
+    //             insertDate: new Date()
+    //         }
+    //         await postCalendar(calendarData, token)
+    //         .then(function (response) {
+    //             calendarId = response.data.name;
+    //         })
+    //         .catch(function (error) {
+    //             console.log(error);
+    //         });
 
-        }
-        setModalVisible(!modalVisible);
-    }
+    //     }
+    //     setModalVisible(!modalVisible);
+    // }
 
     return (
         <TouchableWithoutFeedback onPress={() =>{ Keyboard.dismiss(); }} >
@@ -212,7 +216,7 @@ const AddCalendarScreen = ({ route, navigation }) => {
                     onChange={onEndTimeChange}
                 />
             )}
-            <Modal
+            {/* <Modal
                 animationType="slide"
                 transparent={true}
                 visible={modalVisible}
@@ -253,7 +257,7 @@ const AddCalendarScreen = ({ route, navigation }) => {
                         </View>
                     </View>
                 </View>
-            </Modal>
+            </Modal> */}
             <Text style={styles.teamText}>Team:</Text>
             <SelectDropdown
                 data={teams}
@@ -287,54 +291,6 @@ const AddCalendarScreen = ({ route, navigation }) => {
                     <Ionicons name="calendar-outline" size={24} color="darkgreen" style={styles.iconStyle} />
                 </View>
             </TouchableOpacity>
-            <View style={styles.lengthRow}>
-                <Text>On Own?</Text>
-                <CheckBox
-                    checked={onOwn}
-                    toggle={toggleOnOwn}
-                />
-            </View>
-            {onOwn ?
-                <View>
-                    <View style={styles.lengthRow}>
-                        <Text style={styles.disabledText}>Start Time: On Own</Text>
-                    </View>
-                    <View style={styles.lengthRow}>
-                        <Text style={styles.disabledText}>End Time: On Own</Text>
-                    </View>
-                    <View style={styles.locInput}>
-                        <UserInput
-                            label="Location:"
-                            value={"On Own"}
-                            editable={false}
-                        />
-                    </View>
-                </View>
-            :
-                <View>
-                    <TouchableOpacity onPress={showStartTimepicker} disabled={onOwn}>
-                        <View style={styles.lengthRow}>
-                            <Text style={styles.formText}>Start Time: {format(startTime, "h:mm a")}</Text>
-                            <Ionicons name="time-outline" size={24} color="darkgreen" style={styles.iconStyle} />
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={showEndTimepicker} disabled={onOwn}>
-                        <View style={styles.lengthRow}>
-                            <Text style={styles.formText}>End Time: {format(endTime, "h:mm a")}</Text>
-                            <Ionicons name="time-outline" size={24} color="darkgreen" style={styles.iconStyle} />
-                        </View>
-                    </TouchableOpacity>
-                    <View style={styles.locInput}>
-                        <UserInput
-                            label="Location:"
-                            value={location}
-                            onChangeText={setLoc}
-                            autoCorrect={false}
-                            editable={!onOwn}
-                        />
-                    </View>
-                </View>
-            }
             <SelectDropdown
                 data={types}
                 ref={typeDropdownRef}  
@@ -358,6 +314,83 @@ const AddCalendarScreen = ({ route, navigation }) => {
                 rowStyle={styles.selectDropDownRow}
                 rowTextStyle={styles.selectDropDownText}
             />
+            <View style={styles.lengthRow}>
+                <Text>On Own?</Text>
+                <CheckBox
+                    checked={onOwn}
+                    toggle={toggleOnOwn}
+                />
+            </View>
+            {onOwn ?
+                <View>
+                    <View style={styles.lengthRow}>
+                        <Text style={styles.disabledText}>Start Time: On Own</Text>
+                    </View>
+                    <View style={styles.lengthRow}>
+                        <Text style={styles.disabledText}>End Time: On Own</Text>
+                    </View>
+                    <View style={styles.userInput}>
+                        <UserInput
+                            label="Location:"
+                            value={"On Own"}
+                            editable={false}
+                        />
+                    </View>
+                    <View style={styles.userInput}>
+                        <UserInput
+                            label="Name:"
+                            value={""}
+                            editable={false}
+                        />
+                    </View>
+                </View>
+            :
+                <View>
+                    <TouchableOpacity onPress={showStartTimepicker} disabled={onOwn}>
+                        <View style={styles.lengthRow}>
+                            <Text style={styles.formText}>Start Time: {format(startTime, "h:mm a")}</Text>
+                            <Ionicons name="time-outline" size={24} color="darkgreen" style={styles.iconStyle} />
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={showEndTimepicker} disabled={onOwn}>
+                        <View style={styles.lengthRow}>
+                            <Text style={styles.formText}>End Time: {format(endTime, "h:mm a")}</Text>
+                            <Ionicons name="time-outline" size={24} color="darkgreen" style={styles.iconStyle} />
+                        </View>
+                    </TouchableOpacity>
+                    <View style={styles.userInput}>
+                        <UserInput
+                            label="Location:"
+                            value={location}
+                            onChangeText={setLoc}
+                            autoCorrect={false}
+                            editable={!onOwn}
+                        />
+                        <UserInput
+                            label="Name:"
+                            value={calName}
+                            onChangeText={setCalName}
+                            autoCorrect={false}
+                            editable={!onOwn}
+                        />
+                        <UserInput
+                            label="Notes:"
+                            value={notes}
+                            onChangeText={setNotes}
+                            multiline   // ios starts top left
+                            textAlignVertical='top'  // Android starts top left
+                            numberOfLines={6}
+                            style={styles.notesInput}
+                        />
+                        <UserInput
+                            label="Link"
+                            value={extLink}
+                            onChangeText={setExtLink}
+                            keyboardType="url"
+                        />
+                    </View>
+                </View>
+            }
         <OurButton 
             buttonPressed={() => submitHandler()}
             buttonText="Submit"
@@ -419,7 +452,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: 'gray'
     },
-    locInput: {
+    userInput: {
         alignItems: 'center'
     },
     notesInput: {

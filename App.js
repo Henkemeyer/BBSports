@@ -198,8 +198,8 @@ function AthleteTab() {
         inactiveTintColor: 'black',
       }}
     >
-      <TabNav.Screen name="Home" component={RecordStack} />
-      {/* <TabNav.Screen name="Cardio" component={TrainingLogScreen} /> */}
+      <TabNav.Screen name="Home" component={AthleteCalendarScreen} />
+      <TabNav.Screen name="Timer" component={RecordStack} />
       {/* <TabNav.Screen name="Lifting" component={AthleteCalendarScreen} /> */}
       <TabNav.Screen name="Settings" component={SettingsScreen} />
     </TabNav.Navigator>
@@ -328,8 +328,8 @@ function Navigation () {
         }
 
         if (localToken) {
-          // const userMode = await AsyncStorage.getItem('lastUserMode');
-          // userCtx.switchUserMode(userMode);
+          const userMode = await AsyncStorage.getItem('lastUserMode');
+          userCtx.switchUserMode(userMode);
           const authData = { idToken: localToken, localId: userId }
           userCtx.login(authData);
         }

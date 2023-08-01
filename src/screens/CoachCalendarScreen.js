@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Agenda } from 'react-native-calendars';
+import { Agenda, DateData, AgendaEntry, AgendaSchedule } from 'react-native-calendars';
 import { UserContext } from '../store/context/user-context';
 import { fetchTeamCalendar } from '../util/http';
 import { subDays } from 'date-fns';
@@ -52,7 +52,7 @@ const CoachCalendarScreen = ({ navigation }) => {
                     type: dbEvents.data[key].type,
                 };
 
-                const setDot = {};
+                let setDot = {};
                 if(eventType==='Cardio' || eventType==='Lifting' || eventType==='Scrimmage' || eventType==='Practice') {
                     setDot = workout; 
                 }
@@ -87,8 +87,10 @@ const CoachCalendarScreen = ({ navigation }) => {
                 const strTime = timeToString(time);
 
                 items[strTime] = [];
+                console.log(events)
 
                 if (events[strTime]) {
+                    console.log(events[strTime])
                     items[strTime].push(events[strTime]);
                 }
 
@@ -117,7 +119,7 @@ const CoachCalendarScreen = ({ navigation }) => {
                     </View>
                 </TouchableOpacity>
             );
-        }else {
+        } else {
             return (
                 <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('EditEvent', {event: item})}>
                     <View>
@@ -134,7 +136,8 @@ const CoachCalendarScreen = ({ navigation }) => {
         <View style={styles.container}>
             <Agenda
                 items={items}
-                loadItemsForMonth={loadItems}
+                // loadItemsForMonth={loadItems}
+                loadItemsForMonth={month => { console.log('trigger items loading'); }}
                 markingType={'multi-dot'}
                 markedDates={marked}
                 selected={subDays(new Date(), 5)}

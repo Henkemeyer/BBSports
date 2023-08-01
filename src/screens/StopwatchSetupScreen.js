@@ -79,6 +79,7 @@ const StopwatchSetupScreen = ({ navigation }) => {
                     name: dbMeets.data[key].description,
                     type: dbMeets.data[key].type
                 }
+                console.log(tmpArr)
                 meetsArr.push(tmpArr)
             }
             setMeetList([...meetsArr]);

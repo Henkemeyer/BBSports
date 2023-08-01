@@ -301,11 +301,11 @@ function Navigation () {
 
     useEffect(() => {
       async function fetchLocalToken() {
-        try {
-          await SplashScreen.preventAutoHideAsync();
-        } catch (e) {
-          console.warn(e);
-        }
+        // try {
+        //   await SplashScreen.preventAutoHideAsync();
+        // } catch (e) {
+        //   console.warn(e);
+        // }
         const localToken = await AsyncStorage.getItem('authToken');
         const userId = await AsyncStorage.getItem('userID');
         const orgId = await AsyncStorage.getItem('lastOrgId');
@@ -329,12 +329,10 @@ function Navigation () {
 
         if (localToken) {
           const userMode = await AsyncStorage.getItem('lastUserMode');
-          userCtx.switchUserMode(userMode);
           const authData = { idToken: localToken, localId: userId }
-          userCtx.login(authData);
+          userCtx.login(authData, userMode);
         }
-        setIsLoading(false);
-        async () => { await SplashScreen.hideAsync(); };
+        // async () => { await SplashScreen.hideAsync(); };
         setIsLoading(false);
       }
       

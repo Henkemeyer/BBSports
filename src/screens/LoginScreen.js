@@ -1,13 +1,9 @@
 import React, { useContext, useState } from 'react';
 import { Alert, View, Text, TouchableOpacity, StyleSheet, Keyboard, TouchableWithoutFeedback } from 'react-native';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
-// import mongoApi from '../api/mongo';
 import { UserContext } from '../store/context/user-context';
 import { authenticate } from '../util/auth';
-
 import UserInput from '../components/UserInput';
-import CheckBox from '../components/CheckBox';
-import ShadowBox from '../components/ShadowBox';
 import OurButton from '../components/OurButton';
 import Colors from '../constants/ColorThemes';
 
@@ -15,19 +11,18 @@ function LoginScreen({ navigation }) {
     const userCtx = useContext(UserContext);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [checked, setChecked] = useState(false);
 
     async function loginHandler() {
         try {
             const authData = await authenticate('signInWithPassword', email, password);
             userCtx.login(authData);
         } catch (error) {
-            Alert.alert('Create User Failed!', 'Failed to authenticate. Please try again later.')
+            Alert.alert('Login Failed!', 'Failed to authenticate. Please check credentials.')
         }
     }
 
     return (
-        // This closes mobile keyboard when touching off components
+        // This closes mobile keyboard when touching empty space
         <TouchableWithoutFeedback 
             onPress={() =>{
                 Keyboard.dismiss();
@@ -58,13 +53,8 @@ function LoginScreen({ navigation }) {
                         />
                     </View>
                     <View style={styles.rowView}>
-                        <CheckBox
-                            toggle={() => setChecked(!checked)}
-                            checked={checked}
-                        />
-                        <Text style={{paddingRight: 28}}>Remember Me</Text>
                         <TouchableOpacity>
-                            <Text style={styles.clickText}>Reset Password</Text>
+                            <Text style={styles.clickText}>Reset Password TODO</Text>
                         </TouchableOpacity>
                     </View>
                     <OurButton 

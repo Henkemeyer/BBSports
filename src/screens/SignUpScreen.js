@@ -1,5 +1,9 @@
 import React, { useContext, useState } from 'react';
 import { Alert, Keyboard, ScrollView, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { format } from 'date-fns';
+import SelectDropdown from 'react-native-select-dropdown';
+import { Ionicons } from '@expo/vector-icons';
 import UserInput from '../components/UserInput';
 import ShadowBox from '../components/ShadowBox';
 import OurButton from '../components/OurButton';
@@ -11,13 +15,14 @@ function SignUpScreen({ navigation }) {
     const userCtx = useContext(UserContext);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [passwordQC, setPasswordQC] = useState('');
     const [firstName, setFirstName] = useState('');
     const [nickname, setNickname] = useState('');
-    const [lastName, setLastName] = useState('');
+    const [mode, setMode] = useState('Athlete');
+    // Error Messages
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPWError] = useState('');
-    const [firstError, setFirstError] = useState('');
-    const [lastError, setLastError] = useState('');
+    const [nameError, setNameError] = useState('');
     const [isValid, setIsValid] = useState(false);
 
     const confirmInputAgent = () => {
@@ -26,16 +31,18 @@ function SignUpScreen({ navigation }) {
             setEmailError('*You must enter a valid Email');
             setIsValid(false);
         }
-        if(password.length < 6) {
-            setPWError('*You must enter a valid password');
+        if(password.length < 8) {
+            setPWError('*Password must be at least 8 characters');
+            setIsValid(false);
+        } else if(!/[\d\W]/.test(password)) {
+            setPWError('*Passwords must contain a number or special character');
+            setIsValid(false);
+        } else if(password !== passwordQC) {
+            setPWError('*Passwords do not match');
             setIsValid(false);
         }
-        if(firstName.length < 0) {
-            setFirstError('*You must enter a valid first name');
-            setIsValid(false);
-        }
-        if(lastName.length < 0) {
-            setLastError('*You must enter a valid last name');
+        if(firstName.length < 2 && nickname.length < 2) {
+            setNameError('*You must enter a name or nickname');
             setIsValid(false);
         }
         if(isValid) {
@@ -51,8 +58,8 @@ function SignUpScreen({ navigation }) {
                     uid: authData.localId,
                     firstName: firstName,
                     nickname: nickname,
-                    lastName: lastName,
-                    email: email
+                    email: email,
+                    mode: mode
                 }
 
             postUser(userData, authData.idToken)
@@ -71,7 +78,8 @@ function SignUpScreen({ navigation }) {
             <ScrollView>
                 <View style={styles.backgroundView}>
                     <ShadowBox style={styles.containerView}>
-                        <Text style={styles.headerText}>Sign Up for BB Sports</Text>
+                        <Text style={styles.headerText}>Coaches Log</Text>
+                        <Text style={styles.headerText}>Sign Up</Text>
                             <View style={styles.inputView}>
                                 <UserInput
                                     label="Email"
@@ -94,6 +102,16 @@ function SignUpScreen({ navigation }) {
                             />
                         </View>
                         { passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null }
+                        <View style={styles.inputView}>
+                            <UserInput
+                                secureTextEntry
+                                label="Re-Enter Password"
+                                value={passwordQC}
+                                onChangeText={setPasswordQC}
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                            />
+                        </View>
 
                         <View style={styles.inputView}>
                             <UserInput
@@ -103,27 +121,41 @@ function SignUpScreen({ navigation }) {
                                 autoCorrect={false}
                             />
                         </View>
-                        { firstError ? <Text style={styles.errorText}>{firstError}</Text> : null }
+                        { nameError ? <Text style={styles.errorText}>{nameError}</Text> : null }
 
                         <View style={styles.inputView}>
                             <UserInput
                                 label="Nickname"
-                                value={nickName}
+                                value={nickname}
                                 onChangeText={setNickname}
                                 autoCorrect={false}
                             />
                         </View>
-
-                        <View style={styles.inputView}>
-                            <UserInput
-                                label="Last Name"
-                                value={lastName}
-                                onChangeText={setLastName}
-                                autoCorrect={false}
+                        <View>
+                            <Text style={styles.selectText}>Primary Role</Text>
+                            <SelectDropdown
+                                data={["Athlete","Coach"]}
+                                onSelect={(selectedItem, index) => {
+                                    setMode(selectedItem.substring(0,1))
+                                }}
+                                defaultButtonText="Athlete"
+                                buttonTextAfterSelection={(selectedItem, index) => {
+                                    return selectedItem
+                                }}
+                                rowTextForSelection={(item, index) => {
+                                    return item
+                                }}
+                                buttonStyle={styles.selectDropDownButton}
+                                buttonTextStyle={styles.selectDropDownText}
+                                renderDropdownIcon={isOpened => {
+                                    return <Ionicons name={isOpened ? 'chevron-up-circle-sharp' : 'chevron-down-circle-outline'} color={'#FFF'} size={18} />;
+                                }}
+                                dropdownIconPosition={'right'}
+                                dropdownStyle={styles.selectDropDown}
+                                rowStyle={styles.selectDropDownRow}
+                                rowTextStyle={styles.selectDropDownText}
                             />
                         </View>
-                        { lastError ? <Text style={styles.errorText}>{lastError}</Text> : null }
-
                         <OurButton
                             buttonPressed={confirmInputAgent}
                             buttonText="Create Account"
@@ -154,19 +186,31 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff',
         borderRadius: 10,
         marginVertical: 40,
-        width: '80%'
+        width: '85%'
     },
     headerText: {
         fontSize: 30,
         fontWeight: 'bold',
-        margin: 15
+        margin: 15,
+        color: 'darkgreen'
     },
     inputView: {
         width: 250,
         marginBottom: 20
     },
+    lengthRow: {
+        flexDirection: 'row',
+        paddingVertical: 10,
+        alignItems: 'center'
+    },
+    selectText: {
+        fontSize: 18,
+        textAlign: 'left',
+        marginRight: '2%',
+        color: 'darkgreen'
+    },
     loginButton: {
-        marginBottom: 15,
+        marginVertical: 20,
         width: '75%'
     },
     clickText: {
@@ -178,6 +222,29 @@ const styles = StyleSheet.create({
         color: 'red',
         fontSize: 15,
         marginBottom: 15
+    },
+    selectDropDownButton: {
+        width: '80%',
+        height: 40,
+        marginVertical: 15,
+        backgroundColor: 'darkgreen',
+        borderRadius: 8,
+        alignSelf: 'center',
+        alignContent: 'center'
+    },
+    selectDropDown: {
+        backgroundColor: 'darkgreen',
+        borderBottomLeftRadius: 12,
+        borderBottomRightRadius: 12,
+    },
+    selectDropDownRow: {
+        backgroundColor: 'darkgreen', 
+        borderBottomColor: '#C5C5C5',
+    },
+    selectDropDownText: {
+        color: '#FFF',
+        textAlign: 'center',
+        fontWeight: 'bold'
     }
 });
 

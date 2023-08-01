@@ -38,16 +38,16 @@ function UserContextProvider({children}) {
             setName(userData.nickname);
         } else { setName(userData.firstName); }
 
-        setFullName(getName + ' ' + userData.lastName);
         AsyncStorage.setItem('authToken', authData.idToken);
         AsyncStorage.setItem('userID', authData.localId);
-        AsyncStorage.setItem('lastUserMode', 'Athlete');
         AsyncStorage.setItem('firstName', getName);
+        switchUserMode(userData.role)
     }
     
-    function login(authData) {
+    function login(authData, userMode) {
         setToken(authData.idToken);
         setUserId(authData.localId);
+        setUserMode(userMode);
         AsyncStorage.setItem('authToken', authData.idToken);
         AsyncStorage.setItem('userID', authData.localId);
     }

@@ -3,18 +3,16 @@ import axios from 'axios';
 const DB_URL = 'https://bbsports-e9a76-default-rtdb.firebaseio.com/';
 // ?auth=token
 
-export function postUser(user, token) {
-    axios.post(DB_URL + 'user.json?auth=' + token, user)
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+export function postUser(user, authData) {
+    axios.put(DB_URL + 'user/'+authData.localId+'.json?auth=' + authData.idToken, user);
 }
 
 export async function fetchUser(uid, token) {
-  return await axios.get(DB_URL + 'user.json?orderBy="uid"&equalTo="'+uid+'"&print=pretty');
+  return await axios.get(DB_URL + 'user/'+uid+'.json?auth='+ token);
+}
+
+export async function patchUser(uid, token, user) {
+  await axios.patch(DB_URL + 'user/'+uid+'.json?auth='+ token, user);
 }
 
 export async function postEquipment(equipment, token) {
@@ -67,8 +65,8 @@ export async function postOrganization(org, token) {
   return await axios.post(DB_URL + 'organization.json', org);
 }
 
-export async function fetchOrganizations(tbd, token) {
-  const response = await axios.get(DB_URL + 'organization.json');
+export async function fetchOrganization(orgId, token) {
+  const response = await axios.get(DB_URL + 'organization/'+orgId+'.json');
 
   const organizations = [];
 
@@ -84,6 +82,23 @@ export async function fetchOrganizations(tbd, token) {
           // Location: If they have meetups
           // Public, Private
           // Closed, Open, Fee?
+      };
+      organizations.push(orgObj);
+  }
+
+  return organizations;
+}
+
+export async function fetchOrganizationsByAdmin(uid, token) {
+  const response = await axios.get(DB_URL + 'organization.json?orderBy="admin"&equalTo="'+uid+'"');
+
+  const organizations = [];
+
+  for (const key in response.data) {
+      const orgObj = {
+          id: key,
+          name: response.data[key].name,
+          description: response.data[key].description
       };
       organizations.push(orgObj);
   }
@@ -151,20 +166,62 @@ export async function postCoach(coach, token) {
   });
 }
 
-export async function fetchCoaches(tbd, token) {
-  const response = await axios.get(DB_URL + 'coach.json'); // Probably need to filter by active, or organization
+export async function fetchCoach(uid, token) {
+  const response = await axios.get(DB_URL + 'coach.json?orderBy="uid"&equalTo="'+uid+'"');
+
+  const coach = [];
+
+  for (const key in response.data) {
+      const coachObj = {
+        id: key,
+        userId: response.data[key].uid,
+        organizationId: response.data[key].organizationId,
+        teamId: response.data[key].teamId,
+        title: response.data[key].title,
+        fullName: response.data[key].fullName,
+        status: response.data[key].status
+      };
+      coach.push(coachObj);
+  }
+
+  return coach;
+}
+
+export async function fetchCoachesByTeam(teamId, token) {
+  const response = await axios.get(DB_URL + 'coach.json?orderBy="teamId"&equalTo="'+teamId+'"');
 
   const coaches = [];
 
   for (const key in response.data) {
       const coachObj = {
-          id: key,
-          title: response.data[key].title,
-          fullName: response.data[key].fullName,
-          organizationId: response.data[key].organizationId, // 1 = Freelance Coach
-          userId: response.data[key].uid,
-          status: response.data[key].status
-          // Organizations?
+        id: key,
+        userId: response.data[key].uid,
+        organizationId: response.data[key].organizationId, // 1 = Freelance Coach
+        teamId: response.data[key].teamId, // 1 = Freelance Coach
+        title: response.data[key].title,
+        fullName: response.data[key].fullName,
+        status: response.data[key].status
+      };
+      coaches.push(coachObj);
+  }
+
+  return coaches;
+}
+
+export async function fetchCoachByOrg(orgId, token) {
+  const response = await axios.get(DB_URL + 'coach.json?orderBy="orgId"&equalTo="'+orgId+'"');
+
+  const coaches = [];
+
+  for (const key in response.data) {
+      const coachObj = {
+        id: key,
+        userId: response.data[key].uid,
+        organizationId: response.data[key].organizationId, // 1 = Freelance Coach
+        teamId: response.data[key].teamId, // 1 = Freelance Coach
+        title: response.data[key].title,
+        fullName: response.data[key].fullName,
+        status: response.data[key].status
       };
       coaches.push(coachObj);
   }

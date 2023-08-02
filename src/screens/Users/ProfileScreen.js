@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Alert, Keyboard, ScrollView, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { format } from 'date-fns';
@@ -8,14 +8,15 @@ import UserInput from '../../components/UserInput';
 import ShadowBox from '../../components/ShadowBox';
 import OurButton from '../../components/OurButton';
 import { UserContext } from '../../store/context/user-context';
-import { fetchUser, postUser } from '../../util/http';
+import { fetchUser, patchUser } from '../../util/http';
 
-function SignUpScreen({ navigation }) {
+function ProfileScreen({ navigation }) {
     const userCtx = useContext(UserContext);
-    const [email, setEmail] = useState('');
     const [firstName, setFirstName] = useState('');
     const [nickname, setNickname] = useState('');
     const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
     const [birthday, setBirthday] = useState(new Date());
     const [showDate, setShowDate] = useState(false);      // Show or Hide Date Picker
     const [sex, setSex] = useState('X');
@@ -24,6 +25,25 @@ function SignUpScreen({ navigation }) {
     const [passwordError, setPWError] = useState('');
     const [nameError, setNameError] = useState('');
     const [isValid, setIsValid] = useState(false);
+
+    useEffect(() => {
+        async function getUser() {
+            const dbUser = await fetchUser(userCtx.userId, userCtx.token);
+            setFirstName(dbUser['data'].firstName);
+            setNickname(dbUser['data'].nickname);
+            setLastName(dbUser['data'].lastName);
+            setEmail(dbUser['data'].email);
+            setPhone(dbUser['data'].phone);
+            if(dbUser['data'].birthday !== undefined) { 
+                setBirthday(new Date(dbUser['data'].birthday)); // Otherwise it's already set to today
+            } 
+            if(dbUser['data'].sex === 'M') { setSex("Male"); }
+            else if (dbUser['data'].sex === 'F') { setSex("Female"); }
+            else { setSex("X"); }
+        }
+    
+        getUser();
+    }, []);
 
     const onDateChange = (event, selectedDate) => {
         if(event.type != 'dismissed')
@@ -64,29 +84,37 @@ function SignUpScreen({ navigation }) {
             setIsValid(false);
         }
 
+        // if(phone.length !== 10) {
+            // setPhoneError('*Phone Number must be 10 digits');
+        //     setIsValid(false);
+        // }
+
         if(isValid) {
-            signUpHandler();
+            saveHandler();
         }
     };
 
-    async function signUpHandler() {
+    async function saveHandler() {
+        // const roundToMidnight = new Date(Date.UTC(birthday.getFullYear(),birthday.getMonth(), birthday.getDate()));
+        // const moDiff = new Date() - bday.getTime();
+        // const ageDate = new Date(moDiff);
+        // const year = ageDate.getUTCFullYear();
+        // const age = Math.abs(year - 1970);
         try {
-            const authData = await authenticate('signUp', email, password);
             const userData = 
                 {
-                    uid: authData.localId,
                     firstName: firstName,
                     nickname: nickname,
                     lastName: lastName,
                     email: email,
+                    phone: phone,
                     birthday: birthday,
-                    sex: sex
+                    sex: sex.substring(0,1)
                 }
 
-            postUser(userData, authData.idToken)
-            userCtx.signUp(authData, userData);
+            patchUser(userCtx.userId, userCtx.token, userData)
         } catch (error) {
-            Alert.alert('Sign Up Failed!', 'Failed to sign up. Please check E-mail and Password.')
+            Alert.alert('Update Failed!', 'Unknown Error Occurred. '+error)
         }
     }
 
@@ -100,18 +128,6 @@ function SignUpScreen({ navigation }) {
                 <View style={styles.backgroundView}>
                     <ShadowBox style={styles.containerView}>
                         <Text style={styles.headerText}>Profile</Text>
-                            <View style={styles.inputView}>
-                                <UserInput
-                                    label="Email"
-                                    value={email.trim()}
-                                    onChangeText={setEmail}
-                                    autoCapitalize="none"
-                                    autoCorrect={false}
-                                    editable={false}
-                                />
-                        </View>
-                        { emailError ? <Text style={styles.errorText}>{emailError}</Text> : null }
-                        <Text style={styles.errorText}>Change password and Email functionality coming soon</Text>
                         {/* <View style={styles.inputView}>
                             <UserInput
                                 secureTextEntry
@@ -151,6 +167,29 @@ function SignUpScreen({ navigation }) {
                                 autoCorrect={false}
                             />
                         </View>
+                        <View style={styles.inputView}>
+                                <UserInput
+                                    label="Email"
+                                    value={email.trim()}
+                                    onChangeText={setEmail}
+                                    autoCapitalize="none"
+                                    autoCorrect={false}
+                                    editable={false}
+                                />
+                        </View>
+                        { emailError ? <Text style={styles.errorText}>{emailError}</Text> : null }
+                        <Text style={styles.errorText}>Change password, Email, and phone functionality coming soon</Text>
+                        <View style={styles.inputView}>
+                            <UserInput
+                                label="Phone"
+                                value={phone}
+                                onChangeText={setPhone}
+                                autoCorrect={false}
+                                editable={false}
+                                keyboardType="phone-pad"
+
+                            />
+                        </View>
                         {showDate && (
                             <DateTimePicker
                                 testID="datePicker"
@@ -158,11 +197,12 @@ function SignUpScreen({ navigation }) {
                                 mode={'date'}
                                 is24Hour={true}
                                 onChange={onDateChange}
+                                maximumDate={new Date()}
                             />
                         )}
                         <TouchableOpacity onPress={showDatepicker}>
                             <View style={styles.lengthRow}>
-                                <Text style={styles.birthdayText}>Birthday: {format(birthday, "MMMM do, yyyy")}</Text>
+                                <Text style={styles.birthdayText}>Birthday: {format(birthday, "yyyy-MM-dd")}</Text>
                                 <Ionicons name="calendar-outline" size={24} color="darkgreen" style={styles.iconStyle} />
                             </View>
                         </TouchableOpacity>
@@ -171,9 +211,9 @@ function SignUpScreen({ navigation }) {
                             <SelectDropdown
                                 data={["X","Male","Female"]}
                                 onSelect={(selectedItem, index) => {
-                                    setSex(selectedItem.substring(0,1))
+                                    setSex(selectedItem)
                                 }}
-                                defaultButtonText="Sex"
+                                defaultButtonText={sex}
                                 buttonTextAfterSelection={(selectedItem, index) => {
                                     return selectedItem
                                 }}
@@ -285,4 +325,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default SignUpScreen;
+export default ProfileScreen;

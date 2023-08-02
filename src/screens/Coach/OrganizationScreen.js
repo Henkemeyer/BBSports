@@ -3,7 +3,7 @@ import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from '
 import SelectDropdown from 'react-native-select-dropdown';
 import OurButton from '../../components/OurButton';
 import { UserContext } from '../../store/context/user-context';
-import { fetchCoaches, fetchOrganizations, fetchOrgTeams } from '../../util/http';
+import { fetchCoaches, fetchOrganization, fetchOrganizationsByAdmin, fetchOrgTeams } from '../../util/http';
 import { Ionicons } from '@expo/vector-icons';
 
 function OrganizationScreen({ navigation }) {
@@ -31,7 +31,10 @@ function OrganizationScreen({ navigation }) {
 
     useEffect(() => {
         async function getOrganizations() {
-            const dbOrganizations = await fetchOrganizations(userCtx.userId, token);
+            const dbOrganizations = await fetchOrganization(userCtx.organizationId, token);
+            const dbOrganizationsTest = await fetchOrganizationsByAdmin(userCtx.userId, token);
+            console.log(dbOrganizations);
+            console.log(dbOrganizationsTest);
             setOrganizations(dbOrganizations);
             for (const key in organizations) {
                 if(organizations[key].id === userCtx.organizationId) {
@@ -57,18 +60,17 @@ function OrganizationScreen({ navigation }) {
         }
     
         getTeams();
-    }, [userCtx.organizationId]);
+    }, [orgIndex]);
 
-    function selectTeamHandler(teamId) {
-        // We should grab all and then filter so it doesn't pull from DB over and over if they keep flipping between them
+    useEffect(() => {
         async function getCoaches() {
-            const dbCoaches = await fetchCoaches(teamId, token);
+            const dbCoaches = await fetchCoaches(userCtx.teamId, token);
 
             setCoaches(dbCoaches);
         }
     
         getCoaches();
-    }
+    }, [teamIndex]);
 
     function retireHandler(coach) {
         const placeholder = 1;
@@ -104,7 +106,7 @@ function OrganizationScreen({ navigation }) {
                     };
                     userCtx.switchOrganization(orgData);
                 }}
-                defaultButtonText="Organizations"
+                defaultButtonText={userCtx.organizationName}
                 defaultValue={userCtx.organizationId}
                 buttonTextAfterSelection={(selectedItem, index) => {
                     return selectedItem.name
@@ -136,9 +138,9 @@ function OrganizationScreen({ navigation }) {
                             id: selectedItem.id
                         };
                         userCtx.switchTeam(teamData);
-                        selectTeamHandler(selectedItem.id);
+                        setTeamIndex(selectedItem.id);
                     }}
-                    defaultButtonText="Teams"
+                    defaultButtonText={userCtx.teamName}
                     defaultValueByIndex={teamIndex}
                     buttonTextAfterSelection={(selectedItem, index) => {
                         return selectedItem.name

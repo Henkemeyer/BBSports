@@ -55,17 +55,15 @@ function SignUpScreen({ navigation }) {
             const authData = await authenticate('signUp', email, password);
             const userData = 
                 {
-                    uid: authData.localId,
                     firstName: firstName,
                     nickname: nickname,
-                    email: email,
-                    mode: mode
+                    email: email
                 }
 
-            postUser(userData, authData.idToken)
-            userCtx.signUp(authData, userData);
+            postUser(userData, authData)
+            userCtx.signUp(authData, userData, mode);
         } catch (error) {
-            Alert.alert('Sign Up Failed!', 'Failed to sign up. Please check E-mail and Password.')
+            Alert.alert('Sign Up Failed!', 'Failed to sign up. '+error)
         }
     }
 
@@ -136,7 +134,7 @@ function SignUpScreen({ navigation }) {
                             <SelectDropdown
                                 data={["Athlete","Coach"]}
                                 onSelect={(selectedItem, index) => {
-                                    setMode(selectedItem.substring(0,1))
+                                    setMode(selectedItem)
                                 }}
                                 defaultButtonText="Athlete"
                                 buttonTextAfterSelection={(selectedItem, index) => {

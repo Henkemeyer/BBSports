@@ -11,7 +11,7 @@ import Colors from '../../constants/ColorThemes';
 import { Ionicons } from '@expo/vector-icons';
 
 const CoachCardioScreen = ({ route, navigation }) => {
-    const { eventId } = route.params;
+    // const { eventId } = route.params;
     const userCtx = useContext(UserContext);      // App User Info
     const token = userCtx.token;                  // User Auth Token
 
@@ -176,7 +176,7 @@ const CoachCardioScreen = ({ route, navigation }) => {
                 if(selAthletes[uid]) {
                     const taskData = {
                         uid: uid,
-                        eventId: eventId,
+                        // eventId: eventId,
                         notes: notes,
                         type: 'Cardio',
                         insertDate: new Date(),
@@ -283,7 +283,7 @@ const CoachCardioScreen = ({ route, navigation }) => {
                 buttonText="Submit"
             />
         </View>
-        <Text>{eventId}</Text>
+        {/* <Text>{eventId}</Text> */}
         </ScrollView>
         </KeyboardAvoidingView>
     );

@@ -99,11 +99,29 @@ function CreateTeamScreen({ navigation }) {
                                 autoCorrect={false}
                             />
                         </View>
-                        <View style={styles.inputView}>
-                            <UserInput
-                                label="Sex"
-                                value={sex}
-                                onChangeText={setSex}
+                        <View>
+                            <Text style={styles.selectText}>Sex:</Text>
+                            <SelectDropdown
+                                data={["X","Male","Female"]}
+                                onSelect={(selectedItem, index) => {
+                                    setSex(selectedItem.substring(0,1))
+                                }}
+                                defaultButtonText="Sex"
+                                buttonTextAfterSelection={(selectedItem, index) => {
+                                    return selectedItem
+                                }}
+                                rowTextForSelection={(item, index) => {
+                                    return item
+                                }}
+                                buttonStyle={styles.selectDropDownButton}
+                                buttonTextStyle={styles.selectDropDownText}
+                                renderDropdownIcon={isOpened => {
+                                    return <Ionicons name={isOpened ? 'chevron-up-circle-sharp' : 'chevron-down-circle-outline'} color={'#FFF'} size={18} />;
+                                }}
+                                dropdownIconPosition={'right'}
+                                dropdownStyle={styles.selectDropDown}
+                                rowStyle={styles.selectDropDownRow}
+                                rowTextStyle={styles.selectDropDownText}
                             />
                         </View>
                         <View style={styles.inputView}>
@@ -166,6 +184,12 @@ const styles = StyleSheet.create({
         color: 'red',
         fontSize: 15,
         marginBottom: 15
+    },
+    selectText: {
+        fontSize: 18,
+        textAlign: 'left',
+        marginHorizontal: '5%',
+        color: 'darkgreen'
     },
     selectDropDownButton: {
         width: '80%',

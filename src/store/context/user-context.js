@@ -22,32 +22,31 @@ export const UserContext = createContext({
 function UserContextProvider({children}) {
     const [getUserId, setUserId] = useState([]);
     const [getToken, setToken] = useState([]);
-    const [getUserMode, setUserMode] = useState([]);
-    const [getName, setName] = useState([]);
-    const [getFullName, setFullName] = useState([]);
+    const [getUserMode, setUserMode] = useState('');
+    const [getName, setName] = useState('');
+    const [getFullName, setFullName] = useState('');
     const [getOrganizationId, setOrganizationId] = useState([]);
     const [getTeamId, setTeamId] = useState([]);
-    const [getOrganizationName, setOrganizationName] = useState([]);
-    const [getTeamName, setTeamName] = useState([]);
+    const [getOrganizationName, setOrganizationName] = useState('');
+    const [getTeamName, setTeamName] = useState('');
 
-    function signUp(authData, userData) {
+    function signUp(authData, userData, mode) {
         setToken(authData.idToken);
         setUserId(authData.localId);
 
         if(userData.nickname) {
-            setName(userData.nickname);
-        } else { setName(userData.firstName); }
+            setName(userData.nickname.toString());
+        } else { setName(userData.firstName.toString()); }
 
         AsyncStorage.setItem('authToken', authData.idToken);
         AsyncStorage.setItem('userID', authData.localId);
         AsyncStorage.setItem('firstName', getName);
-        switchUserMode(userData.role)
+        switchUserMode(mode)
     }
     
-    function login(authData, userMode) {
+    function login(authData) {
         setToken(authData.idToken);
         setUserId(authData.localId);
-        setUserMode(userMode);
         AsyncStorage.setItem('authToken', authData.idToken);
         AsyncStorage.setItem('userID', authData.localId);
     }

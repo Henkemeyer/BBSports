@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
         shadowRadius: 8,
         shadowOffset: { width: 0, height: 2 },
         elevation: 15,
-        marginVertical: 150,
+        marginVertical: '10%',
         width: '80%'
     },
     headerText: {

@@ -278,12 +278,8 @@ function CoachTab() {
 
           if (route.name === 'Home') {
             iconName = focused ? 'calendar' : 'calendar-outline';
-          } else if (route.name === 'Cardio') {
-            iconName = focused ? 'beer' : 'beer-outline';
-          } else if (route.name === 'Timer') {
-            iconName = focused ? 'stopwatch' : 'stopwatch-outline';
-          } else if (route.name === 'Lifting') {
-            iconName = focused ? 'barbell' : 'barbell-outline';
+          } else if (route.name === 'Create') {
+            iconName = focused ? 'create' : 'create-outline';
           } else if (route.name === 'Roster') {
             iconName = focused ? 'document-text' : 'document-text-outline';
           } else if (route.name === 'Settings') {
@@ -297,11 +293,11 @@ function CoachTab() {
       tabBarOptions={{
         activeTintColor: 'green',
         inactiveTintColor: 'black',
+        showLabel: false
       }}
     >
       <TabNav.Screen name="Home" component={EventStack} />
-      <TabNav.Screen name="Cardio" component={CoachCardioScreen} />
-      <TabNav.Screen name="Lifting" component={CoachLiftingScreen} />
+      <TabNav.Screen name="Create" component={CoachCardioScreen} />
       <TabNav.Screen name="Roster" component={CoachTeamRosterScreen} />
       <TabNav.Screen name="Settings" component={SettingsStack} />
     </TabNav.Navigator>

@@ -23,91 +23,91 @@ const CoachCalendarScreen = ({ navigation }) => {
     const competition = {key: 'competition', color: 'red'};  // Meet, game
     const activity = {key: 'activity', color: 'blue'};   // Pictures, miscellaneous
 
-    useEffect(() => {
-        async function getTeamEvents() {
-            const dbEvents = await fetchTeamCalendar(userCtx.teamId, token);
-            const eventsObj = {};
-            const markedObj = {};
+    // useEffect(() => {
+    //     async function getTeamEvents() {
+    //         const dbEvents = await fetchTeamCalendar(userCtx.teamId, token);
+    //         const eventsObj = {};
+    //         const markedObj = {};
 
-            for (const key in dbEvents.data) {
-                var time = '';
-                const eventType = dbEvents.data[key].type;
+    //         for (const key in dbEvents.data) {
+    //             var time = '';
+    //             const eventType = dbEvents.data[key].type;
 
-                if(dbEvents.data[key].startTime) {
-                    time = dbEvents.data[key].startTime;
-                    if(dbEvents.data[key].endTime) {
-                        time = time +" - "+ dbEvents.data[key].endTime;
-                    }
-                }
-                else {
-                    time = 'On Own';
-                }
-                const eventDate = dbEvents.data[key].date;
-                const eventArr = {
-                    id: key,
-                    day: dbEvents.data[key].date,
-                    teamName: dbEvents.data[key].teamName,
-                    location: dbEvents.data[key].location,
-                    time: time,
-                    type: dbEvents.data[key].type,
-                };
+    //             if(dbEvents.data[key].startTime) {
+    //                 time = dbEvents.data[key].startTime;
+    //                 if(dbEvents.data[key].endTime) {
+    //                     time = time +" - "+ dbEvents.data[key].endTime;
+    //                 }
+    //             }
+    //             else {
+    //                 time = 'On Own';
+    //             }
+    //             const eventDate = dbEvents.data[key].date;
+    //             const eventArr = {
+    //                 id: key,
+    //                 day: dbEvents.data[key].date,
+    //                 teamName: dbEvents.data[key].teamName,
+    //                 location: dbEvents.data[key].location,
+    //                 time: time,
+    //                 type: dbEvents.data[key].type,
+    //             };
 
-                let setDot = {};
-                if(eventType==='Cardio' || eventType==='Lifting' || eventType==='Scrimmage' || eventType==='Practice') {
-                    setDot = workout; 
-                }
-                else if(eventType==='Meet' || eventType==='Game' || eventType==='Match') {
-                    setDot = competition;
-                }
-                else{
-                    setDot = activity;
-                }
+    //             let setDot = {};
+    //             if(eventType==='Cardio' || eventType==='Lifting' || eventType==='Scrimmage' || eventType==='Practice') {
+    //                 setDot = workout; 
+    //             }
+    //             else if(eventType==='Meet' || eventType==='Game' || eventType==='Match') {
+    //                 setDot = competition;
+    //             }
+    //             else{
+    //                 setDot = activity;
+    //             }
 
-                if(eventsObj[eventDate]){
-                    eventsObj[eventDate] = [...eventsObj[eventDate], eventArr];
-                    markedObj[eventDate]['dots'] = [...markedObj[eventDate]['dots'], setDot];
-                }
-                else {
-                    eventsObj[eventDate] = eventArr;
-                    markedObj[eventDate] = {dots: [setDot]};
-                }
-            }
-            setEvents(eventsObj);
-            setMarked(markedObj);
-        }
+    //             if(eventsObj[eventDate]){
+    //                 eventsObj[eventDate] = [...eventsObj[eventDate], eventArr];
+    //                 markedObj[eventDate]['dots'] = [...markedObj[eventDate]['dots'], setDot];
+    //             }
+    //             else {
+    //                 eventsObj[eventDate] = eventArr;
+    //                 markedObj[eventDate] = {dots: [setDot]};
+    //             }
+    //         }
+    //         setEvents(eventsObj);
+    //         setMarked(markedObj);
+    //     }
     
-        getTeamEvents();
-    }, []);
+    //     getTeamEvents();
+    // }, []);
 
-    const loadItems = (day) => {
+    // const loadItems = (day) => {
 
-        setTimeout(() => {
-            for (let i = -15; i < 50; i++) {
-                const time = day.timestamp + i * 24 * 60 * 60 * 1000;
-                const strTime = timeToString(time);
+    //     setTimeout(() => {
+    //         for (let i = -15; i < 50; i++) {
+    //             const time = day.timestamp + i * 24 * 60 * 60 * 1000;
+    //             const strTime = timeToString(time);
 
-                items[strTime] = [];
-                console.log(events)
+    //             items[strTime] = [];
+    //             console.log(events)
 
-                if (events[strTime]) {
-                    console.log(events[strTime])
-                    items[strTime].push(events[strTime]);
-                }
+    //             if (events[strTime]) {
+    //                 console.log(events[strTime])
+    //                 items[strTime].push(events[strTime]);
+    //             }
 
-                items[strTime].push({
-                    text: 'Add Event',
-                    day: strTime,
-                    placeholder: true
-                });
-            }
-            const newItems = {};
-            Object.keys(items).forEach(key => {
-                newItems[key] = items[key];
-            });
+    //             items[strTime].push({
+    //                 text: 'Add Event',
+    //                 day: strTime,
+    //                 placeholder: true
+    //             });
+    //         }
+    //         const newItems = {};
+    //         Object.keys(items).forEach(key => {
+    //             newItems[key] = items[key];
+    //         });
 
-            setItems(newItems);
-        }, 1000);
-    }
+    //         setItems(newItems);
+    //     }, 1000);
+    // }
 
     const renderItem = (item) => {
         if(item.placeholder) {
@@ -134,7 +134,7 @@ const CoachCalendarScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <Agenda
+            {/* <Agenda
                 items={items}
                 // loadItemsForMonth={loadItems}
                 loadItemsForMonth={month => { console.log('trigger items loading'); }}
@@ -158,7 +158,7 @@ const CoachCalendarScreen = ({ navigation }) => {
                     todayTextColor: 'orange',
                     dayTextColor: 'green',
                 }}
-            />
+            /> */}
             <StatusBar />
         </View>
     );

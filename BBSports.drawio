@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2023-08-03T20:25:04.697Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36" etag="iFf9N0e0nWlqoLFoUk-k" version="21.6.6" type="github">
+<mxfile host="app.diagrams.net" modified="2023-08-03T20:29:15.758Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36" etag="HmXBC7dzi8mX7KPqN_-g" version="21.6.6" type="github">
   <diagram id="p2ylJtfO_-Iy1inDbocZ" name="Page-1">
     <mxGraphModel dx="1434" dy="1858" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -31,11 +31,20 @@
         <mxCell id="I1CVPrIMJtBGXKQZ_hz7-4" value="Manage Plans" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="KutpoxNR8eGC2RVmOY_f-10">
           <mxGeometry x="10" y="50" width="100" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="I1CVPrIMJtBGXKQZ_hz7-5" value="Edit Warmup / Cooldown" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="KutpoxNR8eGC2RVmOY_f-10">
+        <mxCell id="I1CVPrIMJtBGXKQZ_hz7-5" value="Edit Routine" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="KutpoxNR8eGC2RVmOY_f-10">
           <mxGeometry x="10" y="260" width="100" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="KutpoxNR8eGC2RVmOY_f-3" value="Roster" style="swimlane;startSize=20;rounded=0;" parent="KutpoxNR8eGC2RVmOY_f-1" vertex="1">
+        <mxCell id="KutpoxNR8eGC2RVmOY_f-3" value="Sandbox" style="swimlane;startSize=20;rounded=0;" parent="KutpoxNR8eGC2RVmOY_f-1" vertex="1">
           <mxGeometry x="240" y="20" width="120" height="460" as="geometry" />
+        </mxCell>
+        <mxCell id="I1CVPrIMJtBGXKQZ_hz7-50" value="Create Circuit" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="KutpoxNR8eGC2RVmOY_f-3">
+          <mxGeometry x="10" y="50" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="I1CVPrIMJtBGXKQZ_hz7-51" value="Create Workout" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="KutpoxNR8eGC2RVmOY_f-3">
+          <mxGeometry x="10" y="120" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="I1CVPrIMJtBGXKQZ_hz7-52" value="Create Routine" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="KutpoxNR8eGC2RVmOY_f-3">
+          <mxGeometry x="10" y="190" width="100" height="50" as="geometry" />
         </mxCell>
         <mxCell id="KutpoxNR8eGC2RVmOY_f-4" value="Team Profile" style="swimlane;startSize=20;rounded=0;" parent="KutpoxNR8eGC2RVmOY_f-1" vertex="1">
           <mxGeometry x="360" y="20" width="120" height="460" as="geometry">
@@ -314,6 +323,9 @@
         </mxCell>
         <mxCell id="I1CVPrIMJtBGXKQZ_hz7-47" value="" style="shape=ext;double=1;rounded=1;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="I1CVPrIMJtBGXKQZ_hz7-18">
           <mxGeometry y="190" width="240" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="I1CVPrIMJtBGXKQZ_hz7-49" value="If Org Admin" style="text;html=1;strokeColor=#b85450;fillColor=#f8cecc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="I1CVPrIMJtBGXKQZ_hz7-18">
+          <mxGeometry x="70" y="190" width="110" height="30" as="geometry" />
         </mxCell>
         <mxCell id="I1CVPrIMJtBGXKQZ_hz7-24" value="" style="endArrow=classic;startArrow=classic;html=1;strokeWidth=2;" edge="1" parent="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">

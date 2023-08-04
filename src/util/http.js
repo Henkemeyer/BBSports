@@ -3,7 +3,8 @@ import axios from 'axios';
 const DB_URL = 'https://bbsports-e9a76-default-rtdb.firebaseio.com/';
 // ?auth=token
 
-export function postUser(user, authData) {
+// Login and Profile Screens
+export function putUser(user, authData) {
     axios.put(DB_URL + 'user/'+authData.localId+'.json?auth=' + authData.idToken, user);
 }
 
@@ -11,8 +12,58 @@ export async function fetchUser(uid, token) {
   return await axios.get(DB_URL + 'user/'+uid+'.json?auth='+ token);
 }
 
-export async function patchUser(uid, token, user) {
-  await axios.patch(DB_URL + 'user/'+uid+'.json?auth='+ token, user);
+export async function patchUser(uid, token, userData) {
+  await axios.patch(DB_URL + 'user/'+uid+'.json?auth='+ token, userData);
+}
+
+// Create, Manage, Find Organizations
+export async function postOrganization(orgData, token) {
+  return await axios.post(DB_URL + 'organization.json?auth='+ token, orgData);
+}
+
+export async function putAdmin(orgId, uid, token) {
+  return await axios.put(DB_URL + 'member/'+orgId+'/admin.json?auth='+ token, { uid: uid });
+}
+
+export async function fetchOrganization(orgId, token) {
+  const response = await axios.get(DB_URL + 'organization/'+orgId+'.json');
+
+  const organizations = [];
+
+  for (const key in response.data) {
+      const orgObj = {
+          id: key,
+          name: response.data[key].name,
+          description: response.data[key].description,
+          // Possible Editions:
+          // Level: Child, high school, college, club, adult
+          // Rating: 5 *'s... Rating and Review seperate file
+          // Members: # of
+          // Location: If they have meetups
+          // Public, Private
+          // Closed, Open, Fee?
+      };
+      organizations.push(orgObj);
+  }
+
+  return organizations;
+}
+
+export async function fetchOrganizationsByAdmin(uid, token) {
+  const response = await axios.get(DB_URL + 'organization.json?orderBy="admin"&equalTo="'+uid+'"');
+
+  const organizations = [];
+
+  for (const key in response.data) {
+      const orgObj = {
+          id: key,
+          name: response.data[key].name,
+          description: response.data[key].description
+      };
+      organizations.push(orgObj);
+  }
+
+  return organizations;
 }
 
 export async function postEquipment(equipment, token) {
@@ -59,51 +110,6 @@ export async function postCardioLog(cardio, token) {
 
 export async function fetchCardioLog(uid, token) {
   return await axios.get(DB_URL + 'cardioLog.json?orderBy="uid"&equalTo="'+uid+'"&limitToLast=100');
-}
-
-export async function postOrganization(org, token) {
-  return await axios.post(DB_URL + 'organization.json', org);
-}
-
-export async function fetchOrganization(orgId, token) {
-  const response = await axios.get(DB_URL + 'organization/'+orgId+'.json');
-
-  const organizations = [];
-
-  for (const key in response.data) {
-      const orgObj = {
-          id: key,
-          name: response.data[key].name,
-          description: response.data[key].description,
-          // Possible Editions:
-          // Level: Child, high school, college, club, adult
-          // Rating: 5 *'s... Rating and Review seperate file
-          // Members: # of
-          // Location: If they have meetups
-          // Public, Private
-          // Closed, Open, Fee?
-      };
-      organizations.push(orgObj);
-  }
-
-  return organizations;
-}
-
-export async function fetchOrganizationsByAdmin(uid, token) {
-  const response = await axios.get(DB_URL + 'organization.json?orderBy="admin"&equalTo="'+uid+'"');
-
-  const organizations = [];
-
-  for (const key in response.data) {
-      const orgObj = {
-          id: key,
-          name: response.data[key].name,
-          description: response.data[key].description
-      };
-      organizations.push(orgObj);
-  }
-
-  return organizations;
 }
 
 export async function postTeam(team, token) {

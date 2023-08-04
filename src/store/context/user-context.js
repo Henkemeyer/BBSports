@@ -20,13 +20,13 @@ export const UserContext = createContext({
 });
 
 function UserContextProvider({children}) {
-    const [getUserId, setUserId] = useState([]);
-    const [getToken, setToken] = useState([]);
+    const [getUserId, setUserId] = useState('');
+    const [getToken, setToken] = useState('');
     const [getUserMode, setUserMode] = useState('');
     const [getName, setName] = useState('');
     const [getFullName, setFullName] = useState('');
-    const [getOrganizationId, setOrganizationId] = useState([]);
-    const [getTeamId, setTeamId] = useState([]);
+    const [getOrganizationId, setOrganizationId] = useState('');
+    const [getTeamId, setTeamId] = useState('');
     const [getOrganizationName, setOrganizationName] = useState('');
     const [getTeamName, setTeamName] = useState('');
 
@@ -68,6 +68,7 @@ function UserContextProvider({children}) {
         if(orgData) {
             setOrganizationId(orgData.id);
             setOrganizationName(orgData.name);
+            console.log("Switching Org to "+orgData.name)
             AsyncStorage.setItem('lastOrgId', orgData.id);
             AsyncStorage.setItem('lastOrgName', orgData.name);
         }
@@ -77,6 +78,7 @@ function UserContextProvider({children}) {
         if(teamData) {
             setTeamId(teamData.id);
             setTeamName(teamData.name);
+            console.log("Switching Team to "+teamData.name)
             AsyncStorage.setItem('lastTeamId', teamData.id);
             AsyncStorage.setItem('lastTeamName', teamData.name);
         }

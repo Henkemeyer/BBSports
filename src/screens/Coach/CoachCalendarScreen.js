@@ -87,10 +87,8 @@ const CoachCalendarScreen = ({ navigation }) => {
     //             const strTime = timeToString(time);
 
     //             items[strTime] = [];
-    //             console.log(events)
 
     //             if (events[strTime]) {
-    //                 console.log(events[strTime])
     //                 items[strTime].push(events[strTime]);
     //             }
 

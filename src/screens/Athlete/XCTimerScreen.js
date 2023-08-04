@@ -95,7 +95,6 @@ const XCTimerScreen = ({ navigation, route}) => {
                         style={styles.cellText}/>)
 
                     headerCopy[1].push(150)
-                    console.log(headerCopy)
                     setHeader(headerCopy)
                 }
                 else if(y === row+1) {

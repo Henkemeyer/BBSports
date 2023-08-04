@@ -79,11 +79,9 @@ const StopwatchSetupScreen = ({ navigation }) => {
                     name: dbMeets.data[key].description,
                     type: dbMeets.data[key].type
                 }
-                console.log(tmpArr)
                 meetsArr.push(tmpArr)
             }
             setMeetList([...meetsArr]);
-            console.log(meetList.length)
             if(!meetList || meetList.length === 0) {
                 setMeetError("Nothing scheduled for today to time.")
             }
@@ -110,11 +108,11 @@ const StopwatchSetupScreen = ({ navigation }) => {
     }, [userCtx.teamId]);
 
     function selectMeetHandler(meet) {
-        console.log("You still have to implement this you fucking geek")
+        console.log("TODO")
     }
 
     function selectEventHandler(event) {
-        console.log("You still have to implement this you fucking nerd")
+        console.log("TODO")
     }
 
     const submitForm = () => {

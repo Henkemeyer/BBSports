@@ -3,7 +3,7 @@ import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from '
 import SelectDropdown from 'react-native-select-dropdown';
 import OurButton from '../../components/OurButton';
 import { UserContext } from '../../store/context/user-context';
-import { fetchCoaches, fetchOrganization, fetchOrganizationsByAdmin, fetchOrgTeams } from '../../util/http';
+import { fetchCoachesByTeam, fetchOrganization, fetchOrganizationsByAdmin, fetchOrgTeams } from '../../util/http';
 import { Ionicons } from '@expo/vector-icons';
 
 function OrganizationScreen({ navigation }) {
@@ -33,22 +33,23 @@ function OrganizationScreen({ navigation }) {
         async function getOrganizations() {
             const dbOrganizations = await fetchOrganization(userCtx.organizationId, token);
             const dbOrganizationsTest = await fetchOrganizationsByAdmin(userCtx.userId, token);
-            console.log(dbOrganizations);
-            console.log(dbOrganizationsTest);
-            setOrganizations(dbOrganizations);
-            for (const key in organizations) {
-                if(organizations[key].id === userCtx.organizationId) {
-                    setOrgIndex(key);
-                    break;
+            if(dbOrganizations.length > 0) {
+                setOrganizations(dbOrganizations);
+                for (const key in organizations) {
+                    if(organizations[key].id === userCtx.organizationId) {
+                        setOrgIndex(key);
+                        console.log("Here?")
+                        break;
+                    }
                 }
             }
         }
-    
         getOrganizations();
     }, [token]);
-
+    
     useEffect(() => {
         async function getTeams() {
+            console.log("FetchTeams?")
             const dbTeams = await fetchOrgTeams(userCtx.organizationId, token);
             setTeams(dbTeams);
             for (const key in teams) {
@@ -64,7 +65,7 @@ function OrganizationScreen({ navigation }) {
 
     useEffect(() => {
         async function getCoaches() {
-            const dbCoaches = await fetchCoaches(userCtx.teamId, token);
+            const dbCoaches = await fetchCoachesByTeam(userCtx.teamId, token);
 
             setCoaches(dbCoaches);
         }
@@ -76,8 +77,7 @@ function OrganizationScreen({ navigation }) {
         const placeholder = 1;
         // try {
         //     deleteEquipment(equip.id, token);
-        //     console.log(equip.id);
-
+// 
         //     const tempEquip = equipment;
         //     const index = tempEquip.indexOf(equip);
         //     if (index !== -1) {
@@ -96,7 +96,7 @@ function OrganizationScreen({ navigation }) {
 
     return (
         <View style={styles.containerView}>
-            <Text style={styles.titleText}>Switch Organization?</Text>
+            <Text style={styles.titleText}>Your Organizations:</Text>
             <SelectDropdown 
                 data={organizations}
                 onSelect={(selectedItem, index) => {
@@ -106,7 +106,7 @@ function OrganizationScreen({ navigation }) {
                     };
                     userCtx.switchOrganization(orgData);
                 }}
-                defaultButtonText={userCtx.organizationName}
+                defaultButtonText={organizations.length === 0 ? "No Organizations" : userCtx.organizationName}
                 defaultValue={userCtx.organizationId}
                 buttonTextAfterSelection={(selectedItem, index) => {
                     return selectedItem.name
@@ -123,13 +123,14 @@ function OrganizationScreen({ navigation }) {
                 dropdownStyle={styles.selectDropDown}
                 rowStyle={styles.selectDropDownRow}
                 rowTextStyle={styles.selectDropDownText}
+                disabled={!organizations.length}
             />
             <OurButton 
                 buttonPressed={() => navigation.navigate('CreateOrg')}
                 buttonText="Create?"
                 style={styles.createButton}/>
             { userCtx.organizationId ? <>
-                <Text style={styles.titleText}>Switch Team?</Text>
+                <Text style={styles.titleText}>Your Teams:</Text>
                 <SelectDropdown
                     data={teams}
                     onSelect={(selectedItem, index) => {
@@ -214,8 +215,9 @@ const styles = StyleSheet.create({
        marginVertical: 20
     },
     titleText: {
-        fontSize: 30,
-        fontWeight: 'bold',
+        fontSize: 20,
+        textAlign: 'left',
+        // fontWeight: 'bold',
         margin: 15,
         color: 'darkgreen'
     },

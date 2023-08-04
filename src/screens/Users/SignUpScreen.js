@@ -9,7 +9,7 @@ import ShadowBox from '../../components/ShadowBox';
 import OurButton from '../../components/OurButton';
 import { UserContext } from '../../store/context/user-context';
 import { authenticate } from '../../util/auth';
-import { postUser } from '../../util/http';
+import { putUser } from '../../util/http';
 
 function SignUpScreen({ navigation }) {
     const userCtx = useContext(UserContext);
@@ -60,7 +60,7 @@ function SignUpScreen({ navigation }) {
                     email: email
                 }
 
-            postUser(userData, authData)
+            putUser(userData, authData)
             userCtx.signUp(authData, userData, mode);
         } catch (error) {
             Alert.alert('Sign Up Failed!', 'Failed to sign up. '+error)

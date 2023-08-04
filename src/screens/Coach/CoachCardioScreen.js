@@ -50,7 +50,6 @@ const CoachCardioScreen = ({ route, navigation }) => {
                 if(dbAthletes.data[key].groups) {
                     const abb = dbAthletes.data[key].groups
                     for (const group in abb) {
-                        console.log(abb[group])
                         if(tmpGroups.indexOf(abb[group]) < 0) {
                             tmpGroups = [...tmpGroups, abb[group]];
 
@@ -167,7 +166,6 @@ const CoachCardioScreen = ({ route, navigation }) => {
         let tmpArr = selAthletes
         tmpArr[uid] = !tmpArr[uid]
         setSelAthletes(tmpArr)
-        console.log(selAthletes[uid])
     }
 
     function submitHandler() {

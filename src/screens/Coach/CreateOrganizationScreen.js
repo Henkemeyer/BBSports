@@ -4,7 +4,7 @@ import UserInput from '../../components/UserInput';
 import ShadowBox from '../../components/ShadowBox';
 import OurButton from '../../components/OurButton';
 import { UserContext } from '../../store/context/user-context';
-import { postOrganization } from '../../util/http';
+import { postOrganization, putAdmin } from '../../util/http';
 
 function CreateOrganizationScreen({ navigation }) {
     const userCtx = useContext(UserContext);
@@ -13,7 +13,7 @@ function CreateOrganizationScreen({ navigation }) {
     const [level, setLevel] = useState('');
     const [location, setLocation] = useState('');
     const [description, setDescription] = useState('');
-    const [title, setTitle] = useState('');
+    // const [title, setTitle] = useState('');
     const [nameError, setNameError] = useState('');
     const [isValid, setIsValid] = useState(false);
 
@@ -29,23 +29,31 @@ function CreateOrganizationScreen({ navigation }) {
         }
     };
 
-    function createOrgHandler() {
+    async function createOrgHandler() {
+        let newOrgId = ''
+        const orgData = {
+            name: orgName,
+            level: level,
+            location: location,
+            description: description,
+            tier: 'Premium'
+        }
+        
         try {
-            const orgData = {
-                name: orgName,
-                level: level,
-                location: location,
-                description: description,
-                admin: {
-                    uid: userCtx.userId,
-                    title: title
-                }
-            }
-            
-            postOrganization(orgData, token)
+            await postOrganization(orgData, token)
+            .then(function (response) {
+                newOrgId = response.data.name;
+                const newOrg = { id: newOrgId, name: orgName }
+                userCtx.switchOrganization(newOrg);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
         } catch (error) {
             Alert.alert('Org Creation Failed!', 'Failed to create organization. Please try again later')
         }
+        
+        putAdmin(newOrgId, userCtx.userId, token);
         navigation.goBack();
     }
 
@@ -85,13 +93,13 @@ function CreateOrganizationScreen({ navigation }) {
                                 autoCorrect={false}
                             />
                         </View>
-                        <View style={styles.inputView}>
+                        {/* <View style={styles.inputView}>
                             <UserInput
                                 label="Your Title"
                                 value={title}
                                 onChangeText={setTitle}
                             />
-                        </View>
+                        </View> */}
 
                         <View style={styles.inputView}>
                             <UserInput
@@ -129,8 +137,9 @@ const styles = StyleSheet.create({
         borderColor: 'gray',
         backgroundColor: '#ffffff',
         borderRadius: 10,
-        marginVertical: 65,
-        width: '80%'
+        marginVertical: 30,
+        paddingVertical: 20,
+        width: '90%'
     },
     headerText: {
         fontSize: 30,
@@ -138,7 +147,7 @@ const styles = StyleSheet.create({
         margin: 15
     },
     inputView: {
-        width: 250,
+        width: '90%',
         marginBottom: 20
     },
     confirmButton: {

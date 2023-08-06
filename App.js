@@ -34,7 +34,7 @@ import CoachCalendarScreen      from './src/screens/Coach/CoachCalendarScreen';
 import EditCalendarScreen       from './src/screens/Coach/EditCalendarScreen';
 import StopwatchSetupScreen     from './src/screens/Athlete/StopwatchSetupScreen';
 import SoloTimerScreen          from './src/screens/Athlete/SoloTimerScreen';
-import XCTimerScreen            from './src/screens/Athlete/XCTimerScreen';
+import XCTimerScreen            from './src/screens/Athlete/StopwatchScreen';
 
 const TabNav = createBottomTabNavigator();
 const StackNav = createStackNavigator();

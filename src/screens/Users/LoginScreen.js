@@ -30,7 +30,7 @@ function LoginScreen({ navigation }) {
         >
             <View style={styles.backgroundView}>
                 <View style={styles.containerView}>  
-                    <Text style={styles.headerText}>Login to BB Sports</Text>
+                    <Text style={styles.headerText}>Login to Coaches Log</Text>
                     <View style={styles.inputView}>
                         <UserInput
                             label="Email"

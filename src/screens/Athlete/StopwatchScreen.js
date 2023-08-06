@@ -7,7 +7,7 @@ import { Table, TableWrapper, Row, Cell } from 'react-native-table-component';
 import { Ionicons } from '@expo/vector-icons';
 import { differenceInMilliseconds, format } from 'date-fns';
 
-const XCTimerScreen = ({ navigation, route}) => {
+const StopwatchScreen = ({ navigation, route}) => {
     const { meet, event, numSplits, athletes } = route.params
 
     const userCtx = useContext(UserContext);
@@ -315,4 +315,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default XCTimerScreen;
+export default StopwatchScreen;

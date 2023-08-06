@@ -33,36 +33,39 @@ const StopwatchSetupScreen = ({ navigation }) => {
 
     useEffect(() => {
         async function initializeValues() {
-            const teamData = await fetchTeam(userCtx.teamId, token);
+            // const teamData = await fetchTeam(userCtx.teamId, token);
 
-            setSport(teamData.data.sport)
-            setLevel(teamData.data.level)
+            // setSport(teamData.data.sport)
+            // setLevel(teamData.data.level)
+            // setSex(teamData.data.sex)
+            setSport("Cross Country")
+            setLevel("College")
             setSex(teamData.data.sex)
-            let abbSport = ''
+            let sportAbb = ''
             switch(sport) {
                 case 'Cross Country':
-                    abbSport = 'XC';
+                    sportAbb = 'XC';
                     break;
                 case 'Track & Field':
-                    abbSport = 'TF';
+                    sportAbb = 'TF';
                     break;
                 case 'Gymnastics':
-                    abbSport = 'GYM';
+                    sportAbb = 'GYM';
                     break;
                 case 'Basketball':
-                    abbSport = 'BB';
+                    sportAbb = 'BB';
                     break;
                 case 'Football':
-                    abbSport = 'FB';
+                    sportAbb = 'FB';
                     break;
                 default:
-                    abbSport = sport;
+                    sportAbb = sport;
             }
 
-            const eventStr = 'MCollegeXC' // sex+level+abbSport
+            const eventStr = 'MCollegeXC' // sex+level+sport
             setEventsList(Events.MCollegeXC)
 
-            const dbMeets = await fetchTeamCalendar(userCtx.teamId, token);
+            // const dbMeets = await fetchTeamCalendar(userCtx.teamId, token);
             const meetsArr = [];
             const today = format(new Date(), 'yyyy-MM-dd')
 
@@ -70,7 +73,7 @@ const StopwatchSetupScreen = ({ navigation }) => {
                 if(dbMeets.data[key].date !== today) {
                     continue;
                 }
-                if(dbMeets.data[key].type === 'Activity' || dbMeets.data[key].type === 'Weights') {
+                if(dbMeets.data[key].type !== 'Meet' && dbMeets.data[key].type !== 'Game') {
                     continue;
                 }
 

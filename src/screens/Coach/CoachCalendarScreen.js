@@ -157,6 +157,12 @@ const CoachCalendarScreen = ({ navigation }) => {
                     dayTextColor: 'green',
                 }}
             /> */}
+            <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('AddEvent')}>
+                <View style={styles.viewRow}>
+                    <Ionicons name="add-circle-outline" size={24} color="darkgreen"/>
+                    <Text style={styles.itemText}>New Event</Text>
+                </View>
+            </TouchableOpacity>
             <StatusBar />
         </View>
     );

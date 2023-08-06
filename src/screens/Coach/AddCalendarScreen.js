@@ -12,12 +12,8 @@ import CheckBox from '../../components/CheckBox';
 import Colors from '../../constants/ColorThemes';
 import { Ionicons } from '@expo/vector-icons';
 
-const AddCalendarScreen = ({ route, navigation }) => {
-    const { day } = route.params;
+const AddCalendarScreen = ({ navigation }) => {
     var defaultDay = new Date();
-    if(day) {
-        defaultDay = new Date(new Date(day).valueOf() + 86400000);
-    } // For some reason it subtracts a day so I added it back on
 
     const userCtx = useContext(UserContext);      // App User Info
     const token = userCtx.token;                  // User Auth Token

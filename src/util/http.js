@@ -21,51 +21,23 @@ export async function postOrganization(orgData, token) {
   return await axios.post(DB_URL + 'organization.json?auth='+ token, orgData);
 }
 
-export async function putAdmin(orgId, uid, token) {
-  return await axios.put(DB_URL + 'member/'+orgId+'/admin.json?auth='+ token, { uid: uid });
+export async function putAdmin(adminData, orgId, token) {
+  return await axios.put(DB_URL + 'member/'+orgId+'.json?auth='+ token, adminData);
 }
 
 export async function fetchOrganization(orgId, token) {
-  const response = await axios.get(DB_URL + 'organization/'+orgId+'.json');
-
-  const organizations = [];
-
-  for (const key in response.data) {
-      const orgObj = {
-          id: key,
-          name: response.data[key].name,
-          description: response.data[key].description,
-          // Possible Editions:
-          // Level: Child, high school, college, club, adult
-          // Rating: 5 *'s... Rating and Review seperate file
-          // Members: # of
-          // Location: If they have meetups
-          // Public, Private
-          // Closed, Open, Fee?
-      };
-      organizations.push(orgObj);
-  }
-
-  return organizations;
+  return await axios.get(DB_URL + 'organization/'+orgId+'.json?auth='+ token);
 }
 
 export async function fetchOrganizationsByAdmin(uid, token) {
-  const response = await axios.get(DB_URL + 'organization.json?orderBy="admin"&equalTo="'+uid+'"');
-
-  const organizations = [];
-
-  for (const key in response.data) {
-      const orgObj = {
-          id: key,
-          name: response.data[key].name,
-          description: response.data[key].description
-      };
-      organizations.push(orgObj);
-  }
-
-  return organizations;
+ return await axios.get(DB_URL + 'admin/'+uid+'.json?auth='+ token);
 }
 
+export async function fetchAdminsByOrganization(orgId, token) {
+  return await axios.get(DB_URL + 'member/'+orgId+'/admin.json?auth='+ token);
+ }
+
+ // Equipment and Training Log Screens
 export async function postEquipment(equipment, token) {
   return await axios.post(DB_URL + 'equipment.json', equipment);
 }
@@ -76,6 +48,10 @@ export async function fetchEquipment(uid, token) {
 
 export async function patchEquipment(equipId, data, token) {
   await axios.patch(DB_URL + 'equipment/' + equipId +'.json', data);
+}
+
+export async function postCardioLog(cardio, token) {
+  await axios.post(DB_URL + 'cardioLog.json', cardio);
 }
 
 /* Code to use in Screen
@@ -104,22 +80,13 @@ export async function fetchTeamCalendar(teamId, token) {
   return await axios.get(DB_URL + 'calendar.json?orderBy="teamId"&equalTo="'+teamId+'"');
 }
 
-export async function postCardioLog(cardio, token) {
-  await axios.post(DB_URL + 'cardioLog.json', cardio);
-}
 
 export async function fetchCardioLog(uid, token) {
   return await axios.get(DB_URL + 'cardioLog.json?orderBy="uid"&equalTo="'+uid+'"&limitToLast=100');
 }
 
-export async function postTeam(team, token) {
-  await axios.post(DB_URL + 'team.json', team)
-  .then(function (response) {
-    console.log('Team ID: ' + response.data.name)
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
+export async function postTeam(teamData, token) {
+  return await axios.post(DB_URL + 'team.json?auth='+ token, teamData);
 }
 
 export async function fetchTeam(teamId, token) {

@@ -13,8 +13,10 @@ function CreateTeamScreen({ navigation }) {
     const token = userCtx.token;
     const [teamName, setTeamName] = useState('');
     const [level, setLevel] = useState('');
+    const [location, setLocation] = useState('');
     const [description, setDescription] = useState('');
-    const [sex, setSex] = useState('');
+    const [profilePic, setProfilePic] = useState('');
+    const [sex, setSex] = useState('X');
     const [sport, setSport] = useState('');
     const [nameError, setNameError] = useState('');
     const [isValid, setIsValid] = useState(false);
@@ -32,21 +34,35 @@ function CreateTeamScreen({ navigation }) {
         }
     };
 
-    function createTeamHandler() {
-        try {
-            const teamData = {
-                description: description,
-                level: level,
-                name: teamName,
-                organizationId: userCtx.organization.id,
-                sex: 'X',
-                sport: sport
-            }
-            
-            postTeam(teamData, token)
-        } catch (error) {
-            Alert.alert('Team Creation Failed!', 'Failed to create Team. Please try again later')
+    async function createTeamHandler() {
+        let newTeamId = '';
+        const teamData = {
+            description: description,
+            level: level,
+            location: location,
+            name: teamName,
+            organizationId: userCtx.organizationId,
+            organizationName: userCtx.organizationName,
+            profilePicture: '',
+            sex: sex,
+            sport: sport
         }
+
+        try {
+            await postTeam(teamData, token)
+            .then(function (response) {
+                newTeamId = response.data.name;
+                const newTeam = { id: newTeamId, name: teamName }
+                userCtx.switchTeam(newTeam);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        } catch (error) {
+            Alert.alert('Team Creation Failed!', 'Failed to create Team. '+error);
+            return;
+        }
+
         navigation.goBack();
     }
 
@@ -99,14 +115,21 @@ function CreateTeamScreen({ navigation }) {
                                 autoCorrect={false}
                             />
                         </View>
+                        <View style={styles.inputView}>
+                            <UserInput
+                                label="Location"
+                                value={location}
+                                onChangeText={setLocation}
+                            />
+                        </View>
                         <View>
                             <Text style={styles.selectText}>Sex:</Text>
                             <SelectDropdown
-                                data={["X","Male","Female"]}
+                                data={["Coed","Male","Female"]}
                                 onSelect={(selectedItem, index) => {
-                                    setSex(selectedItem.substring(0,1))
+                                    selectedItem === "Coed" ? setSex('X') : setSex(selectedItem.substring(0,1))
                                 }}
-                                defaultButtonText="Sex"
+                                defaultButtonText="Coed"
                                 buttonTextAfterSelection={(selectedItem, index) => {
                                     return selectedItem
                                 }}

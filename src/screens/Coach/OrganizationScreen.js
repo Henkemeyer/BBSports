@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
 import OurButton from '../../components/OurButton';
 import { UserContext } from '../../store/context/user-context';
@@ -31,47 +31,53 @@ function OrganizationScreen({ navigation }) {
 
     useEffect(() => {
         async function getOrganizations() {
-            const dbOrganizations = await fetchOrganization(userCtx.organizationId, token);
-            const dbOrganizationsTest = await fetchOrganizationsByAdmin(userCtx.userId, token);
-            if(dbOrganizations.length > 0) {
-                setOrganizations(dbOrganizations);
-                for (const key in organizations) {
-                    if(organizations[key].id === userCtx.organizationId) {
-                        setOrgIndex(key);
-                        console.log("Here?")
-                        break;
-                    }
-                }
+            console.log(userCtx.organizationId+" - "+userCtx.organizationName);
+            let dbOrganization = {};
+            try {
+                // const response = await fetchOrganization(userCtx.organizationId, token);
+                const response = await fetchOrganizationsByAdmin(userCtx.userId, token);
+                dbOrganization = response.data;
+            } catch (error) {
+                Alert.alert('Org Fatch Failed!', 'Failed to fetch organization. '+error)
             }
+
+            // if(dbOrganization.length > 0) {
+            //     for (const key in dbOrganization) {
+            //         const response = await fetchOrganization(dbOrganization[key], token);
+            //         console.log(response.data);
+            //         setOrganizations({ organizations: [...organizations, ...{id:dbOrganization[key], name:response.data.name}]})
+            //         console.log(organizations);
+            //     }
+            // }
         }
         getOrganizations();
     }, [token]);
     
-    useEffect(() => {
-        async function getTeams() {
-            console.log("FetchTeams?")
-            const dbTeams = await fetchOrgTeams(userCtx.organizationId, token);
-            setTeams(dbTeams);
-            for (const key in teams) {
-                if(teams[key].id === userCtx.teamId) {
-                    setTeamIndex(key);
-                    break;
-                }
-            }
-        }
+    // useEffect(() => {
+    //     async function getTeams() {
+    //         console.log("FetchTeams?")
+    //         const dbTeams = await fetchOrgTeams(userCtx.organizationId, token);
+    //         setTeams(dbTeams);
+    //         for (const key in teams) {
+    //             if(teams[key].id === userCtx.teamId) {
+    //                 setTeamIndex(key);
+    //                 break;
+    //             }
+    //         }
+    //     }
     
-        getTeams();
-    }, [orgIndex]);
+    //     getTeams();
+    // }, [orgIndex]);
 
-    useEffect(() => {
-        async function getCoaches() {
-            const dbCoaches = await fetchCoachesByTeam(userCtx.teamId, token);
+    // useEffect(() => {
+    //     async function getCoaches() {
+    //         const dbCoaches = await fetchCoachesByTeam(userCtx.teamId, token);
 
-            setCoaches(dbCoaches);
-        }
+    //         setCoaches(dbCoaches);
+    //     }
     
-        getCoaches();
-    }, [teamIndex]);
+    //     getCoaches();
+    // }, [teamIndex]);
 
     function retireHandler(coach) {
         const placeholder = 1;

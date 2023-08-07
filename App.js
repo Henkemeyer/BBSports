@@ -297,7 +297,7 @@ function CoachTab() {
       }}
     >
       <TabNav.Screen name="Home" component={EventStack} />
-      <TabNav.Screen name="Create" component={CoachCardioScreen} />
+      <TabNav.Screen name="Create" component={CoachLiftingScreen} />
       <TabNav.Screen name="Roster" component={CoachTeamRosterScreen} />
       <TabNav.Screen name="Settings" component={SettingsStack} />
     </TabNav.Navigator>

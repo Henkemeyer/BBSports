@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { ScrollView, StyleSheet, Text, View} from 'react-native';
+import { Alert, ScrollView, StyleSheet, Text, View} from 'react-native';
 import OurButton from '../../components/OurButton';
 import ShadowBox from '../../components/ShadowBox';
 
@@ -19,7 +19,7 @@ function SettingsScreen ({navigation}) {
     }
 
     function themeScreenHandler() {
-        alert('Not implemented yet')
+        Alert.alert('Not implemented yet')
     }
 
     function equipmentScreenHandler() {
@@ -56,17 +56,14 @@ function SettingsScreen ({navigation}) {
                         buttonText="Theme"
                         style={styles.buttonStyle}
                     />
-                    {userCtx.userMode=='Athlete' || userCtx.userMode=='Athlete' ? (
-                        <OurButton 
-                            buttonPressed={() => equipmentScreenHandler()}
-                            buttonText="Manage Equipment"
-                            style={styles.thiccButtonStyle} />
-                    ) : (
-                        <OurButton 
-                            buttonPressed={() => orgHandler()}
-                            buttonText="Your Orgs"
-                            style={styles.buttonStyle} />
-                    )}
+                    <OurButton 
+                        buttonPressed={() => equipmentScreenHandler()}
+                        buttonText="Manage Equipment"
+                        style={styles.thiccButtonStyle} />
+                    <OurButton 
+                        buttonPressed={() => orgHandler()}
+                        buttonText="Your Orgs"
+                        style={styles.buttonStyle} />
                     <OurButton 
                         buttonPressed={() => switchModeHandler()}
                         buttonText="Switch Mode"

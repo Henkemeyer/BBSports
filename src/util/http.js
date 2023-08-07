@@ -38,16 +38,20 @@ export async function fetchAdminsByOrganization(orgId, token) {
  }
 
  // Equipment and Training Log Screens
-export async function postEquipment(equipment, token) {
-  return await axios.post(DB_URL + 'equipment.json', equipment);
+export async function postEquipment(uid, equipment, token) {
+  return await axios.post(DB_URL + 'equipment/'+uid+'.json?auth='+ token, equipment);
 }
 
 export async function fetchEquipment(uid, token) {
-  return await axios.get(DB_URL + 'equipment.json?orderBy="uid"&equalTo="'+uid+'"');
+  return await axios.get(DB_URL + 'equipment/'+uid+'.json?orderBy="status"&equalTo="A"');
+}
+
+export async function fetchAllEquipment(uid, token) {
+  return await axios.get(DB_URL + 'equipment/'+uid+'.json');
 }
 
 export async function patchEquipment(equipId, data, token) {
-  await axios.patch(DB_URL + 'equipment/' + equipId +'.json', data);
+  await axios.patch(DB_URL + 'equipment/' + equipId +'.json?auth='+ token, data);
 }
 
 export async function postCardioLog(cardio, token) {

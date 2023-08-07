@@ -98,8 +98,7 @@ const CoachTeamRosterScreen = ( {navigation} ) => {
                 uid: recruitUid,
                 fullName: recruit.fullName,
                 status: 'P', // (P)ending, (A)ctive, (T)erminated
-                teamId: userCtx.teamId,
-                age: 29
+                teamId: userCtx.teamId
             }
             postAthlete(athleteData, userCtx.token);
         }

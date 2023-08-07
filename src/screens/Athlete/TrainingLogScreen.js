@@ -18,6 +18,8 @@ const TrainingLogScreen = ( ) => {
     const [show, setShow] = useState(false);      // Show or Hide Date Picker
     const [time, setTime] = useState(0);          // Time workout took
     const [distance, setDist] = useState(0);      // Distance travelled during workout
+    const [unit, setUnit] = useState('mi');
+    const [route, setRoute] = useState('');
     const [notes, setNotes] = useState('');       // Workout notes
     const [feel, setFeel] = useState('');          // Users workout feel
     const [equipmentList, setEquipmentList] = useState([]); // List of users equipment (shoes, wheels, bikes)
@@ -37,6 +39,11 @@ const TrainingLogScreen = ( ) => {
     const showDatepicker = () => {
       showMode('date');
     };
+
+    const units = [
+        { id: 0, name: 'mi'},
+        { id: 1, name: 'km'}
+    ];
 
     useEffect(() => {
         async function getEquipment() {
@@ -73,8 +80,14 @@ const TrainingLogScreen = ( ) => {
                 }
 
             postCardioLog(cardioData, token);
-
-            const totalDistance = parseInt(distance) + parseInt(equipment.distance);
+            
+            let convertedDist = 0;
+            if(unit === 'mi') {
+                convertedDist = parseInt(distance) * 1609;
+            } else {
+                convertedDist = parseInt(distance) * 1000;
+            }
+            const totalDistance = convertedDist + parseInt(equipment.distance);
             const patchDistance = { distance: totalDistance };
             patchEquipment(equipment.id, patchDistance);
 
@@ -90,6 +103,7 @@ const TrainingLogScreen = ( ) => {
         setDist('0');
         setTime('0');
         setFeel('');
+        setRoute('');
     }
 
     return (
@@ -134,6 +148,28 @@ const TrainingLogScreen = ( ) => {
                     autoCorrect={false}
                     maxLength={7}
                 />
+                <SelectDropdown 
+                    data={units}
+                    onSelect={(selectedItem, index) => {
+                        setUnit(selectedItem.name);
+                    }}
+                    defaultButtonText="mi"
+                    buttonTextAfterSelection={(selectedItem, index) => {
+                        return selectedItem.name
+                    }}
+                    rowTextForSelection={(item, index) => {
+                        return item.name
+                    }}
+                    buttonStyle={styles.selectDropDownButton}
+                    buttonTextStyle={styles.selectDropDownText}
+                    renderDropdownIcon={isOpened => {
+                        return <Ionicons name={isOpened ? 'chevron-up-circle-sharp' : 'chevron-down-circle-outline'} color={'#FFF'} size={18} />;
+                    }}
+                    dropdownIconPosition={'right'}
+                    dropdownStyle={styles.selectDropDown}
+                    rowStyle={styles.selectDropDownRow}
+                    rowTextStyle={styles.selectDropDownText}
+                />
             </View>
             <SelectDropdown 
                 data={equipmentList}
@@ -157,6 +193,11 @@ const TrainingLogScreen = ( ) => {
                 dropdownStyle={styles.selectDropDown}
                 rowStyle={styles.selectDropDownRow}
                 rowTextStyle={styles.selectDropDownText}
+            />
+            <UserInput
+                label="Route:"
+                value={route}
+                onChangeText={setRoute}
             />
             <UserInput
                 label="Notes:"

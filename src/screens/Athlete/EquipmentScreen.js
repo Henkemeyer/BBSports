@@ -22,14 +22,20 @@ const EquipmentScreen = () => {
     
     useEffect(() => {
         async function getDBEquipment() {
-            const dbEquipment = await fetchEquipment(userCtx.userId, token);
+            let dbEquipment = '';
+            try { 
+                dbEquipment = await fetchEquipment(userCtx.userId, token);
+            } catch (error) {
+                Alert.alert('Fetch Failed!', 'Failed to fetch equipment. '+error);
+                return;
+            }
             const equipArr = [];
-
+            console.log(dbEquipment.data);
             for (const key in dbEquipment.data) {
                 if(dbEquipment.data[key].status != 'X') {
                     const tmpArr = [
                         dbEquipment.data[key].equipName,
-                        dbEquipment.data[key].distance,
+                        (dbEquipment.data[key].distance/1609).toFixed(0),
                         dbEquipment.data[key].insertDate,
                         key
                     ]
@@ -74,13 +80,12 @@ const EquipmentScreen = () => {
     async function closeModal(action) {
         if (action === 'add') {
             const equipData = {
-                uid: userCtx.userId,
                 equipName: newName,
                 status: 'A', 
                 distance: 0,
                 insertDate: format(new Date(), "yyyy-MM-dd"),
             }
-            await postEquipment(equipData, userCtx.token)
+            await postEquipment(userCtx.userId, equipData, userCtx.token)
             .then(function (response) {
                 const tmpArr = [
                     newName,
@@ -88,7 +93,7 @@ const EquipmentScreen = () => {
                     format(new Date(), "yyyy-MM-dd"),
                     response.data.name
                 ]
-                setEquipment([...equipment, response.data])
+                setEquipment([...equipment, tmpArr])
             })
             .catch(function (error) {
                 console.log(error);

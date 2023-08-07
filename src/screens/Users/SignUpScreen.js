@@ -17,7 +17,7 @@ function SignUpScreen({ navigation }) {
     const [password, setPassword] = useState('');
     const [passwordQC, setPasswordQC] = useState('');
     const [firstName, setFirstName] = useState('');
-    const [nickname, setNickname] = useState('');
+    const [lastName, setLastName] = useState('');
     const [mode, setMode] = useState('Athlete');
     // Error Messages
     const [emailError, setEmailError] = useState('');
@@ -41,8 +41,8 @@ function SignUpScreen({ navigation }) {
             setPWError('*Passwords do not match');
             setIsValid(false);
         }
-        if(firstName.length < 2 && nickname.length < 2) {
-            setNameError('*You must enter a name or nickname');
+        if(firstName.length < 2) {
+            setNameError('*You must enter a name');
             setIsValid(false);
         }
         if(isValid) {
@@ -56,8 +56,10 @@ function SignUpScreen({ navigation }) {
             const userData = 
                 {
                     firstName: firstName,
-                    nickname: nickname,
-                    email: email
+                    lastName: lastName,
+                    email: email,
+                    sex: 'X',
+                    profilePicture: ''
                 }
 
             putUser(userData, authData)
@@ -123,9 +125,9 @@ function SignUpScreen({ navigation }) {
 
                         <View style={styles.inputView}>
                             <UserInput
-                                label="Nickname"
-                                value={nickname}
-                                onChangeText={setNickname}
+                                label="Last Name"
+                                value={lastName}
+                                onChangeText={setLastName}
                                 autoCorrect={false}
                             />
                         </View>

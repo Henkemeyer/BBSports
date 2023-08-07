@@ -10,8 +10,9 @@ function CreateOrganizationScreen({ navigation }) {
     const userCtx = useContext(UserContext);
     const token = userCtx.token;
     const [orgName, setOrgName] = useState('');
+    const [orgProPic, setOrgProPic] = useState('');
     const [level, setLevel] = useState('');
-    const [location, setLocation] = useState('');
+    const [region, setRegion] = useState('');
     const [description, setDescription] = useState('');
     // const [title, setTitle] = useState('');
     const [nameError, setNameError] = useState('');
@@ -34,7 +35,7 @@ function CreateOrganizationScreen({ navigation }) {
         const orgData = {
             name: orgName,
             level: level,
-            location: location,
+            region: region,
             description: description,
             tier: 'Premium'
         }
@@ -76,7 +77,14 @@ function CreateOrganizationScreen({ navigation }) {
                             />
                         </View>
                         { nameError ? <Text style={styles.errorText}>{nameError}</Text> : null }
-
+                        <View style={styles.inputView}>
+                            <UserInput
+                                label="Profile Picture"
+                                value={orgProPic}
+                                onChangeText={setOrgProPic}
+                                autoCorrect={false}
+                            />
+                        </View>
                         <View style={styles.inputView}>
                             <UserInput
                                 label="Org Level"
@@ -87,9 +95,9 @@ function CreateOrganizationScreen({ navigation }) {
                         </View>
                         <View style={styles.inputView}>
                             <UserInput
-                                label="Location"
-                                value={location}
-                                onChangeText={setLocation}
+                                label="Region"
+                                value={region}
+                                onChangeText={setRegion}
                                 autoCorrect={false}
                             />
                         </View>

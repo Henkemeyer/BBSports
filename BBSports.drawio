@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2023-08-03T20:29:15.758Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36" etag="HmXBC7dzi8mX7KPqN_-g" version="21.6.6" type="github">
+<mxfile host="app.diagrams.net" modified="2023-08-07T18:57:34.297Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36" etag="UWM7SQgsOrWcijhs7Kur" version="21.6.6" type="github">
   <diagram id="p2ylJtfO_-Iy1inDbocZ" name="Page-1">
     <mxGraphModel dx="1434" dy="1858" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -19,34 +19,34 @@
         <mxCell id="KutpoxNR8eGC2RVmOY_f-74" value="Create Event" style="rounded=0;whiteSpace=wrap;html=1;" parent="KutpoxNR8eGC2RVmOY_f-2" vertex="1">
           <mxGeometry x="10" y="120" width="100" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="KutpoxNR8eGC2RVmOY_f-10" value="Roadmap" style="swimlane;startSize=20;rounded=0;" parent="KutpoxNR8eGC2RVmOY_f-1" vertex="1">
+        <mxCell id="KutpoxNR8eGC2RVmOY_f-10" value="Roadmap" style="swimlane;startSize=20;rounded=0;fillColor=#f8cecc;strokeColor=#b85450;" parent="KutpoxNR8eGC2RVmOY_f-1" vertex="1">
           <mxGeometry x="120" y="20" width="120" height="460" as="geometry" />
         </mxCell>
-        <mxCell id="KutpoxNR8eGC2RVmOY_f-75" value="Edit Circuit" style="rounded=0;whiteSpace=wrap;html=1;" parent="KutpoxNR8eGC2RVmOY_f-10" vertex="1">
+        <mxCell id="KutpoxNR8eGC2RVmOY_f-75" value="Edit Circuit" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="KutpoxNR8eGC2RVmOY_f-10" vertex="1">
           <mxGeometry x="10" y="120" width="100" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="KutpoxNR8eGC2RVmOY_f-76" value="Edit Roadmap" style="rounded=0;whiteSpace=wrap;html=1;" parent="KutpoxNR8eGC2RVmOY_f-10" vertex="1">
+        <mxCell id="KutpoxNR8eGC2RVmOY_f-76" value="Edit Roadmap" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="KutpoxNR8eGC2RVmOY_f-10" vertex="1">
           <mxGeometry x="10" y="190" width="100" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="I1CVPrIMJtBGXKQZ_hz7-4" value="Manage Plans" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="KutpoxNR8eGC2RVmOY_f-10">
+        <mxCell id="I1CVPrIMJtBGXKQZ_hz7-4" value="Manage Plans" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="KutpoxNR8eGC2RVmOY_f-10">
           <mxGeometry x="10" y="50" width="100" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="I1CVPrIMJtBGXKQZ_hz7-5" value="Edit Routine" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="KutpoxNR8eGC2RVmOY_f-10">
+        <mxCell id="I1CVPrIMJtBGXKQZ_hz7-5" value="Edit Routine" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="KutpoxNR8eGC2RVmOY_f-10">
           <mxGeometry x="10" y="260" width="100" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="KutpoxNR8eGC2RVmOY_f-3" value="Sandbox" style="swimlane;startSize=20;rounded=0;" parent="KutpoxNR8eGC2RVmOY_f-1" vertex="1">
+        <mxCell id="KutpoxNR8eGC2RVmOY_f-3" value="Sandbox" style="swimlane;startSize=20;rounded=0;fillColor=#f8cecc;strokeColor=#b85450;" parent="KutpoxNR8eGC2RVmOY_f-1" vertex="1">
           <mxGeometry x="240" y="20" width="120" height="460" as="geometry" />
         </mxCell>
-        <mxCell id="I1CVPrIMJtBGXKQZ_hz7-50" value="Create Circuit" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="KutpoxNR8eGC2RVmOY_f-3">
+        <mxCell id="I1CVPrIMJtBGXKQZ_hz7-50" value="Create Circuit" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="KutpoxNR8eGC2RVmOY_f-3">
           <mxGeometry x="10" y="50" width="100" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="I1CVPrIMJtBGXKQZ_hz7-51" value="Create Workout" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="KutpoxNR8eGC2RVmOY_f-3">
+        <mxCell id="I1CVPrIMJtBGXKQZ_hz7-51" value="Create Workout" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="KutpoxNR8eGC2RVmOY_f-3">
           <mxGeometry x="10" y="120" width="100" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="I1CVPrIMJtBGXKQZ_hz7-52" value="Create Routine" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="KutpoxNR8eGC2RVmOY_f-3">
+        <mxCell id="I1CVPrIMJtBGXKQZ_hz7-52" value="Create Routine" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="KutpoxNR8eGC2RVmOY_f-3">
           <mxGeometry x="10" y="190" width="100" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="KutpoxNR8eGC2RVmOY_f-4" value="Team Profile" style="swimlane;startSize=20;rounded=0;" parent="KutpoxNR8eGC2RVmOY_f-1" vertex="1">
+        <mxCell id="KutpoxNR8eGC2RVmOY_f-4" value="Team Home" style="swimlane;startSize=20;rounded=0;" parent="KutpoxNR8eGC2RVmOY_f-1" vertex="1">
           <mxGeometry x="360" y="20" width="120" height="460" as="geometry">
             <mxRectangle x="240" y="20" width="40" height="460" as="alternateBounds" />
           </mxGeometry>
@@ -142,37 +142,29 @@
         <mxCell id="KutpoxNR8eGC2RVmOY_f-38" value="Calendar" style="rounded=0;whiteSpace=wrap;html=1;" parent="KutpoxNR8eGC2RVmOY_f-17" vertex="1">
           <mxGeometry x="20" y="40" width="100" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="KutpoxNR8eGC2RVmOY_f-40" value="Training Log" style="rounded=0;whiteSpace=wrap;html=1;" parent="KutpoxNR8eGC2RVmOY_f-17" vertex="1">
-          <mxGeometry x="20" y="180" width="100" height="50" as="geometry" />
-        </mxCell>
-        <mxCell id="KutpoxNR8eGC2RVmOY_f-45" value="Training Log Circuit" style="rounded=0;whiteSpace=wrap;html=1;" parent="KutpoxNR8eGC2RVmOY_f-17" vertex="1">
-          <mxGeometry x="20" y="250" width="100" height="50" as="geometry" />
-        </mxCell>
-        <mxCell id="I1CVPrIMJtBGXKQZ_hz7-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0;exitDx=40;exitDy=40;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeWidth=2;" edge="1" parent="KutpoxNR8eGC2RVmOY_f-17" source="KutpoxNR8eGC2RVmOY_f-49" target="KutpoxNR8eGC2RVmOY_f-40">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="I1CVPrIMJtBGXKQZ_hz7-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;strokeWidth=2;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="KutpoxNR8eGC2RVmOY_f-17" source="KutpoxNR8eGC2RVmOY_f-49" target="KutpoxNR8eGC2RVmOY_f-45">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint y="280" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="KutpoxNR8eGC2RVmOY_f-49" value="Practice" style="shape=display;whiteSpace=wrap;html=1;rounded=0;fontFamily=Helvetica;fontSize=12;" parent="KutpoxNR8eGC2RVmOY_f-17" vertex="1">
-          <mxGeometry x="30" y="110" width="80" height="40" as="geometry" />
-        </mxCell>
         <mxCell id="KutpoxNR8eGC2RVmOY_f-41" value="Record Setup" style="rounded=0;whiteSpace=wrap;html=1;" parent="KutpoxNR8eGC2RVmOY_f-17" vertex="1">
-          <mxGeometry x="20" y="320" width="100" height="50" as="geometry" />
+          <mxGeometry x="15" y="180" width="100" height="50" as="geometry" />
         </mxCell>
         <mxCell id="KutpoxNR8eGC2RVmOY_f-50" value="Record Event" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;" parent="KutpoxNR8eGC2RVmOY_f-17" vertex="1">
-          <mxGeometry x="20" y="390" width="100" height="50" as="geometry" />
+          <mxGeometry x="15" y="260" width="100" height="50" as="geometry" />
         </mxCell>
         <mxCell id="KutpoxNR8eGC2RVmOY_f-51" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Helvetica;fontSize=12;fontColor=default;strokeWidth=2;" parent="KutpoxNR8eGC2RVmOY_f-17" source="KutpoxNR8eGC2RVmOY_f-41" target="KutpoxNR8eGC2RVmOY_f-50" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="KutpoxNR8eGC2RVmOY_f-18" value="Feed" style="swimlane;startSize=20;rounded=0;fillColor=#f8cecc;strokeColor=#b85450;" parent="KutpoxNR8eGC2RVmOY_f-16" vertex="1">
+        <mxCell id="I1CVPrIMJtBGXKQZ_hz7-53" value="View Event" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="KutpoxNR8eGC2RVmOY_f-17">
+          <mxGeometry x="15" y="110" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="KutpoxNR8eGC2RVmOY_f-18" value="Log" style="swimlane;startSize=20;rounded=0;" parent="KutpoxNR8eGC2RVmOY_f-16" vertex="1">
           <mxGeometry x="130" y="20" width="120" height="460" as="geometry" />
         </mxCell>
         <mxCell id="I1CVPrIMJtBGXKQZ_hz7-7" value="Followed&amp;nbsp; Updates" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="KutpoxNR8eGC2RVmOY_f-18">
+          <mxGeometry x="10" y="375" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="KutpoxNR8eGC2RVmOY_f-40" value="Cardio Training Log" style="rounded=0;whiteSpace=wrap;html=1;" parent="KutpoxNR8eGC2RVmOY_f-18" vertex="1">
           <mxGeometry x="10" y="40" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="KutpoxNR8eGC2RVmOY_f-45" value="Weights Training Log" style="rounded=0;whiteSpace=wrap;html=1;" parent="KutpoxNR8eGC2RVmOY_f-18" vertex="1">
+          <mxGeometry x="10" y="110" width="100" height="50" as="geometry" />
         </mxCell>
         <mxCell id="KutpoxNR8eGC2RVmOY_f-19" value="Team Home" style="swimlane;startSize=20;rounded=0;" parent="KutpoxNR8eGC2RVmOY_f-16" vertex="1">
           <mxGeometry x="250" y="20" width="120" height="460" as="geometry" />
@@ -200,15 +192,15 @@
         <mxCell id="KutpoxNR8eGC2RVmOY_f-90" value="Change Team" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;rounded=0;fontFamily=Helvetica;fontSize=12;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="KutpoxNR8eGC2RVmOY_f-19" vertex="1">
           <mxGeometry x="10" y="230" width="100" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="KutpoxNR8eGC2RVmOY_f-20" value="Messenger" style="swimlane;startSize=20;rounded=0;" parent="KutpoxNR8eGC2RVmOY_f-16" vertex="1">
+        <mxCell id="KutpoxNR8eGC2RVmOY_f-20" value="Messenger" style="swimlane;startSize=20;rounded=0;fillColor=#f8cecc;strokeColor=#b85450;" parent="KutpoxNR8eGC2RVmOY_f-16" vertex="1">
           <mxGeometry x="370" y="20" width="120" height="460" as="geometry">
             <mxRectangle x="240" y="20" width="40" height="460" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="I1CVPrIMJtBGXKQZ_hz7-36" value="Chat List" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="KutpoxNR8eGC2RVmOY_f-20">
+        <mxCell id="I1CVPrIMJtBGXKQZ_hz7-36" value="Chat List" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="KutpoxNR8eGC2RVmOY_f-20">
           <mxGeometry x="10" y="40" width="100" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="I1CVPrIMJtBGXKQZ_hz7-37" value="Messages" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="KutpoxNR8eGC2RVmOY_f-20">
+        <mxCell id="I1CVPrIMJtBGXKQZ_hz7-37" value="Messages" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="KutpoxNR8eGC2RVmOY_f-20">
           <mxGeometry x="10" y="110" width="100" height="50" as="geometry" />
         </mxCell>
         <mxCell id="KutpoxNR8eGC2RVmOY_f-23" value="" style="endArrow=none;dashed=1;html=1;rounded=0;strokeWidth=2;" parent="1" edge="1">

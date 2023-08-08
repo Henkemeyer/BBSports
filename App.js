@@ -320,6 +320,7 @@ function Navigation () {
         const orgId = await AsyncStorage.getItem('lastOrgId');
         const teamId = await AsyncStorage.getItem('lastTeamId');
 
+        console.log("Last Org: "+orgId);
         if(orgId) {
           const organization = {
             id: orgId,
@@ -327,7 +328,7 @@ function Navigation () {
           };
           userCtx.switchOrganization(organization);
         }
-
+        console.log("Last Team: "+teamId);
         if(teamId) {
           const team = {
             id: teamId,

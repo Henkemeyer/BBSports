@@ -44,11 +44,12 @@ function UserContextProvider({children}) {
         switchUserMode(mode)
     }
     
-    function login(authData) {
+    function login(authData, userMode) {
         setToken(authData.idToken);
         setUserId(authData.localId);
         AsyncStorage.setItem('authToken', authData.idToken);
         AsyncStorage.setItem('userID', authData.localId);
+        setUserMode(userMode);
     }
 
     function logout() {

@@ -94,7 +94,15 @@ export async function postTeam(teamData, token) {
 }
 
 export async function fetchTeam(teamId, token) {
-  return await axios.get(DB_URL + 'team/'+teamId+'.json');
+  return await axios.get(DB_URL + 'team/'+teamId+'.json?auth='+ token);
+}
+
+export async function fetchTeamsByAthlete(uid, token) {
+  return await axios.get(DB_URL + 'athlete/'+uid+'.json?auth='+ token);
+}
+
+export async function fetchTeamsByCoach(uid, token) {
+  return await axios.get(DB_URL + 'coach/'+uid+'.json?auth='+ token);
 }
 
 export async function fetchOrgTeams(orgId, token) {

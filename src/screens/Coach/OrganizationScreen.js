@@ -9,10 +9,10 @@ import { Ionicons } from '@expo/vector-icons';
 function OrganizationScreen({ navigation }) {
     const userCtx = useContext(UserContext);
     const token = userCtx.token;
-    const [organizations, setOrganizations] = useState('');
+    const [organizations, setOrganizations] = useState([]);
     const [orgIndex, setOrgIndex] = useState(-1);
     const [teamIndex, setTeamIndex] = useState(-1);
-    const [teams, setTeams] = useState('');
+    const [teams, setTeams] = useState([]);
     const [coaches, setCoaches] = useState('');
     const [noTeamsAlert, setNoTeamsAlert] = useState('');
 
@@ -31,24 +31,24 @@ function OrganizationScreen({ navigation }) {
 
     useEffect(() => {
         async function getOrganizations() {
-            console.log(userCtx.organizationId+" - "+userCtx.organizationName);
-            let dbOrganization = {};
+            let dbOrganizations = {};
             try {
                 // const response = await fetchOrganization(userCtx.organizationId, token);
                 const response = await fetchOrganizationsByAdmin(userCtx.userId, token);
-                dbOrganization = response.data;
+                dbOrganizations = response.data;
             } catch (error) {
-                Alert.alert('Org Fatch Failed!', 'Failed to fetch organization. '+error)
+                Alert.alert('Org Fetch Failed!', 'Failed to fetch organization. '+error)
             }
-
-            // if(dbOrganization.length > 0) {
-            //     for (const key in dbOrganization) {
-            //         const response = await fetchOrganization(dbOrganization[key], token);
-            //         console.log(response.data);
-            //         setOrganizations({ organizations: [...organizations, ...{id:dbOrganization[key], name:response.data.name}]})
-            //         console.log(organizations);
-            //     }
-            // }
+            console.log(dbOrganizations);
+            if(Object.keys(dbOrganizations).length > 0) {
+                let orgArr = [];
+                for (const key in dbOrganizations) {
+                    orgArr.push([key,dbOrganizations[key]]);
+                    console.log("key: "+key+" name: "+dbOrganizations[key]);
+                }
+                setOrganizations(orgArr);
+                console.log(organizations);
+            }
         }
         getOrganizations();
     }, [token]);
@@ -106,19 +106,19 @@ function OrganizationScreen({ navigation }) {
             <SelectDropdown 
                 data={organizations}
                 onSelect={(selectedItem, index) => {
-                    const orgData = {
-                        name: selectedItem.name,
-                        id: selectedItem.id
-                    };
-                    userCtx.switchOrganization(orgData);
+                    // const orgData = {
+                    //     name: selectedItem.name,
+                    //     id: selectedItem.id
+                    // };
+                    // userCtx.switchOrganization(orgData);
                 }}
-                defaultButtonText={organizations.length === 0 ? "No Organizations" : userCtx.organizationName}
-                defaultValue={userCtx.organizationId}
+                defaultButtonText={organizations.length === 0 ? "No Organizations" : "Select an Option"}
+                // defaultValue={-1}
                 buttonTextAfterSelection={(selectedItem, index) => {
-                    return selectedItem.name
+                    return selectedItem[1]
                 }}
                 rowTextForSelection={(item, index) => {
-                    return item.name
+                    return item[1]
                 }}
                 buttonStyle={styles.selectDropDownButton}
                 buttonTextStyle={styles.selectDropDownText}

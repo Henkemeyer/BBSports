@@ -37,58 +37,7 @@ export async function fetchAdminsByOrganization(orgId, token) {
   return await axios.get(DB_URL + 'member/'+orgId+'/admin.json?auth='+ token);
  }
 
- // Equipment and Training Log Screens
-export async function postEquipment(uid, equipment, token) {
-  return await axios.post(DB_URL + 'equipment/'+uid+'.json?auth='+ token, equipment);
-}
-
-export async function fetchEquipment(uid, token) {
-  return await axios.get(DB_URL + 'equipment/'+uid+'.json?orderBy="status"&equalTo="A"');
-}
-
-export async function fetchAllEquipment(uid, token) {
-  return await axios.get(DB_URL + 'equipment/'+uid+'.json');
-}
-
-export async function patchEquipment(equipId, data, token) {
-  await axios.patch(DB_URL + 'equipment/' + equipId +'.json?auth='+ token, data);
-}
-
-export async function postCardioLog(cardio, token) {
-  await axios.post(DB_URL + 'cardioLog.json', cardio);
-}
-
-/* Code to use in Screen
-useEffect(() => {
-    async function getEquipment() {
-        const equipment = await fetchEquipment();
-    }
-
-    getEquipment();
-}, []);
-*/
-
-export async function postCalendar(calendar, token) {
-  return await axios.post(DB_URL + 'calendar.json', calendar);
-}
-
-export async function patchCalendar(calendarId, calendar, token) {
-  await axios.patch(DB_URL + 'calendar/'+calendarId+'.json', calendar);
-}
-
-export async function fetchUserCalendar(uid, token) {
-  return await axios.get(DB_URL + 'calendar.json?orderBy="uid"&equalTo="'+uid+'"');
-}
-
-export async function fetchTeamCalendar(teamId, token) {
-  return await axios.get(DB_URL + 'calendar.json?orderBy="teamId"&equalTo="'+teamId+'"');
-}
-
-
-export async function fetchCardioLog(uid, token) {
-  return await axios.get(DB_URL + 'cardioLog.json?orderBy="uid"&equalTo="'+uid+'"&limitToLast=100');
-}
-
+ // Create, Manage, Find Teams
 export async function postTeam(teamData, token) {
   return await axios.post(DB_URL + 'team.json?auth='+ token, teamData);
 }
@@ -140,6 +89,81 @@ export async function fetchCoachTeams(uid, token) {
 
   return teams;
 }
+
+// Messaging System
+export async function postChatRoom(chatName, uid, token) {
+  return await axios.post(DB_URL + 'chatRoom/'+uid+'.json?auth='+token, chatRoom);
+}
+
+export async function fetchChatRooms(uid, token) {
+  return await axios.get(DB_URL + 'chatRooms/'+uid+'.json?auth='+token);
+}
+
+export async function fetchMessages(chatRoom, token) { // TODO Limit this to last 50
+  return await axios.get(DB_URL + 'messages/'+chatRoom+'.json?auth='+token);
+}
+
+export async function postMessage(chatRoom, message, token) {
+  return await axios.get(DB_URL + 'messages/'+chatRoom+'.json?auth='+token, message);
+}
+
+ // Equipment and Training Log Screens
+export async function postEquipment(uid, equipment, token) {
+  return await axios.post(DB_URL + 'equipment/'+uid+'.json?auth='+ token, equipment);
+}
+
+export async function fetchEquipment(uid, token) {
+  return await axios.get(DB_URL + 'equipment/'+uid+'.json?orderBy="status"&equalTo="A"');
+}
+
+export async function fetchAllEquipment(uid, token) {
+  return await axios.get(DB_URL + 'equipment/'+uid+'.json');
+}
+
+export async function patchEquipment(equipId, data, token) {
+  await axios.patch(DB_URL + 'equipment/' + equipId +'.json?auth='+ token, data);
+}
+
+
+
+
+/* Code to use in Screen
+useEffect(() => {
+    async function getEquipment() {
+        const equipment = await fetchEquipment();
+    }
+
+    getEquipment();
+}, []);
+*/
+
+export async function postCalendar(calendar, token) {
+  return await axios.post(DB_URL + 'calendar.json', calendar);
+}
+
+export async function patchCalendar(calendarId, calendar, token) {
+  await axios.patch(DB_URL + 'calendar/'+calendarId+'.json', calendar);
+}
+
+export async function fetchUserCalendar(uid, token) {
+  return await axios.get(DB_URL + 'calendar.json?orderBy="uid"&equalTo="'+uid+'"');
+}
+
+export async function fetchTeamCalendar(teamId, token) {
+  return await axios.get(DB_URL + 'calendar.json?orderBy="teamId"&equalTo="'+teamId+'"');
+}
+
+
+export async function postCardioLog(cardio, token) {
+  await axios.post(DB_URL + 'cardioLog.json', cardio);
+}
+
+export async function fetchCardioLog(uid, token) {
+  return await axios.get(DB_URL + 'cardioLog.json?orderBy="uid"&equalTo="'+uid+'"&limitToLast=100');
+}
+
+
+
 
 export async function postCoach(coach, token) {
   await axios.post(DB_URL + 'coach.json', coach)

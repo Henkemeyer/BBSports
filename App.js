@@ -9,6 +9,8 @@ import SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { TouchableOpacity, View } from 'react-native';
 // Our Screens
+import MessagingScreen          from './src/screens/Users/MessagingScreen';
+import ChatRoomScreen           from './src/screens/Users/ChatRoomScreen';
 import TrainingLogScreen        from './src/screens/Athlete/TrainingLogScreen';
 import AthleteCalendarScreen    from './src/screens/Athlete/AthleteCalendarScreen';
 import AthleteCardioScreen      from './src/screens/Athlete/AthleteCardioScreen';
@@ -123,6 +125,26 @@ function OrganizationStack() {
   );
 }
 
+function MessagingStack() {
+  return (
+    <StackNav.Navigator
+      screenOptions={{
+        headerTintColor: 'green',
+      }}>
+      <StackNav.Screen 
+        name="Messages" 
+        component={MessagingScreen} 
+        options={{ title: 'Messages' }}
+      />
+      <StackNav.Screen 
+        name="ChatRoom" 
+        component={ChatRoomScreen} 
+        options={{ title: "TODO" }}
+      />
+    </StackNav.Navigator>
+  );
+}
+
 function EventStack() {
   return (
     <StackNav.Navigator
@@ -183,41 +205,6 @@ function RecordStack() {
   );
 }
 
-function AthleteTab() {
-  return (
-    <TabNav.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
-
-          if (route.name === 'Home') {
-            iconName = focused ? 'home' : 'home-outline';
-          } else if (route.name === 'Cardio') {
-            iconName = focused ? 'beer' : 'beer-outline';
-          } else if (route.name === 'Timer') {
-            iconName = focused ? 'stopwatch' : 'stopwatch-outline';
-          } else if (route.name === 'Lifting') {
-            iconName = focused ? 'barbell' : 'barbell-outline';
-          } else if (route.name === 'Settings') {
-            iconName = focused ? 'settings-sharp' : 'settings-outline';
-          }
-
-          // You can return any component that you like here!
-          return <Ionicons name={iconName} size={size} color={color} />;
-        },
-      })}
-      tabBarOptions={{
-        activeTintColor: 'green',
-        inactiveTintColor: 'black',
-      }}
-    >
-      <TabNav.Screen name="Home" component={AthleteCalendarScreen} />
-      <TabNav.Screen name="Timer" component={RecordStack} />
-      {/* <TabNav.Screen name="Lifting" component={AthleteCalendarScreen} /> */}
-      <TabNav.Screen name="Settings" component={SettingsStack} />
-    </TabNav.Navigator>
-  );
-}
 
 function AthleteContainerStack() {
   return (
@@ -269,6 +256,42 @@ function CoachContainerStack() {
   );
 }
 
+function AthleteTab() {
+  return (
+    <TabNav.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+
+          if (route.name === 'Home') {
+            iconName = focused ? 'home' : 'home-outline';
+          } else if (route.name === 'Cardio') {
+            iconName = focused ? 'beer' : 'beer-outline';
+          } else if (route.name === 'Timer') {
+            iconName = focused ? 'stopwatch' : 'stopwatch-outline';
+          } else if (route.name === 'Lifting') {
+            iconName = focused ? 'barbell' : 'barbell-outline';
+          } else if (route.name === 'Settings') {
+            iconName = focused ? 'settings-sharp' : 'settings-outline';
+          }
+
+          // You can return any component that you like here!
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+      })}
+      tabBarOptions={{
+        activeTintColor: 'green',
+        inactiveTintColor: 'black',
+      }}
+    >
+      <TabNav.Screen name="Home" component={AthleteCalendarScreen} />
+      <TabNav.Screen name="Timer" component={RecordStack} />
+      <TabNav.Screen name="Lifting" component={MessagingStack} />
+      <TabNav.Screen name="Settings" component={SettingsStack} />
+    </TabNav.Navigator>
+  );
+}
+
 function CoachTab() {
   return (
     <TabNav.Navigator
@@ -297,7 +320,7 @@ function CoachTab() {
       }}
     >
       <TabNav.Screen name="Home" component={EventStack} />
-      <TabNav.Screen name="Create" component={CoachLiftingScreen} />
+      <TabNav.Screen name="Create" component={MessagingStack} />
       <TabNav.Screen name="Roster" component={CoachTeamRosterScreen} />
       <TabNav.Screen name="Settings" component={SettingsStack} />
     </TabNav.Navigator>

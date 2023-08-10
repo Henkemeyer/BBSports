@@ -24,9 +24,9 @@ function MessagingScreen({ route, navigation }) {
             } catch (error) {
                 Alert.alert('Messaging Failed!', 'Failed to fetch chat room. '+error)
             }
-            const messages = dbMessages.map((item, index) => (
-                <View style={styles.messageView}>
-                    <Text key={index}>{item.from} {item.time}{'\n'}{item.text}</Text>
+            const messages = Object.entries(dbMessages).map((item, index) => (
+                <View key={'v'+index} style={styles.messageView}>
+                    <Text key={index}>{item[1].from} {item[1].time}{'\n'}{item[1].text}</Text>
                 </View>
               ));
             setRenderedMessages(messages);
@@ -34,19 +34,27 @@ function MessagingScreen({ route, navigation }) {
         getMessages();
     }, []);
 
-    function sendTextHandler() {
-        console.log(userCtx.name+" - "+inputText);
-        const newMessage = [{
+    async function sendTextHandler() {
+        const newMessage = {
             "from": userCtx.name, 
             "text": inputText,
             "time": new Date()
-        }]
-        postMessage(newMessage);
+        };
+        await postMessage(chatRoom.id, newMessage)
+        .then(function (response) {
+            let newList = renderedMessages;
+            newList[response.data.name] = newMessage;
+            setRenderedMessages(newList);
+            setInputText('');
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
     }
 
     return (
-        <View style={styles.containerView}>
-            <Text>{chatRoom.roomName}</Text>
+        <View style={styles.backgroundView}>
+            <Text style={styles.headerText}>{chatRoom.roomName}</Text>
             {renderedMessages}
             <View style={styles.rowView}>
                 <UserInput
@@ -67,31 +75,28 @@ const styles = StyleSheet.create({
     backgroundView: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
         borderWidth: 1,
         backgroundColor: '#ededed'
     },
-    containerView: {
-        flex: 1,
-        alignItems: 'center',
-        borderWidth: 1,
-        borderColor: 'gray',
-        backgroundColor: '#ffffff',
-        borderRadius: 10,
-        margin: 10,
+    headerText: {
+        fontSize: 18,
+        paddingVertical: 10,
+        color: 'darkgreen'
     },
     messageView: {
         width: '90%',
         alignItems: 'flex-start',
-        borderWidth: 2,
-        borderColor: 'gray',
-        backgroundColor: '#darkgreen',
+        borderWidth: 3,
+        borderColor: 'darkgreen',
+        backgroundColor: 'white',
         borderRadius: 10,
         margin: 10,
         padding: 10
     },
     rowView: {
         flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 });
 

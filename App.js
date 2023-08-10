@@ -362,8 +362,9 @@ function Navigation () {
 
         if (localToken) {
           const userMode = await AsyncStorage.getItem('lastUserMode');
+          const userName = await AsyncStorage.getItem('firstName');
           const authData = { idToken: localToken, localId: userId }
-          userCtx.login(authData, userMode);
+          userCtx.login(authData, userMode, userName);
         }
         // async () => { await SplashScreen.hideAsync(); };
         setIsLoading(false);

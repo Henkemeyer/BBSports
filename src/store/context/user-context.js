@@ -41,15 +41,17 @@ function UserContextProvider({children}) {
         AsyncStorage.setItem('authToken', authData.idToken);
         AsyncStorage.setItem('userID', authData.localId);
         AsyncStorage.setItem('firstName', getName);
+        setFullName(getName+" "+userData.lastName);
         switchUserMode(mode)
     }
     
-    function login(authData, userMode) {
+    function login(authData, userMode, userName) {
         setToken(authData.idToken);
         setUserId(authData.localId);
         AsyncStorage.setItem('authToken', authData.idToken);
         AsyncStorage.setItem('userID', authData.localId);
         setUserMode(userMode);
+        setName(userName);
     }
 
     function logout() {
@@ -82,6 +84,20 @@ function UserContextProvider({children}) {
             console.log("Switching Team to "+teamData.name)
             AsyncStorage.setItem('lastTeamId', teamData.id);
             AsyncStorage.setItem('lastTeamName', teamData.name);
+        }
+    }
+
+    function updateName(input) {
+        if(input.firstName) {
+            setName(input.firstName);
+            AsyncStorage.setItem('firstName', input);
+        }
+        if(input.nickname) {
+            AsyncStorage.setItem('nickname', input);
+        }
+        if(input.lastName) {
+            AsyncStorage.setItem('lastName', input);
+            setFullName(getName+" "+input.lastName);
         }
     }
 

@@ -104,7 +104,7 @@ export async function fetchMessages(chatRoom, token) { // TODO Limit this to las
 }
 
 export async function postMessage(chatRoom, message, token) {
-  return await axios.get(DB_URL + 'messages/'+chatRoom+'.json?auth='+token, message);
+  return await axios.post(DB_URL + 'messages/'+chatRoom+'.json?auth='+token, message);
 }
 
  // Equipment and Training Log Screens

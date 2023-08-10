@@ -112,7 +112,7 @@ function ProfileScreen({ navigation }) {
                     sex: sex.substring(0,1)
                 }
 
-            patchUser(userCtx.userId, userCtx.token, userData)
+            patchUser(userCtx.userId, userCtx.token, userData);
         } catch (error) {
             Alert.alert('Update Failed!', 'Unknown Error Occurred. '+error)
         }

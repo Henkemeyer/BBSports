@@ -24,9 +24,11 @@ function MessagingScreen({ navigation }) {
             }
 
             const roomItems = dbChatRooms.map((item, index) => (
-                <TouchableOpacity key={index} onPress={() => enterChatHandler(index, item)}>
-                    <Text key={index}>{item}</Text>
-                </TouchableOpacity> 
+                <View key={"view"+index} style={styles.listView}>
+                    <TouchableOpacity key={"click"+index} onPress={() => enterChatHandler(index, item)}>
+                        <Text key={"text"+index}>{item}</Text>
+                    </TouchableOpacity> 
+                </View>
               ));
             setRenderedItems(roomItems);
         }
@@ -35,13 +37,12 @@ function MessagingScreen({ navigation }) {
  
 
     function enterChatHandler(index, item) {
-        console.log(index+" - "+item);
         navigation.navigate('ChatRoom', {id: index, roomName:item})
     }
 
     return (
-        <View style={styles.containerView}>
-            <Text>Testing</Text>
+        <View style={styles.backgroundView}>
+            <Text style={styles.headerText}>Your Chat Rooms</Text>
             {renderedItems}
         </View>
     );
@@ -51,18 +52,28 @@ const styles = StyleSheet.create({
     backgroundView: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
+        // justifyContent: 'center',
         borderWidth: 1,
         backgroundColor: '#ededed'
     },
-    containerView: {
-        flex: 1,
-        alignItems: 'center',
-        borderWidth: 1,
-        borderColor: 'gray',
-        backgroundColor: '#ffffff',
+    listView: {
+        alignItems: 'flex-start',
+        width: '90%',
+        height: '5%',
+        borderWidth: 4,
+        borderColor: 'darkgreen',
+        backgroundColor: 'green',
         borderRadius: 10,
         margin: 10,
+        padding: 5
+    },
+    headerText: {
+        fontSize: 18,
+        paddingVertical: 10,
+        color: 'darkgreen'
+    },
+    listText: {
+        fontSize: 16
     }
 });
 

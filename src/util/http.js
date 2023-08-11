@@ -20,28 +20,28 @@ export async function patchUser(uid, token, userData) {
 export async function postOrganization(orgData, token) {
   return await axios.post(DB_URL + 'organization.json?auth='+ token, orgData);
 }
-
+// Assign new Admin
 export async function putAdmin(adminData, orgId, token) {
   return await axios.put(DB_URL + 'member/'+orgId+'.json?auth='+ token, adminData);
 }
-
+// Fetch Org Info
 export async function fetchOrganization(orgId, token) {
   return await axios.get(DB_URL + 'organization/'+orgId+'.json?auth='+ token);
 }
-
+// Fetch all Orgs a user controls
 export async function fetchOrganizationsByAdmin(uid, token) {
- return await axios.get(DB_URL + 'admin/'+uid+'.json?auth='+ token);
+  return await axios.get(DB_URL + 'admin/'+uid+'.json?auth='+ token);
 }
-
+// Fetch all admins who control an Org
 export async function fetchAdminsByOrganization(orgId, token) {
   return await axios.get(DB_URL + 'member/'+orgId+'/admin.json?auth='+ token);
- }
-
- // Create, Manage, Find Teams
+}
+// Create new Team
 export async function postTeam(teamData, token) {
   return await axios.post(DB_URL + 'team.json?auth='+ token, teamData);
 }
 
+// Create, Manage, Find Teams
 export async function fetchTeam(teamId, token) {
   return await axios.get(DB_URL + 'team/'+teamId+'.json?auth='+ token);
 }
@@ -54,55 +54,24 @@ export async function fetchTeamsByCoach(uid, token) {
   return await axios.get(DB_URL + 'coach/'+uid+'.json?auth='+ token);
 }
 
-export async function fetchOrgTeams(orgId, token) {
-  const response = await axios.get(DB_URL + 'team.json?orderBy="organizationId"&equalTo="'+orgId+'"');
-
-  const teams = [];
-
-  for (const key in response.data) {
-      const teamObj = {
-          id: key,
-          name: response.data[key].name,
-          description: response.data[key].description,
-          organizationId: response.data[key].organizationId
-      };
-      teams.push(teamObj);
-  }
-
-  return teams;
-}
-
-export async function fetchCoachTeams(uid, token) {
-  const response = await axios.get(DB_URL + 'coach.json?orderBy="uid"&equalTo="'+uid+'"');
-
-  const teams = [];
-
-  for (const key in response.data) {
-      const teamObj = {
-          id: response.data[key].teamId,
-          name: response.data[key].teamName,
-          status: response.data[key].status,
-          title: response.data[key].title
-      };
-      teams.push(teamObj);
-  }
-
-  return teams;
+export async function fetchTeamsByOrganization(orgId, token) {
+  return await axios.get(DB_URL + 'team.json?orderBy="organizationId"&equalTo="'+orgId+'"');
 }
 
 // Messaging System
-export async function postChatRoom(chatName, uid, token) {
+// Create a new chat room
+export async function postChatRoom(chatRoom, uid, token) {
   return await axios.post(DB_URL + 'chatRoom/'+uid+'.json?auth='+token, chatRoom);
 }
-
+// Fetch all chat rooms for user
 export async function fetchChatRooms(uid, token) {
   return await axios.get(DB_URL + 'chatRooms/'+uid+'.json?auth='+token);
 }
-
+// Fetch last messages for chat room
 export async function fetchMessages(chatRoom, token) { // TODO Limit this to last 50
   return await axios.get(DB_URL + 'messages/'+chatRoom+'.json?auth='+token);
 }
-
+// Post a new message
 export async function postMessage(chatRoom, message, token) {
   return await axios.post(DB_URL + 'messages/'+chatRoom+'.json?auth='+token, message);
 }
@@ -111,51 +80,58 @@ export async function postMessage(chatRoom, message, token) {
 export async function postEquipment(uid, equipment, token) {
   return await axios.post(DB_URL + 'equipment/'+uid+'.json?auth='+ token, equipment);
 }
-
+// Fetch all active equipment
 export async function fetchEquipment(uid, token) {
   return await axios.get(DB_URL + 'equipment/'+uid+'.json?orderBy="status"&equalTo="A"');
 }
-
+// Fetch all equipment a user has entered
 export async function fetchAllEquipment(uid, token) {
   return await axios.get(DB_URL + 'equipment/'+uid+'.json');
 }
-
+// Update equipment name, distance or status
 export async function patchEquipment(equipId, data, token) {
   await axios.patch(DB_URL + 'equipment/' + equipId +'.json?auth='+ token, data);
 }
 
-
-
-
-/* Code to use in Screen
-useEffect(() => {
-    async function getEquipment() {
-        const equipment = await fetchEquipment();
-    }
-
-    getEquipment();
-}, []);
-*/
-
-export async function postCalendar(calendar, token) {
-  return await axios.post(DB_URL + 'calendar.json', calendar);
+// Calendar and Event screens
+// New Practice, Activity, Competition
+export async function postCalendarEvent(event, token) {
+  return await axios.post(DB_URL + 'calendarEvent.json?auth='+ token, event);
 }
-
+// Add to everyones personal calendar
+export async function putCalendar(calendar, token) {
+  return await axios.put(DB_URL + 'calendar.json?auth='+ token, calendar);
+}
+// Update everyones personal calendar
+export async function patchCalendarEvent(calendarEventId, calendarEvent, token) {
+  await axios.patch(DB_URL + 'calendarEvent/'+calendarEventId+'.json?auth='+ token, calendarEvent);
+}
+// Update a practice, activity or competition
 export async function patchCalendar(calendarId, calendar, token) {
-  await axios.patch(DB_URL + 'calendar/'+calendarId+'.json', calendar);
+  await axios.patch(DB_URL + 'calendar/'+uid+'/'+calendarId+'.json?auth='+ token, calendar);
 }
-
-export async function fetchUserCalendar(uid, token) {
-  return await axios.get(DB_URL + 'calendar.json?orderBy="uid"&equalTo="'+uid+'"');
+// Cancel a practice, activity or competition
+export async function cancelCalendarEvent(calendarEventId, token) {
+  await axios.delete(DB_URL + 'calendarEvent/'+calendarEventId+'.json?auth='+ token);
 }
-
-export async function fetchTeamCalendar(teamId, token) {
+// Remove the event from a personal calendar
+export async function declineCalendarEvent(calendarId, token) {
+  await axios.delete(DB_URL + 'calendar/'+uid+'/'+calendarId+'.json?auth='+ token);
+}
+// Fetch all events for a personal Agenda
+export async function fetchUserCalendar(uid, token) { // TODO: add in performance filter
+  return await axios.get(DB_URL + 'calendar/'+uid+'.json?auth='+ token);
+}
+// TODO Pull competitions for Team Profile Screen
+export async function fetchTeamCompetitions(teamId, token) {
   return await axios.get(DB_URL + 'calendar.json?orderBy="teamId"&equalTo="'+teamId+'"');
 }
 
 
+
+
 export async function postCardioLog(cardio, token) {
-  await axios.post(DB_URL + 'cardioLog.json', cardio);
+  await axios.post(DB_URL + 'cardioLog.json?auth='+ token, cardio);
 }
 
 export async function fetchCardioLog(uid, token) {
@@ -166,34 +142,11 @@ export async function fetchCardioLog(uid, token) {
 
 
 export async function postCoach(coach, token) {
-  await axios.post(DB_URL + 'coach.json', coach)
-  .then(function (response) {
-    console.log('Coach ID: ' + response.data.name)
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
+  return await axios.post(DB_URL + 'coach.json?auth='+ token, coach);
 }
 
 export async function fetchCoach(uid, token) {
-  const response = await axios.get(DB_URL + 'coach.json?orderBy="uid"&equalTo="'+uid+'"');
-
-  const coach = [];
-
-  for (const key in response.data) {
-      const coachObj = {
-        id: key,
-        userId: response.data[key].uid,
-        organizationId: response.data[key].organizationId,
-        teamId: response.data[key].teamId,
-        title: response.data[key].title,
-        fullName: response.data[key].fullName,
-        status: response.data[key].status
-      };
-      coach.push(coachObj);
-  }
-
-  return coach;
+  return await axios.get(DB_URL + 'coach.json?orderBy="uid"&equalTo="'+uid+'"');
 }
 
 export async function fetchCoachesByTeam(teamId, token) {
@@ -267,26 +220,5 @@ export async function fetchAthleteGroup(tbd, token) {
 }
 
 export async function fetchGroups(teamId, token) {
-  const response = await axios.get(DB_URL + 'groups.json?orderBy="teamId"&equalTo="'+teamId+'"');
-
-  const groups = [];
-
-  for (const key in response.data) {
-      const groupObj = {
-          id: key,
-          name: response.data[key].groupName,
-          // athletes: [List of Athletes to push the workout too]
-      };
-      groups.push(groupObj);
-  }
-
-  return groups;
+  return await axios.get(DB_URL + 'groups/'+teamId+'.json?auth='+ token);
 }
-
-export async function postEvent(event, token) {
-  return await axios.post(DB_URL + 'event.json', event);
-}
-
-// export async function patchEvent(athleteId, data, token) {
-//   await axios.patch(DB_URL + 'athlete/' + athleteId +'.json', data);
-// }

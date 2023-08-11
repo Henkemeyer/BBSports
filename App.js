@@ -5,38 +5,43 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import UserContextProvider, { UserContext } from './src/store/context/user-context';
-import SplashScreen from 'expo-splash-screen';
-import { StatusBar } from 'expo-status-bar';
-import { TouchableOpacity, View } from 'react-native';
-// Our Screens
-import MessagingScreen          from './src/screens/Users/MessagingScreen';
-import ChatRoomScreen           from './src/screens/Users/ChatRoomScreen';
-import TrainingLogScreen        from './src/screens/Athlete/TrainingLogScreen';
-import AthleteCalendarScreen    from './src/screens/Athlete/AthleteCalendarScreen';
+
+// Ignore
+import MessagingScreen          from './src/screens/Ignore/MessagingScreen';
+import ChatRoomScreen           from './src/screens/Ignore/ChatRoomScreen';
 import AthleteCardioScreen      from './src/screens/Athlete/AthleteCardioScreen';
 import AthleteLiftingScreen     from './src/screens/Athlete/AthleteLiftingScreen';
-import AddCalendarScreen        from './src/screens/Coach/AddCalendarScreen';
-import CoachTeamRosterScreen    from './src/screens/Coach/CoachTeamRosterScreen';
 import CoachCardioScreen        from './src/screens/Coach/CoachCardioScreen';
 import CoachLiftingScreen       from './src/screens/Coach/CoachLiftingScreen';
+import SoloTimerScreen          from './src/screens/Ignore/SoloTimerScreen';
+
+
+import CoachTeamRosterScreen    from './src/screens/Coach/CoachTeamRosterScreen';
+import TrainingLogScreen        from './src/screens/Athlete/TrainingLogScreen';
+
 // Login Stack
-import LoginScreen              from './src/screens/Users/LoginScreen';
-import SignUpScreen             from './src/screens/Users/SignUpScreen';
+import LoginScreen              from './src/screens/LoginScreen';
+import SignUpScreen             from './src/screens/SignUpScreen';
 
 // Settings Stack
-import ProfileScreen            from './src/screens/Users/ProfileScreen';
-import SettingsScreen           from './src/screens/Users/SettingsScreen';
-import EquipmentScreen          from './src/screens/Athlete/EquipmentScreen';
+import ProfileScreen            from './src/screens/ProfileScreen';
+import SettingsScreen           from './src/screens/SettingsScreen';
+import EquipmentScreen          from './src/screens/EquipmentScreen';
 
+// Calendar Stack
+import EditCalendarScreen       from './src/screens/Coach/EditCalendarScreen';
+import AddCalendarScreen        from './src/screens/Coach/AddCalendarScreen';
+import CalendarScreen           from './src/screens/CalendarScreen';
+import StopwatchSetupScreen     from './src/screens/StopwatchSetupScreen';
+import XCTimerScreen            from './src/screens/StopwatchScreen';
+
+// Admin Screens
 import OrganizationScreen       from './src/screens/Coach/OrganizationScreen';
 import CreateOrganizationScreen from './src/screens/Coach/CreateOrganizationScreen';
 import CreateTeamScreen         from './src/screens/Coach/CreateTeamScreen';
 import AddCoachScreen           from './src/screens/Coach/AddCoachScreen';
-import CoachCalendarScreen      from './src/screens/Coach/CoachCalendarScreen';
-import EditCalendarScreen       from './src/screens/Coach/EditCalendarScreen';
-import StopwatchSetupScreen     from './src/screens/Athlete/StopwatchSetupScreen';
-import SoloTimerScreen          from './src/screens/Athlete/SoloTimerScreen';
-import XCTimerScreen            from './src/screens/Athlete/StopwatchScreen';
+
+import TeamProfileScreen        from './src/screens/TeamProfileScreen';
 
 const TabNav = createBottomTabNavigator();
 const StackNav = createStackNavigator();
@@ -145,16 +150,16 @@ function MessagingStack() {
   );
 }
 
-function EventStack() {
+function CalendarStack() {
   return (
     <StackNav.Navigator
       screenOptions={{
         headerTintColor: 'green',
       }}>
       <StackNav.Screen 
-        name="CoachCalendar" 
-        component={CoachCalendarScreen} 
-        options={{ title: 'Team Calendar' }}
+        name="Calendar" 
+        component={CalendarScreen}
+        options={{ title: 'Agenda' }}
       />
       <StackNav.Screen 
         name="AddEvent" 
@@ -247,11 +252,11 @@ function CoachContainerStack() {
         component={OrganizationStack}
         options={{ headerShown: false }} 
       />
-      <StackNav.Screen 
+      {/* <StackNav.Screen 
         name="EventStack" 
         component={EventStack}
         options={{ headerShown: false }} 
-      />
+      /> */}
     </StackNav.Navigator>
   );
 }
@@ -284,7 +289,7 @@ function AthleteTab() {
         inactiveTintColor: 'black',
       }}
     >
-      <TabNav.Screen name="Home" component={AthleteCalendarScreen} />
+      <TabNav.Screen name="Home" component={CalendarStack} />
       <TabNav.Screen name="Timer" component={RecordStack} />
       <TabNav.Screen name="Lifting" component={MessagingStack} />
       <TabNav.Screen name="Settings" component={SettingsStack} />
@@ -319,10 +324,10 @@ function CoachTab() {
         showLabel: false
       }}
     >
-      <TabNav.Screen name="Home" component={EventStack} />
+      <TabNav.Screen name="Home" component={CalendarStack} />
       <TabNav.Screen name="Create" component={MessagingStack} />
       <TabNav.Screen name="Roster" component={CoachTeamRosterScreen} />
-      <TabNav.Screen name="Settings" component={SettingsStack} />
+      <TabNav.Screen name="Settings" component={TeamProfileScreen} />
     </TabNav.Navigator>
   );
 }

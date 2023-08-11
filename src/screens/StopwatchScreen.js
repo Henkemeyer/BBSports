@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState} from 'react';
 import { Button, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import OurButton from '../../components/OurButton';
-import { postEquipment, fetchEquipment, patchEquipment, postEvent } from '../../util/http';
-import { UserContext } from '../../store/context/user-context';
+import OurButton from '../components/OurButton';
+import { postEquipment, fetchEquipment, patchEquipment, postEvent } from '../util/http';
+import { UserContext } from '../store/context/user-context';
 import { Table, TableWrapper, Row, Cell } from 'react-native-table-component';
 import { Ionicons } from '@expo/vector-icons';
 import { differenceInMilliseconds, format } from 'date-fns';

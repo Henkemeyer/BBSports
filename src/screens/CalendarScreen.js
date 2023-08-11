@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import FloatingButton from '../components/FloatingButton';
 import { Agenda } from 'react-native-calendars';
-import { UserContext } from '../../store/context/user-context';
-import { fetchUserEvents } from '../../util/http';
+import { UserContext } from '../store/context/user-context';
+import { fetchUserCalendar } from '../util/http';
 import { subDays } from 'date-fns';
 
 const timeToString = (time) => {
@@ -10,7 +11,7 @@ const timeToString = (time) => {
     return date.toISOString().split('T')[0];
 }
 
-const AthleteCalendarScreen = () => {
+const CalendarScreen = ({ navigation }) => {
     const userCtx = useContext(UserContext);
     const token = userCtx.token;
     const [items, setItems] = useState({});   // populates everyday
@@ -24,7 +25,12 @@ const AthleteCalendarScreen = () => {
 
     useEffect(() => {
         async function getEvents() {
-            const dbEvents = await fetchUserEvents(userCtx.userId, token);
+            let dbEvents = '';
+            try {
+                dbEvents = await fetchUserCalendar(userCtx.userId, token);
+            } catch (error) {
+                Alert.alert('Calendar Error!', 'Failed to fetch events. '+error)
+            }
             const eventsObj = {};
             const markedObj = {};
 
@@ -65,21 +71,21 @@ const AthleteCalendarScreen = () => {
                     setDot = activity;
                 }
 
-                // if(eventsObj[eventDate]){
-                //     eventsObj[eventDate] = [...eventsObj[eventDate], eventArr];
-                //     markedObj[eventDate]['dots'] = [...markedObj[eventDate]['dots'], setDot];
-                // }
-                // else {
-                //     eventsObj[eventDate] = eventArr;
-                //     markedObj[eventDate] = {dots: [setDot]};
-                // }
+                if(eventsObj[eventDate]){
+                    eventsObj[eventDate] = [...eventsObj[eventDate], eventArr];
+                    markedObj[eventDate]['dots'] = [...markedObj[eventDate]['dots'], setDot];
+                }
+                else {
+                    eventsObj[eventDate] = eventArr;
+                    markedObj[eventDate] = {dots: [setDot]};
+                }
             }
             // setItems(eventsObj);
             setMarked(markedObj);
         }
     
         getEvents();
-    }, [userCtx.userId]);
+    }, []);
 
     const loadItems = (day) => {
 
@@ -122,6 +128,11 @@ const AthleteCalendarScreen = () => {
         );
     }
 
+    function newEventHandler() {
+        console.log("We are leaving!");
+        navigation.navigate('AddEvent');
+    }
+
     return (
         <View style={styles.container}>
             <Agenda
@@ -148,6 +159,12 @@ const AthleteCalendarScreen = () => {
                     dayTextColor: 'green',
                 }}
             />
+            { userCtx.userMode === 'Coach' ? 
+                <FloatingButton 
+                    pressHandler={() => newEventHandler()} 
+                    iconName="add-circle-outline"
+                />
+            : null }
             <StatusBar />
         </View>
     );
@@ -168,4 +185,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default AthleteCalendarScreen;
+export default CalendarScreen;

@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState  } from 'react';
 import { Alert, ScrollView, StyleSheet, Text, View} from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
-import OurButton from '../../components/OurButton';
-import ShadowBox from '../../components/ShadowBox';
-import { fetchTeam, fetchTeamsByAthlete, fetchTeamsByCoach } from '../../util/http';
-import { UserContext } from '../../store/context/user-context';
+import OurButton from '../components/OurButton';
+import ShadowBox from '../components/ShadowBox';
+import { fetchTeam, fetchTeamsByAthlete, fetchTeamsByCoach } from '../util/http';
+import { UserContext } from '../store/context/user-context';
 import { Ionicons } from '@expo/vector-icons';
 
 function SettingsScreen ({navigation}) {

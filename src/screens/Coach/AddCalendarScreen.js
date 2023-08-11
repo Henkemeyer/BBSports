@@ -4,7 +4,7 @@ import { Alert, Keyboard, KeyboardAvoidingView, Modal, Platform, ScrollView, Sty
 import SelectDropdown from 'react-native-select-dropdown';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { format } from 'date-fns';
-import { fetchAthleteGroup, fetchCoachTeams, fetchRoster, postCalendar } from '../../util/http';
+import { putCalendar, postCalendarEvent } from '../../util/http';
 import { UserContext } from '../../store/context/user-context';
 import UserInput from '../../components/UserInput';
 import OurButton from '../../components/OurButton';
@@ -16,26 +16,32 @@ const AddCalendarScreen = ({ navigation }) => {
     var defaultDay = new Date();
 
     const userCtx = useContext(UserContext);      // App User Info
-    const token = userCtx.token;                  // User Auth Token
-    const [teams, setTeams] = useState([]);       // List of Coach's Teams
-    const [onOwn, setOnOwn] = useState(false);    // If it's a solo task or not
-    const [location, setLoc] = useState('');      // Location to meet
-    const [calName, setCalName] = useState('');      // Name for Calendar Event
-    const [notes, setNotes] = useState('');       // Coaches notes if they have any
-    const [extLink, setExtLink] = useState('');         // Link for additional info like schedule or results
-    // const [modalVisible, setModalVisible] = useState(false);
+    const [calendarEventTitle, setCalendarEventTitle] = useState('');      // Name for Calendar Event
     const typeDropdownRef = useRef({});           // Event type drop down reference
-    const [type, setType] = useState('Cardio');   // Event Type
+    const [type, setType] = useState('Practice');   // Event Type
     const [types, setTypes] = useState([
-        {id:0, name: 'Cardio'},
-        {id:1, name: 'Weights'},
-        {id:2, name: 'Meet'},
-        {id:3, name: 'Activity'}
+        {id:0, name: 'Practice'},
+        {id:1, name: 'Activity'},
+        {id:2, name: 'Competition'}
     ]);
-
     const [date, setDate] = useState(defaultDay);         // Date of workout
     const [showDate, setShowDate] = useState(false);      // Show or Hide Date Picker
+    const [onOwn, setOnOwn] = useState(false);            // If it's a solo task or not
+    const [startTime, setStartTime] = useState(new Date());         // Time of workout
+    const [showStartTime, setShowStartTime] = useState(false);      // Show or Hide Date Picker
+    const [endTime, setEndTime] = useState(new Date());             // End time of workout
+    const [showEndTime, setShowEndTime] = useState(false);          // Show or Hide Date Picker
+    const [location, setLocation] = useState('');         // Location to meet
+    const [infoLink, setInfoLink] = useState('');         // Link for additional info like schedule
+    const [resultsLink, setResultsLink] = useState('');         // Link for results
+    const [notes, setNotes] = useState('');       // Coaches notes if they have any
+    const [attachment, setAttachment] = useState(''); // TODO
+ 
+    // const [modalVisible, setModalVisible] = useState(false);
 
+
+    // All these Data and time pickers were a hassle
+    // Date Picker
     const onDateChange = (event, selectedDate) => {
         if(event.type != 'dismissed')
         {
@@ -51,10 +57,8 @@ const AddCalendarScreen = ({ navigation }) => {
     const showDatepicker = () => {
         showDateMode('date');
     };
-
-    const [startTime, setStartTime] = useState(new Date());         // Time of workout
-    const [showStartTime, setShowStartTime] = useState(false);      // Show or Hide Date Picker
-
+    
+    // Start Time Picker
     const onStartTimeChange = (event, selectedTime) => {
         if(event.type != 'dismissed')
         {
@@ -67,9 +71,7 @@ const AddCalendarScreen = ({ navigation }) => {
         showTimeMode('startTime');
     };
 
-    const [endTime, setEndTime] = useState(new Date());         // End time of workout
-    const [showEndTime, setShowEndTime] = useState(false);      // Show or Hide Date Picker
-
+    // End Time Picker
     const onEndTimeChange = (event, selectedTime) => {
         if(event.type != 'dismissed')
         {
@@ -80,30 +82,8 @@ const AddCalendarScreen = ({ navigation }) => {
     
     const showEndTimepicker = () => {
         showTimeMode('endTime');
-    };
-
-    const toggleOnOwn = () => {
-        setOnOwn(!onOwn);
-        if(!onOwn) {
-            setTypes([
-                {id:0, name: 'Cardio'},
-                {id:1, name: 'Weights'}
-            ]);
-
-            if(type === 'Meet' || type === 'Activity') {
-                setType('Cardio');
-                typeDropdownRef.current.reset();
-            }
-        } else {
-            setTypes([
-                {id:0, name: 'Cardio'},
-                {id:1, name: 'Weights'},
-                {id:2, name: 'Meet'},
-                {id:3, name: 'Activity'}
-            ]);
-        }
-    }
-
+    };    
+    
     const showTimeMode = (currentMode) => {
         if(currentMode === 'startTime') {
             setShowStartTime(true);
@@ -112,19 +92,33 @@ const AddCalendarScreen = ({ navigation }) => {
         }
     };
 
-    useEffect(() => {
-        async function getDBTeams() {
-            const results = await fetchCoachTeams(userCtx.userId, token);
-            setTeams(results);
+    // On Own button limits User Input
+    const toggleOnOwn = () => {
+        setOnOwn(!onOwn);
+        if(!onOwn) {
+            setTypes([
+                {id:0, name: 'Practice'},
+                {id:1, name: 'Activity'}
+            ]);
+
+            if(type === 'Competition') {
+                setType('Practice');
+                typeDropdownRef.current.reset();
+            }
+        } else {
+            setTypes([
+                {id:0, name: 'Practice'},
+                {id:1, name: 'Activity'},
+                {id:2, name: 'Competition'}
+            ]);
         }
-    
-        getDBTeams();
-    }, [token]);
+    }
+
+    function attachFileHandler() {
+        Alert.alert('Sorry!', 'Not implemented yet');
+    }
 
     async function submitHandler() {
-        // if(type==='Meet' || type==='Activity') {
-        //     setModalVisible(!modalVisible);
-        // } else {
         const calendarData = {
             teamId: userCtx.teamId,
             teamName: userCtx.teamName,
@@ -134,25 +128,26 @@ const AddCalendarScreen = ({ navigation }) => {
             startTime: format(startTime, "h:mm a"),
             endTime: format(endTime, "h:mm a"),
             insertDate: new Date(),
-            calendarName: calName,
+            calendarEventTitle: calendarEventTitle,
             notes: notes,
-            extLink: extLink
+            infoLink: infoLink,
+            resultsLink: resultsLink,
+            attachment: attachment
         }
-
-        await postCalendar(calendarData, token)
+        let newCalendarId = '';
+        await postCalendarEvent(calendarData, userCtx.token)
         .then(function (response) {
-            const calendarId = response.data.name;
-            if(type==='Cardio') {
-                navigation.navigate("CoachCardio", { calendarId })
-            } else {
-                navigation.navigate("CoachLifting", { calendarId })
-            }
+            newCalendarId = response.data.name;
         })
         .catch(function (error) {
             console.log(error);
+            return;
         });
-        // }
+        putCalendar(newCalendarId, userCtx.token)
+
+        navigation.goBack();
     }
+
 
     // async function closeModal(action) {
     //     if (action === 'add') {
@@ -254,39 +249,12 @@ const AddCalendarScreen = ({ navigation }) => {
                     </View>
                 </View>
             </Modal> */}
-            <Text style={styles.teamText}>Team:</Text>
-            <SelectDropdown
-                data={teams}
-                onSelect={(selectedItem, index) => {
-                    const teamData = {
-                        name: selectedItem.name,
-                        id: selectedItem.id
-                    };
-                    userCtx.switchTeam(teamData);
-                }}
-                defaultButtonText={userCtx.teamName}
-                buttonTextAfterSelection={(selectedItem, index) => {
-                    return selectedItem.name
-                }}
-                rowTextForSelection={(item, index) => {
-                    return item.name
-                }}
-                buttonStyle={styles.selectDropDownButton}
-                buttonTextStyle={styles.selectDropDownText}
-                renderDropdownIcon={isOpened => {
-                    return <Ionicons name={isOpened ? 'chevron-up-circle-sharp' : 'chevron-down-circle-outline'} color={'#FFF'} size={18} />;
-                }}
-                dropdownIconPosition={'right'}
-                dropdownStyle={styles.selectDropDown}
-                rowStyle={styles.selectDropDownRow}
-                rowTextStyle={styles.selectDropDownText}
+            <Text style={styles.teamText}>Team: {userCtx.teamName}</Text>
+            <UserInput
+                label="Title"
+                value={calendarEventTitle}
+                onChangeText={setCalendarEventTitle}
             />
-            <TouchableOpacity onPress={showDatepicker}>
-                <View style={styles.lengthRow}>
-                    <Text style={styles.formText}>Date: {format(date, "MMMM do, yyyy")}</Text>
-                    <Ionicons name="calendar-outline" size={24} color="darkgreen" style={styles.iconStyle} />
-                </View>
-            </TouchableOpacity>
             <SelectDropdown
                 data={types}
                 ref={typeDropdownRef}  
@@ -310,6 +278,12 @@ const AddCalendarScreen = ({ navigation }) => {
                 rowStyle={styles.selectDropDownRow}
                 rowTextStyle={styles.selectDropDownText}
             />
+            <TouchableOpacity onPress={showDatepicker}>
+                <View style={styles.lengthRow}>
+                    <Text style={styles.formText}>Date: {format(date, "MMMM do, yyyy")}</Text>
+                    <Ionicons name="calendar-outline" size={24} color="darkgreen" style={styles.iconStyle} />
+                </View>
+            </TouchableOpacity>
             <View style={styles.lengthRow}>
                 <Text>On Own?</Text>
                 <CheckBox
@@ -332,13 +306,6 @@ const AddCalendarScreen = ({ navigation }) => {
                             editable={false}
                         />
                     </View>
-                    <View style={styles.userInput}>
-                        <UserInput
-                            label="Name:"
-                            value={""}
-                            editable={false}
-                        />
-                    </View>
                 </View>
             :
                 <View>
@@ -358,40 +325,42 @@ const AddCalendarScreen = ({ navigation }) => {
                         <UserInput
                             label="Location:"
                             value={location}
-                            onChangeText={setLoc}
+                            onChangeText={setLocation}
                             autoCorrect={false}
                             editable={!onOwn}
-                        />
-                        <UserInput
-                            label="Name:"
-                            value={calName}
-                            onChangeText={setCalName}
-                            autoCorrect={false}
-                            editable={!onOwn}
-                        />
-                        <UserInput
-                            label="Notes:"
-                            value={notes}
-                            onChangeText={setNotes}
-                            multiline   // ios starts top left
-                            textAlignVertical='top'  // Android starts top left
-                            numberOfLines={6}
-                            style={styles.notesInput}
-                        />
-                        <UserInput
-                            label="Link"
-                            value={extLink}
-                            onChangeText={setExtLink}
-                            keyboardType="url"
                         />
                     </View>
                 </View>
             }
-        <OurButton 
-            buttonPressed={() => submitHandler()}
-            buttonText="Submit"
-            style={styles.button}
-        />
+            <UserInput
+                label="Info Link"
+                value={infoLink}
+                onChangeText={setInfoLink}
+                keyboardType="url"
+            />
+            <UserInput
+                label="Results Link"
+                value={resultsLink}
+                onChangeText={setResultsLink}
+                keyboardType="url"
+            />
+            <TouchableOpacity onPress={() => attachFileHandler()} >
+                <Text>Attach File</Text>
+            </TouchableOpacity>
+            <UserInput
+                label="Notes:"
+                value={notes}
+                onChangeText={setNotes}
+                multiline   // ios starts top left
+                textAlignVertical='top'  // Android starts top left
+                numberOfLines={6}
+                style={styles.notesInput}
+            />
+            <OurButton 
+                buttonPressed={() => submitHandler()}
+                buttonText="Submit"
+                style={styles.button}
+            />
         </View>
         </ScrollView>
         </KeyboardAvoidingView>
@@ -401,7 +370,8 @@ const AddCalendarScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     container: {
-        paddingVertical: 25
+        paddingVertical: 25,
+        alignItems: 'center'
     },
     teamText: {
         paddingHorizontal: 40,

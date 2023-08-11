@@ -116,7 +116,8 @@ function UserContextProvider({children}) {
         logout: logout,
         switchUserMode: switchUserMode,
         switchOrganization: switchOrganization,
-        switchTeam: switchTeam
+        switchTeam: switchTeam,
+        updateName: updateName
     }
 
     return <UserContext.Provider value={value}>{children}</UserContext.Provider>

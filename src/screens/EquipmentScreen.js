@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Alert, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Table, TableWrapper, Row, Cell } from 'react-native-table-component';
-import OurButton from '../../components/OurButton';
-import UserInput from '../../components/UserInput';
-import { postEquipment, fetchEquipment, patchEquipment } from '../../util/http';
-import { UserContext } from '../../store/context/user-context';
+import OurButton from '../components/OurButton';
+import UserInput from '../components/UserInput';
+import { postEquipment, fetchEquipment, patchEquipment } from '../util/http';
+import { UserContext } from '../store/context/user-context';
 import { Ionicons } from '@expo/vector-icons';
 import { format } from 'date-fns';
 

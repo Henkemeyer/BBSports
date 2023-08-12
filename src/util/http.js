@@ -58,6 +58,16 @@ export async function fetchTeamsByOrganization(orgId, token) {
   return await axios.get(DB_URL + 'team.json?orderBy="organizationId"&equalTo="'+orgId+'"');
 }
 
+export async function fetchAthletesByTeam(orgId, teamId, token) {
+  console.log('member/'+orgId+'/'+teamId+'/athlete.json');
+  return await axios.get(DB_URL + 'member/'+orgId+'/'+teamId+'/athlete.json?auth='+ token);
+}
+
+export async function fetchCoachesByTeam(orgId, teamId, token) {
+  console.log('member/'+orgId+'/'+teamId+'/coach.json');
+  return await axios.get(DB_URL + 'member/'+orgId+'/'+teamId+'/coach.json?auth='+ token);
+}
+
 // Messaging System
 // Create a new chat room
 export async function postChatRoom(chatRoom, uid, token) {
@@ -149,27 +159,6 @@ export async function fetchCoach(uid, token) {
   return await axios.get(DB_URL + 'coach.json?orderBy="uid"&equalTo="'+uid+'"');
 }
 
-export async function fetchCoachesByTeam(teamId, token) {
-  const response = await axios.get(DB_URL + 'coach.json?orderBy="teamId"&equalTo="'+teamId+'"');
-
-  const coaches = [];
-
-  for (const key in response.data) {
-      const coachObj = {
-        id: key,
-        userId: response.data[key].uid,
-        organizationId: response.data[key].organizationId, // 1 = Freelance Coach
-        teamId: response.data[key].teamId, // 1 = Freelance Coach
-        title: response.data[key].title,
-        fullName: response.data[key].fullName,
-        status: response.data[key].status
-      };
-      coaches.push(coachObj);
-  }
-
-  return coaches;
-}
-
 export async function fetchCoachByOrg(orgId, token) {
   const response = await axios.get(DB_URL + 'coach.json?orderBy="orgId"&equalTo="'+orgId+'"');
 
@@ -199,9 +188,6 @@ export async function patchAthlete(athleteId, data, token) {
   await axios.patch(DB_URL + 'athlete/' + athleteId +'.json', data);
 }
 
-export async function fetchRoster(teamId, token) {
-  return await axios.get(DB_URL + 'athlete.json?orderBy="teamId"&equalTo="'+teamId+'"');
-}
 
 export async function fetchAthleteGroup(tbd, token) {
   const response = await axios.get(DB_URL + 'groups.json?orderBy="uid"&equalTo="'+uid+'"');

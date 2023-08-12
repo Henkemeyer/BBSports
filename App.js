@@ -276,6 +276,8 @@ function AthleteTab() {
             iconName = focused ? 'stopwatch' : 'stopwatch-outline';
           } else if (route.name === 'Lifting') {
             iconName = focused ? 'barbell' : 'barbell-outline';
+          } else if (route.name === 'Roster') {
+            iconName = focused ? 'document-text' : 'document-text-outline';
           } else if (route.name === 'Settings') {
             iconName = focused ? 'settings-sharp' : 'settings-outline';
           }
@@ -292,6 +294,7 @@ function AthleteTab() {
       <TabNav.Screen name="Home" component={CalendarStack} />
       <TabNav.Screen name="Timer" component={RecordStack} />
       <TabNav.Screen name="Lifting" component={MessagingStack} />
+      <TabNav.Screen name="Roster" component={TeamProfileScreen} />
       <TabNav.Screen name="Settings" component={SettingsStack} />
     </TabNav.Navigator>
   );
@@ -308,6 +311,8 @@ function CoachTab() {
             iconName = focused ? 'calendar' : 'calendar-outline';
           } else if (route.name === 'Create') {
             iconName = focused ? 'create' : 'create-outline';
+          } else if (route.name === 'Chat') {
+            iconName = focused ? 'chatbox' : 'chatbox-outline';
           } else if (route.name === 'Roster') {
             iconName = focused ? 'document-text' : 'document-text-outline';
           } else if (route.name === 'Settings') {
@@ -325,9 +330,10 @@ function CoachTab() {
       }}
     >
       <TabNav.Screen name="Home" component={CalendarStack} />
-      <TabNav.Screen name="Create" component={MessagingStack} />
-      <TabNav.Screen name="Roster" component={CoachTeamRosterScreen} />
-      <TabNav.Screen name="Settings" component={TeamProfileScreen} />
+      <TabNav.Screen name="Create" component={TrainingLogScreen} />
+      <TabNav.Screen name="Chat" component={MessagingStack} />
+      <TabNav.Screen name="Roster" component={TeamProfileScreen} />
+      <TabNav.Screen name="Settings" component={SettingsStack} />
     </TabNav.Navigator>
   );
 }

@@ -73,10 +73,12 @@ export default function UploadProfilePicture() {
 
     return (
         <View style={styles.container}>
-            { image && <Image source={{ uri: image.uri }} style={{ width: 200, height: 200 }} /> }
+            { image && <Image source={{ uri: image.uri }} style={{ width: 100, height: 100 }} /> }
             <View style={styles.uploadButtonContainer}>
-                <TouchableOpacity onPress={selectImage} style={styles.uploadButton} >
-                    <Text>{image ? 'Edit' : 'Upload'} Image</Text>
+                <TouchableOpacity 
+                    // onPress={selectImage} 
+                    style={styles.uploadButton} >
+                    <Text>{image ? 'Edit' : 'Not Supported'}</Text>
                     <Ionicons name="camera" size={20} color="darkgreen" />
                 </TouchableOpacity>
             </View>
@@ -87,8 +89,8 @@ export default function UploadProfilePicture() {
 const styles = StyleSheet.create({
     container:{
         elevation:2,
-        height:200,
-        width:200,
+        height:100,
+        width:100,
         backgroundColor:'#efefef',
         position:'relative',
         borderRadius:999,

@@ -21,8 +21,11 @@ export async function postOrganization(orgData, token) {
   return await axios.post(DB_URL + 'organization.json?auth='+ token, orgData);
 }
 // Assign new Admin
-export async function putAdmin(adminData, orgId, token) {
-  return await axios.put(DB_URL + 'member/'+orgId+'.json?auth='+ token, adminData);
+export async function putAdmin(uid, orgName, orgId, token) {
+  const newAdmin = { admin: {0:uid}, orgName: orgName};
+  await axios.put(DB_URL + 'member/'+orgId+'.json?auth='+ token, newAdmin);
+  await axios.put(DB_URL + 'admin/'+uid+'/'+orgId+'.json?auth='+ token, orgName);
+  return;
 }
 // Fetch Org Info
 export async function fetchOrganization(orgId, token) {
@@ -109,8 +112,8 @@ export async function postCalendarEvent(event, token) {
   return await axios.post(DB_URL + 'calendarEvent.json?auth='+ token, event);
 }
 // Add to everyones personal calendar
-export async function putCalendar(calendar, token) {
-  return await axios.put(DB_URL + 'calendar.json?auth='+ token, calendar);
+export async function putCalendar(uid, eventDate, calendarId, agendaInfo, token) {
+  return await axios.put(DB_URL + 'calendar/'+uid+'/'+eventDate+'/'+calendarId+'.json?auth='+ token, agendaInfo);
 }
 // Update everyones personal calendar
 export async function patchCalendarEvent(calendarEventId, calendarEvent, token) {

@@ -53,8 +53,7 @@ function CreateOrganizationScreen({ navigation }) {
         } catch (error) {
             Alert.alert('Org Creation Failed!', 'Failed to create organization. Please try again later')
         }
-        const newAdmin = { admin: {0:userCtx.userId}, orgName: orgName}
-        putAdmin(newAdmin, newOrgId, token);
+        putAdmin(userCtx.userId, orgName, newOrgId, token);
         navigation.goBack();
     }
 

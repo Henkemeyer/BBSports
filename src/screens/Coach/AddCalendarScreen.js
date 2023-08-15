@@ -119,10 +119,11 @@ const AddCalendarScreen = ({ navigation }) => {
     }
 
     async function submitHandler() {
+        const eventDate = format(date, "yyyy-MM-dd");
         const calendarData = {
             teamId: userCtx.teamId,
             teamName: userCtx.teamName,
-            date: format(date, "yyyy-MM-dd"),
+            date: eventDate,
             type: type,
             location: location,
             startTime: format(startTime, "h:mm a"),
@@ -143,8 +144,21 @@ const AddCalendarScreen = ({ navigation }) => {
             console.log(error);
             return;
         });
-        putCalendar(newCalendarId, userCtx.token)
-
+        const agendaItem = {
+            location: location,
+            teamName: userCtx.teamName,
+            type: type
+            }
+        // I'll need to add some loops here to go through the repeat event feature and different attendees
+        // For test data I'm just adding the current user
+        await putCalendar(userCtx.userId, eventDate, newCalendarId, agendaItem, userCtx.token)
+        .then(function (response) {
+            console.log("Success");
+        })
+        .catch(function (error) {
+            console.log(error);
+            return;
+        });
         navigation.goBack();
     }
 
@@ -249,7 +263,7 @@ const AddCalendarScreen = ({ navigation }) => {
                     </View>
                 </View>
             </Modal> */}
-            <Text style={styles.teamText}>Team: {userCtx.teamName}</Text>
+            <Text style={styles.teamText}>{userCtx.teamName}</Text>
             <UserInput
                 label="Title"
                 value={calendarEventTitle}

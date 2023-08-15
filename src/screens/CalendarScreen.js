@@ -19,7 +19,7 @@ const CalendarScreen = ({ navigation }) => {
     const [marked, setMarked] = useState({}); // makes calendar dates
     const [minDate, setMinDate] = useState(new Date(new Date().valueOf() - 86400000));
 
-    const workout = {key: 'workout', color: 'green'}; // Cardio, lifting, scrimmage?
+    const practice = {key: 'practice', color: 'green'}; // Cardio, lifting, scrimmage?
     const competition = {key: 'competition', color: 'red'};  // Meet, game
     const activity = {key: 'activity', color: 'blue'};   // Pictures, miscellaneous
 
@@ -33,55 +33,60 @@ const CalendarScreen = ({ navigation }) => {
             }
             const eventsObj = {};
             const markedObj = {};
+            for (const day in dbEvents.data) {
+                console.log(day);
+                setEvents({...events, [day]: dbEvents.data[day]});
 
-            for (const key in dbEvents.data) {
-                const time = '';
-                const eventType = dbEvents.data[key].type;
+                for (const event in dbEvents.data[day]) {
+                    console.log(dbEvents.data[day]);
+                    const eventType = dbEvents.data[day][event].type;
+                }
+            //     const eventType = dbEvents.data[key].type;
 
-                if(dbEvents.data[key].startTime) {
-                    time = dbEvents.data[key].startTime;
-                    if(dbEvents.data[key].endTime) {
-                        time = time +" - "+ dbEvents.data[key].endTime;
-                    }
-                }
-                else {
-                    time = 'On Own';
-                }
-                const eventDate = dbEvents.data[key].date;
-                const eventArr = {
-                    id: key,
-                    day: dbEvents.data[key].date,
-                    teamName: dbEvents.data[key].teamName,
-                    location: dbEvents.data[key].location,
-                    time: "Time: "+time,
-                    teamName: dbEvents.data[key].teamName,
-                    location: dbEvents.data[key].location,
-                    type: dbEvents.data[key].type,
-                    notes: dbEvents.data[key].notes
-                };
+            //     if(dbEvents.data[key].startTime) {
+            //         time = dbEvents.data[key].startTime;
+            //         if(dbEvents.data[key].endTime) {
+            //             time = time +" - "+ dbEvents.data[key].endTime;
+            //         }
+            //     }
+            //     else {
+            //         time = 'On Own';
+            //     }
+            //     const eventDate = dbEvents.data[key].date;
+            //     const eventArr = {
+            //         id: key,
+            //         day: dbEvents.data[key].date,
+            //         teamName: dbEvents.data[key].teamName,
+            //         location: dbEvents.data[key].location,
+            //         time: "Time: "+time,
+            //         teamName: dbEvents.data[key].teamName,
+            //         location: dbEvents.data[key].location,
+            //         type: dbEvents.data[key].type,
+            //         notes: dbEvents.data[key].notes
+            //     };
 
-                let setDot = {};
-                if(eventType==='Cardio' || eventType==='Lifting' || eventType==='Scrimmage' || eventType==='Practice') {
-                    setDot = workout; 
-                }
-                else if(eventType==='Meet' || eventType==='Game' || eventType==='Match') {
-                    setDot = competition;
-                }
-                else{
-                    setDot = activity;
-                }
+            //     let setDot = {};
+            //     if(eventType==='Practice') {
+            //         setDot = practice; 
+            //     }
+            //     else if(eventType==='Competition') {
+            //         setDot = competition;
+            //     }
+            //     else{
+            //         setDot = activity;
+            //     }
 
-                if(eventsObj[eventDate]){
-                    eventsObj[eventDate] = [...eventsObj[eventDate], eventArr];
-                    markedObj[eventDate]['dots'] = [...markedObj[eventDate]['dots'], setDot];
-                }
-                else {
-                    eventsObj[eventDate] = eventArr;
-                    markedObj[eventDate] = {dots: [setDot]};
-                }
+            //     if(eventsObj[eventDate]){
+            //         eventsObj[eventDate] = [...eventsObj[eventDate], eventArr];
+            //         markedObj[eventDate]['dots'] = [...markedObj[eventDate]['dots'], setDot];
+            //     }
+            //     else {
+            //         eventsObj[eventDate] = eventArr;
+            //         markedObj[eventDate] = {dots: [setDot]};
+            //     }
             }
             // setItems(eventsObj);
-            setMarked(markedObj);
+            // setMarked(markedObj);
         }
     
         getEvents();
@@ -94,18 +99,18 @@ const CalendarScreen = ({ navigation }) => {
                 const time = day.timestamp + i * 24 * 60 * 60 * 1000;
                 const strTime = timeToString(time);
 
-                if (!items[strTime]) {
+                if (events[strTime]) {
+                    items[strTime] = events[strTime];
+                    console.log(strTime+" Added Event")
+                } else {
                     items[strTime] = [];
 
                     items[strTime].push({
-                        teamName: 'Nothing Today',
+                        teamName: '',
                         height: 30,
                         day: strTime
                     });
                 }
-                // else {
-                //     items[strTime] = events[strTime];
-                // }
             }
             const newItems = {};
             Object.keys(items).forEach(key => {
@@ -120,6 +125,7 @@ const CalendarScreen = ({ navigation }) => {
         return (
             <TouchableOpacity style={styles.item}>
                 <View>
+                    {console.log("Line 127: "+item)}
                     <Text>{item.teamName}</Text>
                     <Text>{item.location}</Text>
                     <Text>{item.time}</Text>
@@ -129,7 +135,6 @@ const CalendarScreen = ({ navigation }) => {
     }
 
     function newEventHandler() {
-        console.log("We are leaving!");
         navigation.navigate('AddEvent');
     }
 
